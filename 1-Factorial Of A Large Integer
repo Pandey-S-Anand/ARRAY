@@ -1,1 +1,17 @@
+//Method 1- Using BigInteger
 
+class Solution {
+    static ArrayList<Integer> factorial(int num){
+      java.math.BigInteger fact=new java.math.BigInteger("1");
+ 
+      for(int i=num;i>0;i--) // or for(int i=1;i<=num;i++)
+        fact=fact.multiply(java.math.BigInteger.valueOf(i));
+ 
+      ArrayList<Integer>res=new ArrayList<>();
+      
+      for(char ch:fact.toString().toCharArray())
+        res.add(ch-'0');
+        
+      return res;
+    }
+}
