@@ -5,9 +5,9 @@ class Solution {
       
         long max=findMax(arr,n);
 
-        long[] fact = new long[(int)(max+1)]; //fact[i]=i! => fact[max]=max!
-        
+        long[] fact = new long[(int)(max+1)]; //fact[i]=i! => fact[max]=max!       
         fact[0] = 1L; // 0!=1
+
         //find the factorial of maximum number in the array (i.e 'max') using Dynamic programming
         for (int i = 1; i <= max; i++)
             fact[i] = (fact[i-1] * i) % mod; 
