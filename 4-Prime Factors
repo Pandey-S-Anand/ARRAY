@@ -28,8 +28,8 @@ class Solution{
         int[]res=new int[uniquePrimeFactors.size()];
         int idx = 0;
         
-        for (int pf : uniquePrimeFactors)
-          res[idx++] = pf;
+        for (int upf : uniquePrimeFactors)
+          res[idx++] = upf;
         
         return res;
     }
@@ -60,8 +60,8 @@ class Solution{
         int[]res=new int[uniquePrimeFactors.size()];
         int idx = 0;
         
-        for (int pf : uniquePrimeFactors)
-          res[idx++] = pf;
+        for (int upf : uniquePrimeFactors)
+          res[idx++] = upf;
         
 
         return res;
@@ -94,8 +94,8 @@ class Solution{
         int[]res=new int[uniquePrimeFactors.size()];
         int idx = 0;
         
-        for (int pf : uniquePrimeFactors)
-          res[idx++] = pf;
+        for (int upf : uniquePrimeFactors)
+          res[idx++] = upf;
         
 
         return res;
