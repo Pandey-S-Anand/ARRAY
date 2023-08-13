@@ -1,0 +1,102 @@
+//Bruteforce Implementation
+
+class Solution{
+    static ArrayList<Integer> sieveOfEratosthenes(int n){
+       ArrayList<Integer>res=new ArrayList<>();
+       if(n<2)
+	     return res;
+	   
+       boolean isPrime[]=new boolean[n+1];
+       for(int i=2;i<=n;i++)
+         isPrime[i]=true;
+          
+        for(int num=2;num<=n;num++)
+          if(isPrime[num]==true)
+             for(int mark=(num*2);mark<=n;mark+=num)
+                isPrime[mark]=false;
+                
+        for(int i=2;i<=n;i++)
+          if(isPrime[i]==true)
+             res.add(i);
+        
+        return res;
+    }
+}
+
+
+//Better Implementation
+
+class Solution{
+    static ArrayList<Integer> sieveOfEratosthenes(int n){
+       ArrayList<Integer>res=new ArrayList<>();
+       if(n<2)
+	     return res;
+	   
+       boolean isPrime[]=new boolean[n+1];
+       for(int i=2;i<=n;i++)
+         isPrime[i]=true;
+          
+        for(int num=2;num<=(n/2);num++)
+          if(isPrime[num]==true)
+             for(int mark=(num*2);mark<=n;mark+=num)
+                isPrime[mark]=false;
+                
+        for(int i=2;i<=n;i++)
+          if(isPrime[i]==true)
+             res.add(i);
+        
+        return res;
+    }
+}
+
+
+//Further optimised
+
+class Solution{
+    static ArrayList<Integer> sieveOfEratosthenes(int n){
+       ArrayList<Integer>res=new ArrayList<>();
+       if(n<2)
+	     return res;
+	   
+       boolean isPrime[]=new boolean[n+1];
+       for(int i=2;i<=n;i++)
+         isPrime[i]=true;
+          
+        for(int num=2;num<=(int)Math.sqrt(n);num++)
+          if(isPrime[num]==true)
+             for(int mark=(num*2);mark<=n;mark+=num)
+                isPrime[mark]=false;
+                
+        for(int i=2;i<=n;i++)
+          if(isPrime[i]==true)
+             res.add(i);
+        
+        return res;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution{
+    static ArrayList<Integer> sieveOfEratosthenes(int n){
+       ArrayList<Integer>res=new ArrayList<>();
+       if(n<2)
+	     return res;
+	   
+       boolean isPrime[]=new boolean[n+1];
+       for(int i=2;i<=n;i++)
+         isPrime[i]=true;
+          
+        for(int num=2;num<=(int)Math.sqrt(n);num++)
+          if(isPrime[num]==true)
+             for(int mark=(num*num);mark<=n;mark+=num)
+                isPrime[mark]=false;
+                
+        for(int i=2;i<=n;i++)
+          if(isPrime[i]==true)
+             res.add(i);
+        
+        return res;
+    }
+}
