@@ -1,0 +1,60 @@
+//Iterative Approach
+
+class Solution{
+    public int largest(int arr[], int n){
+       int maxIndex=0;
+	     for(int i=1;i<n;i++)
+	       if(arr[i]>arr[maxIndex])
+	         maxIndex=i;
+		
+	    return arr[maxIndex];   
+    }
+}
+
+//Recursive Approach
+
+class Solution{
+    public int largest(int arr[], int n){
+       return findLargest(arr,n,0); 
+    }
+    
+    public static int findLargest(int[] arr, int n ,int idx) {
+        if (idx==(n-1))
+          return arr[idx];
+        
+        int currentElement = arr[idx];
+        int largestInRest = findLargest(arr,n,idx + 1);
+
+        return Math.max(currentElement, largestInRest);
+    }
+}
+
+/*
+
+Recursive tree for the following array
+
+arr[]={20,10,40,30,60};
+
+
+            largest(arr, 5,0)
+                    \
+Math.max(arr[0], findLargest(arr, 5, 1))
+                           \
+     Math.max(arr[1], findLargest(arr, 5, 2))
+                                 \
+                Math.max(arr[2], findLargest(arr, 5, 3))
+                                           \
+                          Math.max(arr[3], findLargest(arr, 5, 4))
+                                              \
+                                            arr[4]  (Base case)
+*/
+
+
+//Via Sorting
+
+class Solution{ 
+    public int largest(int arr[], int n){
+       Arrays.sort(arr);
+	     return arr[n-1];  
+    }
+}
