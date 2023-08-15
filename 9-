@@ -2,18 +2,18 @@
 
 class Solution {
     int print2smallest(int arr[], int n) {
-        int min=Integer.MAX_VALUE;      
-	      for(int i=0;i<n;i++)
-	        if(arr[i]<min)
-	          min=arr[i];
+        int min=arr[0];      
+	for(int i=1;i<n;i++)
+	   if(arr[i]<min)
+	     min=arr[i];
 	          
-	      int secMin=Integer.MAX_VALUE;
+	int secMin=Integer.MAX_VALUE;
 	    
       	for(int i=0;i<n;i++)
-	       if(arr[i]<secMin && arr[i]!=min)
-	         secMin=arr[i];
+	   if(arr[i]<secMin && arr[i]!=min)
+	      secMin=arr[i];
              
-	      return secMin;     
+	 return secMin;     
     }
 }
 
