@@ -1,3 +1,4 @@
+
 class Solution{
     public long[] minAnd2ndMin(long arr[], long len){
 
