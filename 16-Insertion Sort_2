@@ -12,7 +12,7 @@ class Solution {
           }
           arr[j+1]=temp;
 
-	       printArray(arr);
+	printArray(arr);
       }
     }
 
