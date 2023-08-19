@@ -37,3 +37,41 @@ class Solution{
       }
    }
 }
+
+
+//Recurssive Implementation of Bubble Sort
+/*
+How to implement it recursively? 
+Recursive Bubble Sort has no performance/implementation advantages, but can be a good question to check one’s understanding of Bubble Sort and recursion.
+If we take a closer look at Bubble Sort algorithm, we can notice that in first pass, we move largest element to end (Assuming sorting in increasing order).
+In second pass, we move second largest element to second last position and so on. 
+*/
+
+
+class Solution{
+	public static void bubbleSort(int arr[], int n){
+        // Base case
+        if (n == 1)
+            return;
+
+        // One pass of bubble sort. After this pass, the largest element is moved (or bubbled) to end.
+        boolean swap = false;
+        
+        for (int j=0; j<(n-1); j++)
+            if (arr[j] > arr[j+1])
+            {
+                // swap arr[j], arr[j+1]
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swap=true;
+            }
+  
+        if (swap == false)
+          return;
+  
+        // Largest element is fixed,
+        // recur for remaining array
+        bubbleSort(arr, n-1);
+    }
+}
