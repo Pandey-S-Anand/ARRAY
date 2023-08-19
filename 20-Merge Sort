@@ -1,0 +1,41 @@
+class Solution{
+   public static void mergeSort(int[]arr,int lb,int ub){
+      if(lb<ub)
+      {
+          int mid=(lb+ub)/2;
+          mergeSort(arr,lb,mid);
+          mergeSort(arr,(mid+1),ub);
+          merge(arr,lb,mid,ub);
+      }
+   }
+   
+   public static void merge(int[] arr,int lb,int mid,int ub)
+   {
+     int m=(mid-lb+1);
+     int n=(ub-mid);
+     int[] Left=new int[m];
+     int[] Right=new int[n];  
+   
+     for(int i=0;i<m;i++)
+        Left[i]=arr[lb+i];
+        
+     for(int i=0;i<n;i++)
+        Right[i]=arr[mid+1+i];
+        
+     int i=0,j=0,k=lb;
+     
+     while(i<m && j<n)
+        if(Left[i]<=Right[j])
+          arr[k++]=Left[i++];
+        else //(Right[j]<Left[i])
+          arr[k++]=Right[j++];
+      
+     if(i==m)//Left Sublist is Exhausted
+       while(j<n)//copy remaining Elements of Right Sublist into arr[] 
+         arr[k++]=Right[j++];
+     else if(j==n)//Right Sublist is Exhausted
+       while(i<m)//copy remaining Elements of Left Sublist into arr[]
+         arr[k++]=Left[i++];
+
+   }
+}
