@@ -1,4 +1,4 @@
-//Bruteforce Approach: (Sort in Ascending Order using inbuilt Arrays.sort() method or using any Sorting Algorithm and return Kth Element From the Last)
+//Bruteforce Approach :(Sort in Ascending Order using inbuilt Arrays.sort() method or using any Sorting Algorithm and return Kth Element From the Last)
 
 class Solution {
     public int findKthLargest(int[] arr, int k) {
