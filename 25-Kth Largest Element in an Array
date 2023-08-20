@@ -1,0 +1,96 @@
+//Bruteforce Approach: (Sort in Ascending Order using inbuilt Arrays.sort() method or using any Sorting Algorithm and return Kth Element From the Last)
+
+class Solution {
+    public int findKthLargest(int[] arr, int k) {
+        Arrays.sort(arr);
+        return arr[arr.length-k];
+    }
+}
+
+//Better Approach: (Using Bubble Sort)(Idea : https://youtu.be/o4bAoo_gFBU)
+
+class Solution {
+    public int findKthLargest(int[] arr, int k) {
+      int n=arr.length;
+      for(int pass=1;pass<=k;pass++)
+      {
+            boolean swap=false;
+            for(int j=0;j<(n-pass);j++)
+            if(arr[j]>arr[j+1])
+              {
+                 swap=true;
+                 //Swapping
+                 int temp=arr[j];
+                 arr[j]=arr[j+1];
+                 arr[j+1]=temp;
+              }
+              
+           if(swap==false)
+             break;
+      }
+      return arr[n-k];//Kth element from Last i.e Kth largest element in the Array
+    }
+}
+
+
+//Good Approach
+
+class Solution {
+   public int findKthLargest(int[] arr, int k) {
+      return quickSelect(arr,0,arr.length-1,k);  
+   }
+
+   public static int quickSelect(int[]arr,int lb,int ub,int k)
+   {
+      if(lb<ub)
+      {
+          int index=partition(arr,lb,ub);
+          int n=arr.length;
+          if((n-k)==index)
+            return arr[n-k];
+          else if((n-k)<index)
+            return quickSelect(arr,lb,index-1,k);
+          else
+            return quickSelect(arr,index+1,ub,k);
+      }
+      //if(lb==ub)
+      return arr[lb]; //return arr[ub];
+   }
+   
+   
+   public static int partition(int[] arr,int lb,int ub)
+   {
+     int i=lb,j=ub,pivot=arr[lb],n=arr.length;
+     
+     while(true)
+     {
+        while(i<n && arr[i]<=pivot )
+          i++;
+          
+        while(j>=0 && arr[j]>pivot)
+          j--;
+          
+        if(i<j) //Swap arr[i] and arr[j]
+          swap(arr,i,j);
+        else //if i>j => Swap Pivot(i.e arr[lb]) and arr[j]
+        {
+          swap(arr,lb,j);
+          break;
+        }
+     }
+     
+     return j;  //index of pivot element    
+   }
+   
+    
+   public static void swap(int[]arr,int i,int j)
+   {
+       int temp=arr[i];
+       arr[i]=arr[j];
+       arr[j]=temp;
+   }
+}
+
+
+//Optimal Approach
+
