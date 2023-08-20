@@ -2,7 +2,7 @@ class Solution{
     public void heapSort(int arr[], int n){
       buildMaxHeap(arr,n);
       
-      for(int i=1;i<n;i++)
+      for(int i=1;i<=n;i++)
       {
          swap(arr,0,n-i);
          heapify(arr,n-i,0);
