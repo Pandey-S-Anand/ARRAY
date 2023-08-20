@@ -1,0 +1,69 @@
+//Bruteforce Approach
+
+class Solution{
+   public static void segregatePosAndNeg(int[]arr){
+       int n=arr.length,k=0;
+       int temp[]=new int[n];
+             
+       for(int i=0;i<n;i++)
+         if(arr[i]<0)
+           temp[k++]=arr[i];
+       
+       for(int i=0;i<n;i++)
+         if(arr[i]>0)
+           temp[k++]=arr[i];
+             
+       for(int i=0;i<n;i++)
+         arr[i]=temp[i];
+   }
+}
+
+
+//Better Approach
+
+class Solution {
+   public static void segregatePosAndNeg(int[]arr){
+      int n=arr.length,start=0,end=(n-1);
+      
+      while(start<end)
+      {
+          while(start<n && arr[start]<0)
+            start++;
+            
+          while(end>=0 && arr[end]>0)
+            end--;
+            
+           if(start<end)
+           {
+              int temp=arr[start];
+              arr[start]=arr[end];
+              arr[end]=temp;
+                
+              start++;
+              end--;
+           }
+      }
+   }
+}
+
+
+//Optimal Approach
+
+class Solution {
+   public static void segregatePosAndNeg(int[]arr){
+       int n=arr.length,i=0,j=0;
+       while(i<n)
+         if(arr[i]<0)
+         {
+              //Swapping
+            int temp=arr[i];
+            arr[i]=arr[j];
+            arr[j]=temp;
+             
+            i++;
+            j++;
+         }
+         else
+           i++;
+   }
+}
