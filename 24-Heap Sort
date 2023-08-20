@@ -1,6 +1,6 @@
 class Solution{
     public void heapSort(int arr[], int n){
-      buildHeap(arr,n);
+      buildMaxHeap(arr,n);
       
       for(int i=1;i<n;i++)
       {
