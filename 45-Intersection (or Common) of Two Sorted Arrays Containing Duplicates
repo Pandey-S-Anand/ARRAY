@@ -1,28 +1,28 @@
 //Bruteforce Approach
 
 class Solution{	
-	public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
-	    int newLen1=removeDuplicatesFromSortedArray(arr1);
-	    int newLen2=removeDuplicatesFromSortedArray(arr2);
-	    return intersectionOfTwoSortedArray(arr1,newLen1,arr2,newLen2);
-	}
+   public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+      int newLen1=removeDuplicatesFromSortedArray(arr1);
+      int newLen2=removeDuplicatesFromSortedArray(arr2);
+      return intersectionOfTwoSortedArray(arr1,newLen1,arr2,newLen2);
+   }
 	
-  public static int removeDuplicatesFromSortedArray(int[] arr)
-	{
-     int j=0,n=arr.length;
-	   for(int i=0;i<(n-1);i++)
-        if(arr[i]!=arr[i+1])
-           arr[j++]=arr[i];
+   public static int removeDuplicatesFromSortedArray(int[] arr)
+   {
+       int j=0,n=arr.length;
+       for(int i=0;i<(n-1);i++)
+         if(arr[i]!=arr[i+1])
+            arr[j++]=arr[i];
 	       
-      arr[j++]=arr[n-1];
+       arr[j++]=arr[n-1];
 	   
 	   return j;
-	}
+   }
 	
-	public static List<Integer> intersectionOfTwoSortedArray(int[] arr1,int m,int[] arr2,int n)
-	{    
-	    int i=0,j=0,min;
-	    List<Integer>intersection=new ArrayList<>();
+   public static List<Integer> intersectionOfTwoSortedArray(int[] arr1,int m,int[] arr2,int n)
+   {    
+       int i=0,j=0,min;
+       List<Integer>intersection=new ArrayList<>();
 	    
        while(i<m && j<n)
          if(arr1[i]==arr2[j])
@@ -39,40 +39,40 @@ class Solution{
             else if(min==arr2[j])
               j++;
          }
-	       
-        return intersection;
-	 }
+
+    return intersection;
+   }
 }
 
 
 //Better Approach
 
 class Solution {
-	public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
-	    HashSet<Integer>hs=new HashSet<>();
-	    List<Integer>intersection=new ArrayList<>();
+   public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+       HashSet<Integer>hs=new HashSet<>();
+       List<Integer>intersection=new ArrayList<>();
 	    
-	    for(int val :arr2)
-	      hs.add(val);
+       for(int val :arr2)
+	 hs.add(val);
 	   
-	    for(int val :arr1)
-	      if(hs.contains(val))
-	      {
-	         intersection.add(val);
-	         hs.remove(val);
-	      }
+       for(int val :arr1)
+	 if(hs.contains(val))
+         {
+	   intersection.add(val);
+	   hs.remove(val);
+	 }
 	   
-	    return intersection;
-	}
+	return intersection;
+  }
 }
 
 
 //Optimal Approach
 
 class Solution {
-	public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
-	   int i=0,j=0,m=arr1.length,n=arr2.length,prev1=Integer.MIN_VALUE,prev2=Integer.MIN_VALUE;
-	   List<Integer>intersection=new ArrayList<>();
+   public static List<Integer> intersectionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+     int i=0,j=0,m=arr1.length,n=arr2.length,prev1=Integer.MIN_VALUE,prev2=Integer.MIN_VALUE;
+     List<Integer>intersection=new ArrayList<>();
 	    
      while(i<m && j<n)
      {     
@@ -101,6 +101,6 @@ class Solution {
         }
      }
 	   
-	   return intersection;
-	}
+     return intersection;
+  }
 }
