@@ -1,4 +1,4 @@
-//Optimal Solution
+// Optimal Solution
 
 class Solution {
     public int[] intersection(int[] arr1, int[] arr2) {
