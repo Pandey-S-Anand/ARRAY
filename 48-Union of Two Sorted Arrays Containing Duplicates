@@ -1,27 +1,26 @@
 //Bruteforce Approach
 
 class Solution {
-	public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2)
-	{
-	    int newLen1=removeDuplicatesFromSortedArray(arr1);
-	    int newLen2=removeDuplicatesFromSortedArray(arr2);
-	    return unionOfTwoSortedArray(arr1,newLen1,arr2,newLen2);
-	}
+  public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+     int newLen1=removeDuplicatesFromSortedArray(arr1);
+     int newLen2=removeDuplicatesFromSortedArray(arr2);
+     return unionOfTwoSortedArray(arr1,newLen1,arr2,newLen2);
+  }
 	
   public static int removeDuplicatesFromSortedArray(int[] arr)
-	{
+  {
      int n=arr.length,j=0;
-	   for(int i=0;i<(n-1);i++)
+     for(int i=0;i<(n-1);i++)
         if(arr[i]!=arr[i+1])
            arr[j++]=arr[i];
 	       
      arr[j++]=arr[n-1];
 	   
-	   return j;
-	}
+    return j;
+  }
 	
   public static List<Integer> unionOfTwoSortedArray(int[] arr1,int m,int[] arr2,int n)
-	{
+  {
       int i=0,j=0,min;
       List<Integer>union=new ArrayList<>();
 	    
@@ -55,28 +54,28 @@ class Solution {
 //Better Approach
 
 class Solution {
-	public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
-    TreeSet<Integer>ts=new TreeSet<>();
-    List<Integer>union=new ArrayList<>();
+   public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+     TreeSet<Integer>ts=new TreeSet<>();
+     List<Integer>union=new ArrayList<>();
       
-    for(int val :arr1)
-      ts.add(val);
+     for(int val :arr1)
+       ts.add(val);
 	    
-    for(int val :arr2)
-      ts.add(val);
+     for(int val :arr2)
+       ts.add(val);
             
-	  for(int key:ts)
+     for(int key:ts)
       union.add(key);
           
     return union;
-	}
+  }
 }
 
 
 //Optimal Approach
 
 class Solution {
-	public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
+  public static List<Integer> unionOfTwoSortedArrayContainingDuplicates(int[] arr1,int[] arr2){
      int i=0,j=0,m=arr1.length,n=arr2.length,min,prev1=Integer.MIN_VALUE,prev2=Integer.MIN_VALUE;
      List<Integer>union=new ArrayList<>();
 	    
@@ -113,33 +112,33 @@ class Solution {
         }
      }
             
-           if(i<m)
-           {
-              while(i<m && arr1[i]==arr1[i-1])
-                i++;
+     if(i<m)
+     {
+        while(i<m && arr1[i]==arr1[i-1])
+          i++;
             
-              while(i<(m-1))
-                if(arr1[i]!=arr1[i+1])
-                  union.add(arr1[i++]);
+        while(i<(m-1))
+           if(arr1[i]!=arr1[i+1])
+              union.add(arr1[i++]);
             
-              if(i==(m-1))
-                union.add(arr1[i]);   
-           } 
+         if(i==(m-1))
+           union.add(arr1[i]);   
+     } 
         
       
-           if(j<n)
-           {
-               while(j<n && arr2[j]==arr2[j-1])
-                 j++;
+     if(j<n)
+     {
+        while(j<n && arr2[j]==arr2[j-1])
+          j++;
             
-               while(j<(n-1))
-                 if(arr2[j]!=arr2[j+1])
-                   union.add(arr2[j++]);
+        while(j<(n-1))
+          if(arr2[j]!=arr2[j+1])
+            union.add(arr2[j++]);
             
-               if(j==(n-1))
-                 union.add(arr2[j]);
-           }
+        if(j==(n-1))
+          union.add(arr2[j]);
+     }
           
-         return union;
-	}
+     return union;
+  }
 }
