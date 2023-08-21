@@ -2,20 +2,20 @@
 
 class Solution {
     public int missingNumber(int[] arr) {
-      int n=arr.length,actualSum=0,expectedSum=(n*(n+1))/2; //Sum of First N Natural Numbers.
-	    for(int i=0;i<n;i++)
-	       actualSum+=arr[i];
+       int n=arr.length,actualSum=0,expectedSum=(n*(n+1))/2; //Sum of First N Natural Numbers.
+       for(int i=0;i<n;i++)
+	  actualSum+=arr[i];
       
-	    int missingNum=expectedSum-actualSum;
-	    return missingNum;
+       int missingNum=expectedSum-actualSum;
+       return missingNum;
       
       /* Aliter 
-	    int n=arr.length,expectedSum=n*(n+1)/2;//Sum of First N Natural Numbers.
-	    for(int i=0;i<(n-1);i++)
-	      expectedSum-=arr[i];
+	int n=arr.length,expectedSum=n*(n+1)/2;//Sum of First N Natural Numbers.
+	for(int i=0;i<(n-1);i++)
+	   expectedSum-=arr[i];
 
-	    return expectedSum;
-	    */
+	return expectedSum;
+      */
     }
 }
 
@@ -23,15 +23,15 @@ class Solution {
 
 class Solution {
     public int missingNumber(int[] arr) {
-      int n=arr.length,XOR1=0;
-	    for(int i=1;i<=n;i++)
-	       XOR1=XOR1^i;
+       int n=arr.length,XOR1=0;
+       for(int i=1;i<=n;i++)
+	  XOR1=XOR1^i;
 	       
-	    int XOR2=0;  
-	    for(int i=0;i<n;i++)
-	       XOR2=XOR2^arr[i];
+       int XOR2=0;  
+       for(int i=0;i<n;i++)
+	  XOR2=XOR2^arr[i];
 	        
-	    int missingNum=XOR1^XOR2;
-	    return missingNum;
+       int missingNum=XOR1^XOR2;
+       return missingNum;
     }
 }
