@@ -1,8 +1,8 @@
 //Bruteforce Approach
 
 class Solution {
-	    public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
-	       List<Integer>union=new ArrayList<>();
+    public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
+         List<Integer>union=new ArrayList<>();
 	
          for(int val: arr1)
            union.add(val);
@@ -14,11 +14,11 @@ class Solution {
           Collections.sort(union);
         
           return union;
-      }
+    }
 	
 	
-       public static boolean binarySearch(int[]arr,int key)
-       {
+     public static boolean binarySearch(int[]arr,int key)
+     {
          int low=0,high=arr.length-1,mid;
          while(low<=high)
          {
@@ -31,7 +31,7 @@ class Solution {
             low=mid+1;
          }
         return false;//key doesnot exists
-       }
+     }
 }
 
 
@@ -39,28 +39,28 @@ class Solution {
 //Better Approach
 
 class Solution {
-	public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
-     TreeSet<Integer>ts=new TreeSet<>();
-     List<Integer>union=new ArrayList<>();
+   public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
+      TreeSet<Integer>ts=new TreeSet<>();
+      List<Integer>union=new ArrayList<>();
         
-     for(int val : arr1)
-       ts.add(val);
+      for(int val : arr1)
+        ts.add(val);
 	    
-     for(int val : arr2)
-       ts.add(val);
+      for(int val : arr2)
+        ts.add(val);
          
-	   for(int val:ts)
-       union.add(val);
+      for(int val:ts)
+        union.add(val);
 	    
-	   return union;
-  }
+      return union;
+   }
 }
 
 
 //Optimal Approach
 
 class Solution{	
-	public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
+   public static List<Integer> unionOfTwoSortedArray(int[] arr1,int[] arr2){
       int i=0,j=0,m=arr1.length,n=arr2.length;
       List<Integer>union=new ArrayList<>();
 	    
