@@ -7,7 +7,7 @@ class Solution {
 	    {
 	        int count=0;
 	        for(int j=0;j<n;j++)
-	            if(arr[i]==arr[j])
+	           if(arr[i]==arr[j])
 	              count++;
 		      
 	        if(count==1)
@@ -16,7 +16,8 @@ class Solution {
 	           break;
 	        }
 	    }
-	    return res;
+
+	return res;
     }
 }
 
@@ -71,9 +72,9 @@ class Solution {
 class Solution {
     public int singleNumber(int[] arr) {
       int res=arr[0],n=arr.length;
-	    for(int i=1;i<n;i++)
-	       res=res^arr[i];
+      for(int i=1;i<n;i++)
+         res=res^arr[i];
 	       
-	    return res;
+      return res;
     }
 }
