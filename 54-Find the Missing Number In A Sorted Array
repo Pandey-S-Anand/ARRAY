@@ -1,15 +1,14 @@
 //Bruteforce Approach 
 
 class Solution {
-	public static int missingNumberInSortedArray(int[] arr)
-	{
-	   int i;
+   public static int missingNumberInSortedArray(int[] arr){
+     int i;
      for(i=0;i<n;i++)
        if(arr[i]!=(i+1))
           break;
 	       
      return i+1;        
-	}
+   }
 }
 
 
