@@ -1,0 +1,70 @@
+// Method 1 (Using Extra Space)
+
+class Solution {
+    public int removeDuplicates(int[] arr) {
+         int n=arr.length,j=0;
+         int[] temp=new int [n];
+	   
+	     for(int i=0;i<(n-1);i++)
+            if(arr[i]!=arr[i+1])
+               temp[j++]=arr[i];
+              
+         temp[j++]=arr[n-1];
+       
+         for(int i=0;i<j;i++)
+           arr[i]=temp[i];
+	     
+	   return j; 
+    }
+}
+
+//Method 2 (Using Extra Space)
+
+class Solution {
+    public int removeDuplicates(int[] arr) {
+       int j=0;
+       LinkedHashSet<Integer>lhs=new LinkedHashSet<>();
+	  
+       for(int val:arr)
+         lhs.add(val);
+      
+       for(int val :lhs)
+          arr[j++]=val;
+	    
+        return j;
+    }
+}
+
+//Aliter (Using LinkedHashSet)
+
+class Solution {
+    public int removeDuplicates(int[] arr) {
+       int j=0;
+       TreeSet<Integer>ts=new TreeSet<>();
+	  
+       for(int val:arr)
+         ts.add(val);
+      
+       for(int val :ts)
+          arr[j++]=val;
+	    
+       return j;
+    }
+}
+
+
+
+//Method 3 (Without Using Extra Space)
+
+class Solution {
+    public int removeDuplicates(int[] arr) {
+       int n=arr.length,j=0;
+	     for(int i=0;i<(n-1);i++)
+          if(arr[i]!=arr[i+1])
+             arr[j++]=arr[i];
+	       
+       arr[j++]=arr[n-1];
+	   
+	   return j;
+    }
+}
