@@ -1,0 +1,129 @@
+//Method 1
+
+class Solution {
+    public int singleNumber(int[] arr) {
+      int res=-1,n=arr.length;
+	    for(int i=0;i<n;i++)
+	    {
+	      int j;
+	      for(j=0;j<n;j++)
+	        if(j!=i && arr[i]==arr[j])
+	           break;
+	              
+	      if(j==n)
+	      {
+	        res=arr[i];
+	        break;
+	      }
+	    }
+      return res;
+    }
+}
+
+// Method 2
+
+class Solution {
+    public int singleNumber(int[] arr) {
+       int n=arr.length,res=-1;
+       HashMap<Integer,Integer>hm=new HashMap<>(n);
+       
+        for(int i=0;i<n;i++)
+          if(hm.containsKey(arr[i]))
+             hm.put(arr[i],hm.get(arr[i])+1);
+          else
+             hm.put(arr[i],1);
+       
+        for(int key:hm.keySet()) 
+          if(hm.get(key)==1)
+          {
+            res=key;
+            break;
+          }
+	  
+        return res;
+    }
+}
+
+//Method 3
+
+class Solution {
+    public int singleNumber(int[] arr) {
+       int n=arr.length;
+       long arrSum=0,uniqueSum=0,res=-1;
+       HashSet<Integer>hs=new HashSet<>(n);
+       
+       for(int i=0;i<n;i++)
+       {
+         hs.add(arr[i]);
+         arrSum+=arr[i];
+       }
+         
+       for(int val :hs)
+         uniqueSum+=val;
+         
+       res=((3*uniqueSum)-arrSum)/2;
+	  
+       return (int)res;
+    }
+}
+
+
+//Method 4
+
+class Solution {
+    public int singleNumber(int[] arr) {
+       Arrays.sort(arr);
+       int res=-1,n=arr.length;
+       for(int i=0;i<n;i++)
+       {   
+	       if( i==(n-1) || arr[i]!=arr[i+1] )
+	       {
+	         res=arr[i];
+	         break;
+	       }
+	       
+	       while(i<(n-1) && arr[i]==arr[i+1])
+	         i++;
+       }
+			 
+       return res;  
+    }
+}
+
+
+//Method 5
+
+class Solution {
+    public int singleNumber(int[] arr) {
+      int ans=0,n=arr.length;
+      for(int i=0;i<32;i++)
+      {
+          int count1=0;
+	        int mask=1<<i;
+          for(int j=0;j<n;j++)
+            if((arr[j]&mask)!=0)
+               count1++;
+		
+          if((count1%3)==1)//3n+1 form so set ith bit of the answer
+            ans=ans|mask;
+      }
+      return ans;
+    }
+}
+
+
+//Method 6
+
+class Solution {
+    public int singleNumber(int[] arr) {
+        int n=arr.length,counterOne = 0,counterTwo = 0;
+        
+        for (int i = 0; i < n; i++)
+        {
+            counterOne = (~counterTwo) & (counterOne ^ arr[i]);
+            counterTwo = (~counterOne) & (counterTwo ^ arr[i]);
+        }
+        
+        return counterOne;
+    }
+}
