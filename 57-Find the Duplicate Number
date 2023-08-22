@@ -95,7 +95,7 @@ class Solution {
            break;
          }
          
-	       arr[ele]*=-1;
+	arr[ele]*=-1;
       }
       
       return repeated;  
