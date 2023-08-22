@@ -3,22 +3,23 @@
 class Solution {
     public int singleNumber(int[] arr) {
       int res=-1,n=arr.length;
-	    for(int i=0;i<n;i++)
-	    {
-	      int j;
-	      for(j=0;j<n;j++)
-	        if(j!=i && arr[i]==arr[j])
-	           break;
+      for(int i=0;i<n;i++)
+      {
+	 int j;
+	 for(j=0;j<n;j++)
+	    if(j!=i && arr[i]==arr[j])
+	      break;
 	              
-	      if(j==n)
-	      {
-	        res=arr[i];
-	        break;
-	      }
-	    }
+	 if(j==n)
+	 {
+	    res=arr[i];
+	    break;
+	 }
+      }
       return res;
     }
 }
+
 
 // Method 2
 
@@ -76,14 +77,14 @@ class Solution {
        int res=-1,n=arr.length;
        for(int i=0;i<n;i++)
        {   
-	       if( i==(n-1) || arr[i]!=arr[i+1] )
-	       {
-	         res=arr[i];
-	         break;
-	       }
+	  if( i==(n-1) || arr[i]!=arr[i+1] )
+	  {
+	    res=arr[i];
+	    break;
+	  }
 	       
-	       while(i<(n-1) && arr[i]==arr[i+1])
-	         i++;
+	  while(i<(n-1) && arr[i]==arr[i+1])
+	     i++;
        }
 			 
        return res;  
@@ -99,7 +100,7 @@ class Solution {
       for(int i=0;i<32;i++)
       {
           int count1=0;
-	        int mask=1<<i;
+	  int mask=1<<i;
           for(int j=0;j<n;j++)
             if((arr[j]&mask)!=0)
                count1++;
