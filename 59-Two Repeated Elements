@@ -31,7 +31,6 @@ class Solution{
        boolean[] visited=new boolean[n+1];
        
        for(int i=0;i<(n+2);i++)
-       {
            if(visited[arr[i]]==true)
            {
               res[idx++]=arr[i];
@@ -40,7 +39,7 @@ class Solution{
            }
            else
              visited[arr[i]]=true;
-       }
+       
        return res;
     }
 }
@@ -58,7 +57,7 @@ class Solution{
             {
               res[idx++]=ele;
               if(idx==2)
-	             break;
+	        break;
             }
             else
              arr[ele]*=-1; 
