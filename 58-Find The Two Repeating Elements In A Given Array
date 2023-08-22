@@ -1,18 +1,18 @@
 //Method 1
 
 class Solution {
-  public static void findTwoRepeated(int arr[]){
-  	int n=arr.length,count=0;
-	  for(int i=0;i<n;i++)
-	     for(int j=i+1;j<n;j++)
-	       if(arr[i]==arr[j])
-	       {
-	          System.out.print(arr[i]+" ");
-            count++;
-	          if(count==2)
-	            return;
-	       }         
-    }
+   public static void findTwoRepeated(int arr[]){
+      int n=arr.length,count=0;
+      for(int i=0;i<n;i++)
+	 for(int j=i+1;j<n;j++)
+	    if(arr[i]==arr[j])
+	    {
+	       System.out.print(arr[i]+" ");
+               count++;
+	       if(count==2)
+	        return;
+	    }         
+  }
 }
 
 
@@ -24,15 +24,15 @@ class Solution{
       Arrays.sort(arr);
       while(i<n-1)
      	 if(arr[i]==arr[i+1])
-	     {
-	       System.out.println(arr[i]+" ");
-	       i+=2;
-	       count++;    
-	       if(count==2)
-	         break;
-	     }
-       else
-         i++;
+	 {
+	    System.out.println(arr[i]+" ");
+	    i+=2;
+	    count++;    
+	    if(count==2)
+	      break;
+	 }
+         else
+           i++;
     }
 }
 
@@ -52,8 +52,8 @@ class Solution{
        for(int i=0;i<n;i++)
          if(hm.get(arr[i])==2)
          {
-	         System.out.println(arr[i]+" ");
-	         cnt++;
+	   System.out.println(arr[i]+" ");
+	   cnt++;
            if(cnt==2)
              break;  
          }
@@ -86,11 +86,11 @@ class Solution{
 
 class Solution {	
     public static void findTwoRepeated(int arr[]){
-	    int n=arr.length,sum,prod,arrSum,arrProd,sumOfTwoRepeating,prodOfTwoRepeating,differenceOfTwoRepeating,R1,R2;
-        sum=((n-2)*((n-2)+1))/2;//Sum of First 'n' Natural Numbers.
-        prod=factorial(n-2);//Product of First n Natural Numbers.
-        arrSum=0;
-	      arrProd=1;
+	int n=arr.length;
+        int sum=((n-2)*((n-2)+1))/2;//Sum of First 'n' Natural Numbers.
+        int prod=factorial(n-2);//Product of First n Natural Numbers.
+        int arrSum=0;
+	int arrProd=1;
 	    
         for(int i=0;i<n;i++)
         {
@@ -98,24 +98,24 @@ class Solution {
           arrProd*=arr[i];
         }
 	    
-        sumOfTwoRepeating=arrSum-sum;      //R1+R2=sumOfTwoRepeating
-        prodOfTwoRepeating=arrProd/prod;  //R1*R2=prodOfTwoRepeating
-        differenceOfTwoRepeating=(int)Math.sqrt((sumOfTwoRepeating*sumOfTwoRepeating)-(4*prodOfTwoRepeating));//R1-R2=differenceOfTwoRepeating //(X-Y)^2=((X+Y)^2 - 4*X*Y)
-        R1=(sumOfTwoRepeating+differenceOfTwoRepeating)/2;//(R1+R2)+(R1-R2)=2R1 => R1=((R1+R2)+(R1-R2))/2
-        R2=sumOfTwoRepeating-R1;//R2=(R1+R2)-R1
+        int sumOfTwoRepeating=arrSum-sum;      //R1+R2=sumOfTwoRepeating
+        int prodOfTwoRepeating=arrProd/prod;  //R1*R2=prodOfTwoRepeating
+        int differenceOfTwoRepeating=(int)Math.sqrt((sumOfTwoRepeating*sumOfTwoRepeating)-(4*prodOfTwoRepeating));//R1-R2=differenceOfTwoRepeating //(X-Y)^2=((X+Y)^2 - 4*X*Y)
+        int R1=(sumOfTwoRepeating+differenceOfTwoRepeating)/2;//(R1+R2)+(R1-R2)=2R1 => R1=((R1+R2)+(R1-R2))/2
+        int R2=sumOfTwoRepeating-R1;//R2=(R1+R2)-R1
         System.out.println(R1+" "+R2);
-	}
+    }
 	
-	public static int factorial(int num)
-	{
-	   int[]fact=new int[num+1];
-	   fact[0]=1;
+    public static int factorial(int num)
+    {
+       int[]fact=new int[num+1];
+       fact[0]=1;
 	   
-	   for(int i=1;i<=num;i++)
-	     fact[i]=i*fact[i-1];
+       for(int i=1;i<=num;i++)
+	 fact[i]=i*fact[i-1];
 	     
-	   return fact[num];
-	}
+       return fact[num];
+    }
 }
  
  
@@ -163,7 +163,7 @@ class Solution {
     }
 }
 
-//Method 8 (Refer Question 59 and 60 for better understanding of this approach)
+//Method 8 (Refer Question 60 and 61 for better understanding of this approach)
 
 class Solution{
     public static void findTwoRepeated(int arr[],int n){
