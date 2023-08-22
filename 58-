@@ -1,0 +1,195 @@
+//Method 1
+
+class Solution {
+  public static void findTwoRepeated(int arr[]){
+  	int n=arr.length,count=0;
+	  for(int i=0;i<n;i++)
+	     for(int j=i+1;j<n;j++)
+	       if(arr[i]==arr[j])
+	       {
+	          System.out.print(arr[i]+" ");
+            count++;
+	          if(count==2)
+	            return;
+	       }         
+    }
+}
+
+
+//Method 2
+
+class Solution{
+    public static void findTwoRepeated(int arr[]){
+      int n=arr.length,count=0,i=0;
+      Arrays.sort(arr);
+      while(i<n-1)
+     	 if(arr[i]==arr[i+1])
+	     {
+	       System.out.println(arr[i]+" ");
+	       i+=2;
+	       count++;    
+	       if(count==2)
+	         break;
+	     }
+       else
+         i++;
+    }
+}
+
+
+//Method 3
+
+class Solution{
+    public static void findTwoRepeated(int arr[]){
+       int n=arr.length, cnt=0;
+       HashMap<Integer,Integer>hm=new HashMap<>();
+       for(int i=0;i<n;i++)
+         if(hm.containsKey(arr[i]))
+           hm.put(arr[i],hm.get(arr[i])+1);
+         else
+           hm.put(arr[i],1);
+       
+       for(int i=0;i<n;i++)
+         if(hm.get(arr[i])==2)
+         {
+	         System.out.println(arr[i]+" ");
+	         cnt++;
+           if(cnt==2)
+             break;  
+         }
+    }
+}
+
+
+//Method 4
+
+class Solution{     
+    public static void findTwoRepeated(int arr[]){
+      int cnt=0;
+      HashSet<Integer>hs=new HashSet<>();
+        
+      for(int val:arr)
+        if(hs.contains(val))
+        {
+          System.out.println(val+" ");
+          cnt++;
+          if(cnt==2)
+            break;            
+        }
+        else
+          hs.add(val);
+    }
+}
+
+
+//Method 5
+
+class Solution {	
+    public static void findTwoRepeated(int arr[]){
+	    int n=arr.length,sum,prod,arrSum,arrProd,sumOfTwoRepeating,prodOfTwoRepeating,differenceOfTwoRepeating,R1,R2;
+        sum=((n-2)*((n-2)+1))/2;//Sum of First 'n' Natural Numbers.
+        prod=factorial(n-2);//Product of First n Natural Numbers.
+        arrSum=0;
+	      arrProd=1;
+	    
+        for(int i=0;i<n;i++)
+        {
+          arrSum+=arr[i];
+          arrProd*=arr[i];
+        }
+	    
+        sumOfTwoRepeating=arrSum-sum;      //R1+R2=sumOfTwoRepeating
+        prodOfTwoRepeating=arrProd/prod;  //R1*R2=prodOfTwoRepeating
+        differenceOfTwoRepeating=(int)Math.sqrt((sumOfTwoRepeating*sumOfTwoRepeating)-(4*prodOfTwoRepeating));//R1-R2=differenceOfTwoRepeating //(X-Y)^2=((X+Y)^2 - 4*X*Y)
+        R1=(sumOfTwoRepeating+differenceOfTwoRepeating)/2;//(R1+R2)+(R1-R2)=2R1 => R1=((R1+R2)+(R1-R2))/2
+        R2=sumOfTwoRepeating-R1;//R2=(R1+R2)-R1
+        System.out.println(R1+" "+R2);
+	}
+	
+	public static int factorial(int num)
+	{
+	   int[]fact=new int[num+1];
+	   fact[0]=1;
+	   
+	   for(int i=1;i<=num;i++)
+	     fact[i]=i*fact[i-1];
+	     
+	   return fact[num];
+	}
+}
+ 
+ 
+//Method 6
+
+class Solution {
+    public static void findTwoRepeated(int arr[]){
+       int n=arr.length,count=0;
+       boolean[] visited=new boolean[n-1];
+       
+       for(int i=0;i<n;i++)
+       {
+           if(visited[arr[i]]==true)
+           {
+              System.out.print(arr[i]+" ");    
+              count++;   
+              if(count==2)
+               break;
+           }
+           else
+             visited[arr[i]]=true;
+       }
+    }
+}
+
+
+// Method 7
+
+class Solution {
+    public static void findTwoRepeated(int arr[]){
+        int n=arr.length,count=0;
+        for(int i=0;i<n;i++)
+        {
+            int ele=Math.abs(arr[i]); 
+            if(arr[ele]<0)
+            {
+              System.out.print(ele+" ");
+		          count++;
+              if(count==2)
+	             break;
+            }
+            else
+             arr[ele]*=-1; 
+        }
+    }
+}
+
+//Method 8 (Refer Question 59 and 60 for better understanding of this approach)
+
+class Solution{
+    public static void findTwoRepeated(int arr[],int n){
+       int x=0,y=0,xXory=0;
+       int[] res=new int[2];
+          
+       for(int i=1;i<=n;i++)
+         xXory=xXory^i;
+             
+       for(int val:arr)
+         xXory=xXory^val;
+             
+       int rmsbm=rMSBM(xXory);
+          
+       for(int val:arr)
+         if((val & rmsbm)==0)
+            x=x^val;
+         else
+            y=y^val;
+          
+       for(int i=1;i<=n;i++)
+         if((i & rmsbm)==0)
+           x=x^i;
+         else
+           y=y^i;
+
+       System.out.print(x+" "+y);
+    }
+}
