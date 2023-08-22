@@ -165,12 +165,11 @@ class Solution {
 
 //Method 8 (Refer Question 60 and 61 for better understanding of this approach)
 
-class Solution{
-    public static void findTwoRepeated(int arr[],int n){
-       int x=0,y=0,xXory=0;
-       int[] res=new int[2];
+class Solution {
+    public static void findTwoRepeated(int arr[]){
+       int n=arr.length,x=0,y=0,xXory=0;
           
-       for(int i=1;i<=n;i++)
+       for(int i=1;i<=(n-2);i++)
          xXory=xXory^i;
              
        for(int val:arr)
@@ -184,12 +183,23 @@ class Solution{
          else
             y=y^val;
           
-       for(int i=1;i<=n;i++)
+       for(int i=1;i<=(n-2);i++)
          if((i & rmsbm)==0)
            x=x^i;
          else
            y=y^i;
 
        System.out.print(x+" "+y);
+    }
+    
+    public static int rMSBM(int n)
+    {
+       int rsbm= n & twosCompliment(n);
+       return rsbm;
+    }
+		
+    public static int twosCompliment(int n)
+    {
+       return -n;//(~n+1);
     }
 }
