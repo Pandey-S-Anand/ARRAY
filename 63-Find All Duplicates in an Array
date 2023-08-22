@@ -107,7 +107,7 @@ class Solution {
 	 
           if(arr[idx]<0)
             al.add(ele);
-	        else
+	  else
             arr[idx]*=-1;
       }
       
@@ -124,8 +124,8 @@ class Solution {
         {
           int correctIndex=arr[i]-1;
           if(arr[correctIndex]==arr[i])
-	          i++;
-	        else //if arr[i] is not at its correct index
+	     i++;
+	  else //if arr[i] is not at its correct index
           {
             int temp=arr[correctIndex];
             arr[correctIndex]=arr[i];
@@ -138,6 +138,6 @@ class Solution {
           if(arr[i]!=i+1)
             al.add(arr[i]);
              
-	    return al;
+      return al;
     }
 }
