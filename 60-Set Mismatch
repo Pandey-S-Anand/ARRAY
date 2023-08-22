@@ -109,7 +109,7 @@ class Solution {
           int correctIndex=arr[i]-1;
           if(arr[correctIndex]==arr[i])
 	          i++;
-	        else //if arr[i] is not at its correct index
+	  else //if arr[i] is not at its correct index
           {
                int temp=arr[correctIndex];
                arr[correctIndex]=arr[i];
