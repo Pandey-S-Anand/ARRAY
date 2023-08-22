@@ -41,8 +41,8 @@ class Solution {
          if(hm.get(arr[i])==1)
          {
            res[k++]=arr[i];
-	         if(k==2)
-	          break;  
+	   if(k==2)
+	     break;  
          }
          
       return res;
