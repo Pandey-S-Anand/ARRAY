@@ -153,9 +153,9 @@ class Solution {
             if(arr[ele]<0)
             {
               System.out.print(ele+" ");
-		          count++;
+	      count++;
               if(count==2)
-	             break;
+	        break;
             }
             else
              arr[ele]*=-1; 
