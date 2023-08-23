@@ -1,17 +1,17 @@
 //Bruteforce Approach
 
 class Solution {
-	public static int findXor(int[] arr){
-	    int n=arr.length,xor=0,pairSum;
-	    for(int i=0;i<n;i++)
-	       for(int j=0;j<n;j++)
-	       {
-	          pairSum=arr[i]+arr[j];
-	          xor=xor^pairSum;
-	       }
-        
-	    return xor;        
+   public static int findXor(int[] arr){
+      int n=arr.length,xor=0,pairSum;
+      for(int i=0;i<n;i++)
+	for(int j=0;j<n;j++)
+        {
+	  pairSum=arr[i]+arr[j];
+	  xor=xor^pairSum;
 	}
+        
+      return xor;        
+   }
 }
 
 
@@ -24,17 +24,17 @@ Only the pairs like (a[i], a[i]) will give the different result. So, take the xo
 
 
 class Solution {
-	public static int findXor(int[] arr){
-	    int n=arr.length,xor=0;
-	    for(int i=0;i<n;i++)
-	    {
-	       int pairSum=2*arr[i];
-	       xor=xor^pairSum;
-	    }
-	    return xor;        
-	}
-	
-	/*
+   public static int findXor(int[] arr){
+       int n=arr.length,xor=0;
+       for(int i=0;i<n;i++)
+       {
+	  int pairSum=2*arr[i];
+	  xor=xor^pairSum;
+       }
+     return xor;         
+   }
+}	
+/*
 	  Ex-arr[]={1,2,5,3,9};
 	  
 	  (1,1)=>(1+1)=2                                           
@@ -73,5 +73,4 @@ class Solution {
 	     =0^(2*1 ^ 2*2 ^ 2*5 ^ 2*3 ^ 2*9)
 	     =0^24
 	     =24
-	*/
-}
+*/
