@@ -21,7 +21,7 @@ class Solution {
           int d1=num1[i];
 	  
           int base=(d1+carry)%10; 
-	        carry=(d1+carry)/10;
+	  carry=(d1+carry)/10;
 	  
           res.add(base);
           i--;
