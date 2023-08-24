@@ -1,4 +1,4 @@
-//Bruteforce Approach
+//Bruteforce Approach (Using array)
 
 class Solution{
   public static ArrayList<Integer> prevSmall(ArrayList<Integer> arr, int n){
@@ -19,7 +19,7 @@ class Solution{
   }
 }
 
-//Optimal Approach
+//Optimal Approach (Using Stack)
 
 public class Solution{
    public static ArrayList<Integer> prevSmall(ArrayList<Integer> arr, int n){
