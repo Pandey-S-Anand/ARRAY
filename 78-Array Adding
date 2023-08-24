@@ -1,43 +1,43 @@
 class Solution {
   static int[] calSum(int arr1[], int arr2[], int m, int n) {
   
-	   ArrayList<Integer> res=new ArrayList<>();
-	   int i=m-1,j=n-1,carry=0,base;
+     ArrayList<Integer> res=new ArrayList<>();
+     int i=m-1,j=n-1,carry=0,base;
      while(i>=0 && j>=0)
-	   {
-          base=(arr1[i]+arr2[j]+carry)%10;
-          carry=(arr1[i]+arr2[j]+carry)/10;
-          res.add(base);
+     {
+        base=(arr1[i]+arr2[j]+carry)%10;
+        carry=(arr1[i]+arr2[j]+carry)/10;
+        res.add(base);
 
-		   i--;
-		   j--;
-	   }
+	i--;
+	j--;
+     }
 
-	   while(i>=0)
-	   {
-		   base=(arr1[i]+carry)%10;
+     while(i>=0)
+     {
+       base=(arr1[i]+carry)%10;
        carry=(arr1[i]+carry)/10;
        res.add(base);
        i--;
-	   }
+     }
 
 	  
-	   while(j>=0)
-	   {
-		   base=(arr2[j]+carry)%10;
+     while(j>=0)
+     {
+       base=(arr2[j]+carry)%10;
        carry=(arr2[j]+carry)/10;
        res.add(base);
        j--;
-	   }
+     }
 
-	  if(carry==1)
-      res.add(carry);
+     if(carry==1)
+       res.add(carry);
 	  
-	  int[]result=new int[res.size()];
+     int[]result=new int[res.size()];
 	  
-	  for(int k=res.size()-1;k>=0;k--)
-		result[res.size()-k-1]=res.get(k);
+     for(int k=res.size()-1;k>=0;k--)
+       result[res.size()-k-1]=res.get(k);
 
-	  return result;
+     return result;
   }
 }
