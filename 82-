@@ -1,0 +1,60 @@
+
+class Solution{
+  public static void substract(int[]arr1,int[]arr2){  // arr2[] -arr1[] = ?
+    int len1=arr1.length;
+    int len2=arr2.length;
+
+    int diff[] = new int[len2];
+    
+    int borrow = 0;
+    int i = len1 - 1;
+    int j = len2 - 1;
+    int k = len2 - 1;
+
+    while (i>=0 && j>=0) 
+    {
+      
+      if ((arr2[j]-borrow) >= arr1[i])
+      {
+        diff[k] = (arr2[j]-borrow) - arr1[i];
+        borrow = 0;
+      } 
+      else 
+      {
+        diff[k] = (arr2[j] + 10 - borrow) - arr1[i];
+        borrow = 1;
+      }
+
+      i--;
+      j--;
+      k--;
+    }
+    
+    while(j>=0)
+    {
+      if ((arr2[j]-borrow) >= 0)
+      {
+        diff[k] = (arr2[j]-borrow);
+        borrow = 0;
+      } 
+      else 
+      {
+        diff[k] = (arr2[j] + 10) - borrow ;
+        borrow = 1;
+      }
+
+      j--;
+      k--; 
+    }
+    
+    //Removing leading zeroes (if any)
+    k = 0;
+    while (k < len2 && diff[k] == 0)
+      k++;
+      
+    //Printing the difference
+    while (k < len2)
+      System.out.println(diff[k++]);
+
+  }
+}
