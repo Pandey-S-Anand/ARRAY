@@ -5,15 +5,15 @@ class Solution{
     int start=0,end=arr.length-1;
       
     while(start<end)
-	  {
-		 if(arr[start]!=arr[end])
-			 return "Not Palindrome";
+    {
+       if(arr[start]!=arr[end])
+	  return "Not Palindrome";
     
-		  start++;
-		  end--; 
-	  }
+	start++;
+	 end--; 
+     }
 	  
-	  return "Palindrome";
+      return "Palindrome";
   }
 }
 
@@ -27,14 +27,14 @@ class Solution{
 
     public static String isPalindrome(int[] arr, int start, int end)
     {
-      if(start<end)
-	    {
-		    if(arr[start]!=arr[end])
-			   return "Not Palindrome";
+       if(start<end)
+       {
+	  if(arr[start]!=arr[end])
+	    return "Not Palindrome";
       
-		    return isPalindrome(arr,++start, --end); 
-	    }
+	  return isPalindrome(arr,++start, --end); 
+       }
      
-	    return "Palindrome";
+       return "Palindrome";
     }
 }
