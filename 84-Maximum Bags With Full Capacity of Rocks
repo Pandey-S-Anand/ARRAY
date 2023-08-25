@@ -1,0 +1,51 @@
+//Using Extra Space
+
+class Solution {
+    public int maximumBags(int[] capacity, int[] rocks, int additionalRocks) {
+			int n=capacity.length; // int n =rocks.length
+      int[] vacancy = new int[n];
+	   	for(int i=0;i<n;i++)
+	      vacancy[i] = capacity[i] - rocks[i];
+
+		  Arrays.sort(vacancy);
+
+		  int count = 0;
+		  for(int i=0;i<n;i++)
+				if(additionalRocks>=vacancy[i]) 
+				{
+					additionalRocks -= vacancy[i];
+					count++;
+				}
+				else
+				 break;
+
+	  	return count; 
+    }
+}
+
+
+//Without using Extra Space
+
+class Solution {
+    public int maximumBags(int[] capacity, int[] rocks, int additionalRocks) {
+			int n=capacity.length; // int n =rocks.length
+
+	   	for(int i=0;i<n;i++)
+	      capacity[i] = capacity[i] - rocks[i];
+
+		  Arrays.sort(capacity);
+
+		  int count = 0;
+		  for(int i=0;i<n;i++)
+				if(additionalRocks>=capacity[i]) 
+				{
+					additionalRocks -= capacity[i];
+					count++;
+				}
+				else
+				 break;
+
+	  	return count; 
+    }
+}
+
