@@ -10,10 +10,10 @@ class Solution{
 	  return "Not Palindrome";
     
 	start++;
-	 end--; 
+	end--; 
      }
 	  
-      return "Palindrome";
+    return "Palindrome";
   }
 }
 
