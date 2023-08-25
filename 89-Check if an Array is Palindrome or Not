@@ -1,0 +1,40 @@
+//Iterative Approach
+
+class Solution{
+  public static String isPalindrome(int[] arr){
+    int start=0,end=arr.length-1;
+      
+    while(start<end)
+	  {
+		 if(arr[start]!=arr[end])
+			 return "Not Palindrome";
+    
+		  start++;
+		  end--; 
+	  }
+	  
+	  return "Palindrome";
+  }
+}
+
+
+//Recurssive Approach
+
+class Solution{
+    public static String driver(int[]arr){
+      return isPalindrome(arr,0,arr.length-1);
+    }
+
+    public static String isPalindrome(int[] arr, int start, int end)
+    {
+      if(start<end)
+	    {
+		    if(arr[start]!=arr[end])
+			   return "Not Palindrome";
+      
+		    return isPalindrome(arr,++start, --end); 
+	    }
+     
+	    return "Palindrome";
+    }
+}
