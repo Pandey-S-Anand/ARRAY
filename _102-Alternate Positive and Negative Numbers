@@ -4,14 +4,14 @@ class Solution {
     void rearrange(int arr[], int n) {
       int cntPos=0,cntNeg=0;
        
-	   for(int i=0;i<n;i++)
-	      if(arr[i]>=0)
-	        cntPos++;
-	      else
-	        cntNeg++;
+      for(int i=0;i<n;i++)
+        if(arr[i]>=0)
+	  cntPos++;
+	else
+	  cntNeg++;
 	        
-	   if(cntNeg==0 || cntPos==0)
-	      return;
+       if(cntNeg==0 || cntPos==0)
+	 return;
 	      
        int[] pos=new int[cntPos];
        int[] neg=new int[cntNeg];
@@ -79,7 +79,7 @@ class Solution {
     }
     
     public static void rightRotate(int[]arr, int wrongIndex, int index)
-	  {
+    {
        int temp=arr[index];
        for(int i=index;i>wrongIndex;i--)
          arr[i]=arr[i-1];
@@ -114,7 +114,7 @@ class Solution {
         {
             if(arr[i]<0)
             {
-	           //Swap
+	       //Swap
                int temp=arr[i];
                arr[i]=arr[j];
                arr[j]=temp;
