@@ -1,4 +1,4 @@
-//Bruteforce Approach(Order of Appearence is Maintained)
+// Bruteforce Approach(Order of Appearence is Maintained)
 
 class Solution {
     void rearrange(int arr[], int n) {
