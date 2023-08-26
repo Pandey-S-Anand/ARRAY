@@ -1,0 +1,53 @@
+//Method 1
+
+class Solution {
+	public static void rearrange(int[] arr,int n){
+	    int countOdd=segregate(arr,n);     // arr[0.......countOdd-1] =>Odd Elements  and arr[countOdd.......n-1] =>Even Elements
+	    Arrays.sort(arr,0,countOdd);      //First Sort The Array in Ascending Order from index=0 to index=(countOdd-1)
+     
+	    for(int i=0;i<(countOdd/2);i++)  //Now reverse the array so as to obtain the array sorted in descending order from index=0 to index=(countOdd-1)
+	    {
+	        int temp=arr[i];
+	        arr[i]=arr[countOdd-1-i];
+	        arr[countOdd-1-i]=temp;
+	    }
+	    Arrays.sort(arr,countOdd,n);
+	}
+	
+	public static int segregate(int[] arr,int n)
+	{
+	   int i=0,j=0;
+	   while(i<n)
+	   {
+	     if((arr[i]%2)==1)
+	     {
+	         int temp=arr[i];
+	         arr[i]=arr[j];
+	         arr[j]=temp;
+	         
+	         i++;
+	         j++;
+	     }
+	     else
+	       i++;
+	   }
+	   return j;
+	}
+}
+
+//Method 2
+//This method may not work when input array contains negative numbers.
+
+class Solution{
+	public static void rearrange(int[] arr,int n){
+      for(int i=0;i<n;i++)
+        if((arr[i] & 1)==1)//Checking For Odd Number
+           arr[i]*=-1;
+	     
+      Arrays.sort(arr);
+	  
+      for(int i=0;i<n;i++)
+        if(arr[i]<0)
+          arr[i]*=-1;
+	}
+}
