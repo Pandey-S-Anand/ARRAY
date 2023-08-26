@@ -152,7 +152,7 @@ class Solution {
         for(int i=start;i<n;i++)
         {
             int x = Math.abs(arr[i]);
-            if ((x<=newSize && arr[start+(x-1)] > 0)
+            if (x<=newSize && arr[start+(x-1)] > 0)
               arr[start+(x-1)] = -arr[start+(x-1)];
         }
         
