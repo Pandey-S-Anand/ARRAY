@@ -89,7 +89,7 @@ class Solution {
 }
 
 
-// Order of Appearence is not Maintained
+// Alternate Approach (Order of Appearence is not Maintained)
 
 class Solution {
     void rearrange(int arr[], int n) {
