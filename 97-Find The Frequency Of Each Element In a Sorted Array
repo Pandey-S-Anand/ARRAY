@@ -43,18 +43,18 @@ class Solution{
 //Optimal Approach
 
 class Solution{
-	public static void printFreq(int[] arr){
-	    int i,freq=1,n=arr.length;
-	    for(i=0;i<(n-1);i++)
-	       if(arr[i]==arr[i+1])
-	         freq++;
-	       else
-	       {
-	          System.out.println(arr[i]+"=>"+freq);
-	          freq=1;
-	       }
+   public static void printFreq(int[] arr){
+       int i,freq=1,n=arr.length;
+       for(i=0;i<(n-1);i++)
+	  if(arr[i]==arr[i+1])
+	     freq++;
+	  else
+	  {
+	     System.out.println(arr[i]+"=>"+freq);
+	     freq=1;
+	  }
 	       
-	    if(i==(n-1))
-	       System.out.println(arr[i]+"=>"+freq);
-	}
+       if(i==(n-1))
+	 System.out.println(arr[i]+"=>"+freq);
+   }
 }
