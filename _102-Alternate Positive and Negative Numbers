@@ -97,7 +97,7 @@ class Solution {
         
         while(i<j && j<n)
         {
-	         //Swap
+	   //Swap
            int temp=arr[i];
            arr[i]=arr[j];
            arr[j]=temp;
