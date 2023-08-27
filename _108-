@@ -9,7 +9,7 @@ class Solution {
 			else
 				 hm.put(arr[i],1); 
 			    
-    int[][] res = new int[hm.size()][2];  //2d array which contains array elements in first column and frequency in second column
+    int[][] res = new int[hm.size()][2];
 	
     int i=0;
 	  for(int key:hm.keySet())
@@ -19,13 +19,8 @@ class Solution {
         i++;
     }
 
-	   // Sort the 2D array according to 'key'(array elements) in descending order as per given in the question
-     Arrays.sort(res,new keyDesc());
-	
-	   // Sort the 2D array according to 'value'(frequency of array elements) in descending order as per given in the question
-     Arrays.sort(res,new valAsc());  
+     Arrays.sort(res,new customSort());  
     
-  	 int[] ans = new int[n];
 		 int idx=0;
     
      for(int k=0;k<res.length;k++)
@@ -35,33 +30,30 @@ class Solution {
 
 			 while(freq!=0)
 			 {
-         ans[idx++]=val;
+         arr[idx++]=val;
          freq--;
 			 }
      }
 
-      return ans; 
+      return arr; 
     }
 }
 
-class keyDesc implements Comparator<int[]>{
-  public int compare(int[]arr1,int[]arr2){
-    if(arr1[0]<arr2[0])
-		  return 1;
-		else if (arr1[0]>arr2[0])
-		  return -1;
-		else
-		  return 0;
-	}
-}
+//Sort 2D array according to frequency in ascending order if two frequencies are equal sort it according to array elements in descending order     
 
-class valAsc implements Comparator<int[]>{
+class customSort implements Comparator<int[]>{
   public int compare(int[]arr1,int[]arr2){
     if(arr1[1]<arr2[1])
 		  return -1;
 		else if (arr1[1]>arr2[1])
 		  return 1;
-		else
-		  return 0;
+		else if((arr1[1]==arr2[1]) && (arr1[0]<arr2[0]))
+			return 1;
+		else if((arr1[1]==arr2[1]) && (arr1[0]>arr2[0]))
+			return -1;
+		else //if((arr1[1]==arr2[1]) && (arr1[0]==arr2[0]))
+			return 0;
 	}
 }
+
+//Small entity appear before larger entity 
