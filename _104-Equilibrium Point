@@ -1,3 +1,60 @@
+//Bruteforce Approach
+
+class Solution {
+    public static int equilibriumPoint(long arr[], int n) {
+       long leftSum,rightSum;
+       
+       for(int i=0;i<n;i++)
+       {
+            leftSum=0;
+            for(int j=0;j<i;j++)
+              leftSum+=arr[j];
+        
+            rightSum=0;
+            for(int k=(i+1);k<n;k++)
+              rightSum+=arr[k];
+        
+            if(leftSum==rightSum)
+              return i+1; //Position=index+1
+       }
+       
+       return -1;
+    }
+}
+
+
+
+//Better Approach
+
+class Solution {
+    public static int equilibriumPoint(long arr[], int n) {
+        long[] prefixSumFront=new long[n];
+        long[] prefixSumBack=new long[n];
+      
+        for(int i=0;i<n;i++)
+           if(i==0)
+              prefixSumFront[i]=arr[i];
+           else
+              prefixSumFront[i]=arr[i]+prefixSumFront[i-1];
+          
+        for(int i=n-1;i>=0;i--)
+           if(i==(n-1))
+              prefixSumBack[i]=arr[i];
+           else
+              prefixSumBack[i]=arr[i]+prefixSumBack[i+1];
+        
+        for(int i=0;i<n;i++)
+           if((prefixSumFront[i]-arr[i])==(prefixSumBack[i]-arr[i]))
+              return i+1; //Position=index+1
+              
+           return -1; 
+    }
+}
+
+
+
+//Optimal Approach
+
 class Solution {
     public static int equilibriumPoint(long arr[], int n) {
         long arrSum=0,leftSum=0;
