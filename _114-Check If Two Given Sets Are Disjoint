@@ -1,21 +1,21 @@
 /Bruteforce Approach
 
 class Solution{
-	public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
+public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
       for(int i=0;i<m;i++) 
-        if(linearSearch(arr1[i],arr2,n))
-           return false;
+         if(linearSearch(arr1[i],arr2,n))
+            return false;
 	       
       return true;
-	}
+    }
 	
-	public static boolean linearSearch(int key,int[] arr,int n)
-	{
+    public static boolean linearSearch(int key,int[] arr,int n)
+    {
       for(int i=0;i<n;i++) 
         if(arr[i]==key)
           return true;
       return false;
-	}
+    }
 }
 
 //Improved Approach
@@ -42,6 +42,7 @@ class Solution{
           else if(key>arr[mid])
             low=mid+1;
       }
+
       return false;//key doesnot exists
    }
 }
