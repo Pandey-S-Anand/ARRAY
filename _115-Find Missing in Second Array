@@ -11,19 +11,19 @@ class Solution{
     }
     
     public boolean linearSearch(long key,long[] arr,int n)
-	  {
-	     int low=0,high=n-1;
-	     while(low<=high)
-	     {
-	       if((arr[low]==key) || (arr[high]==key))
+    {
+       int low=0,high=n-1;
+       while(low<=high)
+       {
+         if((arr[low]==key) || (arr[high]==key))
            return true; 
           
           low++;
           high--;
-	     }
+       }
 	   
       return false;
-	  }
+    }
 }
 
 
