@@ -1,0 +1,93 @@
+/Bruteforce Approach
+
+class Solution{
+	public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
+      for(int i=0;i<m;i++) 
+        if(linearSearch(arr1[i],arr2,n))
+           return false;
+	       
+      return true;
+	}
+	
+	public static boolean linearSearch(int key,int[] arr,int n)
+	{
+      for(int i=0;i<n;i++) 
+        if(arr[i]==key)
+          return true;
+      return false;
+	}
+}
+
+//Improved Approach
+
+class Solution{
+   public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
+        Arrays.sort(arr2);
+        for(int i=0;i<m;i++) 
+          if(binarySearch(arr1[i],arr2,n))
+             return false;
+        return true;
+   }
+	
+   public static boolean binarySearch(int key,int[]arr,int n)
+   {
+      int low=0,high=n-1;
+      while(low<=high)
+      {
+          int mid=(low+high)/2;
+          if(arr[mid]==key)
+            return true;
+          else if(key<arr[mid])
+            high=mid-1;
+          else if(key>arr[mid])
+            low=mid+1;
+      }
+      return false;//key doesnot exists
+   }
+}
+
+
+//Better Approach
+
+class Solution{
+    public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
+       HashSet<Integer>hs=new HashSet<>();
+       for(int i=0;i<m;i++)
+         hs.add(arr1[i]);
+           
+       for(int i=0;i<n;i++)
+         if(hs.contains(arr2[i]))
+           return false;
+           
+        return true;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution{
+    public static boolean areDisjoint(int[] arr1,int m,int[] arr2,int n){
+       Arrays.sort(arr1);
+       Arrays.sort(arr2);
+       return intersectionOfTwoSortedArray(arr1,m,arr2,n);
+    }
+	
+    public static boolean intersectionOfTwoSortedArray(int[] arr1,int m,int[] arr2,int n)
+    {
+       	int i=0,j=0;
+        while(i<m && j<n)
+          if(arr1[i]==arr2[j])
+            return false;
+          else
+          {
+              int min=arr1[i]<arr2[j]?arr1[i]:arr2[j];
+              if(min==arr1[i])
+                i++;
+              else if(min==arr2[j])
+                j++;
+          }
+
+        return true;
+    }
+}
