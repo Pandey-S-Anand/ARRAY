@@ -1,31 +1,30 @@
 //Method 1 (Using Extra Space)
 
 class Solution {	
-	public static void rightRotateBy_K_Quickly(int[] arr,int n,int k){
-	    k=k%n;
-	    int len=2*n;
-	    int[] twice=new int[len];
+   public static void rightRotateBy_K_Quickly(int[] arr,int n,int k){
+       k=k%n;
+       int len=2*n;
+       int[] twice=new int[len];
 	    
-      for(int i=0;i<n;i++)
-	      twice[i]=twice[n+i]=arr[i];;
+       for(int i=0;i<n;i++)
+	 twice[i]=twice[n+i]=arr[i];;
         
-      System.out.printf("Array Formed After %d Rotations To the Right is:\n",k);
-	    for(int i=0;i<n;i++)
-	      System.out.println(twice[len-n-k+i]);
-	}
+       System.out.printf("Array Formed After %d Rotations To the Right is:\n",k);
+       for(int i=0;i<n;i++)
+	  System.out.println(twice[len-n-k+i]);
+   }
 }
 
 
 //Method 2(Without Extra Space)
 
 class Solution{
-	public static void rightRotateBy_K_Quickly(int[] arr,int n,int k)
-	{
-     System.out.printf("Array Formed After %d Rotations To the Right is:\n",k);
-     k=k%n;
-	   for(int i=(n-k);i<(n-k+n);i++)
-	      System.out.println(arr[i%n]);
-	}
+    public static void rightRotateBy_K_Quickly(int[] arr,int n,int k){
+        System.out.printf("Array Formed After %d Rotations To the Right is:\n",k);
+        k=k%n;
+	for(int i=(n-k);i<(n-k+n);i++)
+	   System.out.println(arr[i%n]);
+    }
 }
 
 /*
