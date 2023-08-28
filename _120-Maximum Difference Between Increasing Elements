@@ -1,0 +1,43 @@
+//Bruteforce Approach
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int max_diff =-1,n=arr.length;
+        for (int i = 0; i <n; i++)
+           for (int j = i + 1; j <n; j++)
+               if ((arr[j]>arr[i]) && (arr[j] - arr[i])>max_diff)
+                  max_diff=(arr[j] - arr[i]);
+                    
+        return max_diff; 
+    }
+}
+
+//Optimal Implementation
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int n=arr.length,max_diff=-1,max_so_far=Integer.MIN_VALUE;
+        for (int i =(n-1);i>=0; i--)
+           if(arr[i]>max_so_far)
+             max_so_far=arr[i];
+           else if((arr[i]<max_so_far) && (max_so_far-arr[i])>max_diff)
+             max_diff=(max_so_far-arr[i]);
+                    
+        return max_diff;
+    }
+}
+
+//Aliter Implementation
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int n=arr.length,max_diff=-1,min_so_far=Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++)
+           if(arr[i]<min_so_far)
+              min_so_far=arr[i];
+           else if((arr[i]>min_so_far) && (arr[i]-min_so_far)> max_diff)
+              max_diff =(arr[i]-min_so_far);
+      
+        return max_diff;
+    }
+}
