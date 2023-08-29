@@ -4,6 +4,7 @@ class Solution {
     public int[] relativeSortArray(int[] arr1, int[] arr2) {
          int m=arr1.length,n=arr2.length,idx=0;
          HashMap<Integer,Integer>hm=new HashMap<>();
+
          for(int i=0;i<m;i++)
            if(hm.containsKey(arr1[i]))
              hm.put(arr1[i],hm.get(arr1[i])+1);
