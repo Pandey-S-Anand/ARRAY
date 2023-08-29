@@ -1,26 +1,28 @@
 
 class Solution {
-	public static void rankify(int[] arr){
-	   int rank=1;
-	   TreeMap<Integer,Integer>tm=new TreeMap<>();
+    public static void rankify(int[] arr){
+        int rank=1;
+	TreeMap<Integer,Integer>tm=new TreeMap<>();
 	   
-	   for(int val : arr)
-	     if(tm.containsKey(val))
-	       tm.put(val,tm.get(val)+1);
-	     else
-	       tm.put(val,1);
+	for(int val : arr)
+	  if(tm.containsKey(val))
+	     tm.put(val,tm.get(val)+1);
+	  else
+	     tm.put(val,1);
 	   
-	   for(int key:tm.keySet())
-	   {
-	       int freq=tm.get(key);
-	       int sum=0;
-	       for(int cnt=1;cnt<=freq;cnt++)
-	       {
-	           sum+=rank;
-	           rank++;
-	       }
-	       float avgRank=(float)sum/freq; 
-	       System.out.println(key+"=>"+avgRank);
-	   }
+	for(int key:tm.keySet())
+	{
+	    int freq=tm.get(key);
+	    int sum=0;
+
+	    for(int cnt=1;cnt<=freq;cnt++)
+	    {
+	       sum+=rank;
+	       rank++;
+	    }
+
+	    float avgRank=(float)sum/freq; 
+	    System.out.println(key+"=>"+avgRank);
 	}
+    }
 }
