@@ -57,13 +57,13 @@ class Solution{
            closestSum = currSum;
          
          if(currSum == target)
-	       {
-	         closestSum=target;
-	         break;
-	       }
-	       else if(currSum<target)
+	 {
+	    closestSum=target;
+	    break;
+	 }
+	 else if(currSum<target)
            i++;
-	       else //(currSum>target)
+	 else //(currSum>target)
            j--;
       }
       
