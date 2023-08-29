@@ -1,0 +1,160 @@
+//Bruteforce Approach
+
+class Solution {
+    public int longestConsecutive(int[] arr) {
+       int n=arr.length,max_len=0;
+       for (int i = 0; i <n; i++)
+       {
+            int curr_len=1;
+            //look left
+            int prev=arr[i]-1;
+            while(linearSearch(arr,prev))
+            {
+              curr_len++;
+              prev--;
+            }
+            
+            //look right    
+            int next=arr[i]+1;
+            while(linearSearch(arr,next))
+            {
+              curr_len++;
+              next++;
+            }
+              
+            max_len=Math.max(curr_len,max_len);
+       }
+
+      return max_len;
+    }
+
+    public boolean linearSearch(int[] arr,int key)
+	  {
+	    int i=0,j=arr.length-1;
+	    while(i<=j)
+      {
+        if(arr[i]==key || arr[j]==key)
+          return true;
+
+        i++;
+        j--;
+      }
+	        
+	    return false;
+	  }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int longestConsecutive(int[] arr) {
+       int n=arr.length,max_len=0;
+       HashSet<Integer>hs=new HashSet<>();
+           
+       for(int i=0;i<n;i++)
+          hs.add(arr[i]);
+             
+       for (int i = 0; i <n; i++)
+       {
+          int curr_len=1;
+              
+          //look left
+          int prev=arr[i]-1;
+          while(hs.contains(prev))
+          {
+            curr_len++;
+            prev--;
+          }
+            
+          //look right    
+          int next=arr[i]+1;
+          while(hs.contains(next))
+          {
+            curr_len++;
+            next++;
+          }
+              
+          max_len=Math.max(curr_len,max_len);
+       }
+
+      return max_len; 
+    }
+}
+
+
+// Good Approach
+
+class Solution {
+    public int longestConsecutive(int[] arr) {
+      int n=arr.length;
+	    HashMap<Integer,Boolean>hm=new HashMap<>(n);
+	    
+	    for(int i=0;i<n;i++)
+	      hm.put(arr[i],true);
+	      
+	    for(int key:hm.keySet())
+	    {
+	       int prev=key-1;
+	       if(hm.containsKey(prev))
+	         hm.put(key,false);
+	    }
+	    
+	    int max_len=0;
+      for(int key:hm.keySet())
+	       if(hm.get(key)==true)
+	       {
+	          int curr_len=1;
+	          int next=key+1; 
+	          while(hm.containsKey(next))
+	          {
+	             curr_len++;
+	             next++;
+	          }
+	          max_len = Math.max(max_len,curr_len);
+ 	       }
+ 	       
+ 	    return max_len;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int longestConsecutive(int[] arr) {
+       int n=arr.length,max_len=0;
+       HashSet<Integer>hs=new HashSet<>();
+           
+       for(int i=0;i<n;i++)
+          hs.add(arr[i]);
+             
+       for (int i = 0; i <n; i++)
+       {
+          int curr_len=1;
+              
+          //look left
+          int prev=arr[i]-1;
+          while(hs.contains(prev))
+          {
+            curr_len++;
+            hs.remove(prev);
+            prev--;
+          }
+            
+          //look right    
+          int next=arr[i]+1;
+          while(hs.contains(next))
+          {
+            curr_len++;
+            hs.remove(next);
+            next++;
+          }
+              
+          max_len=Math.max(curr_len,max_len);
+       }
+
+      return max_len; 
+    }
+}
+
