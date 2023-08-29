@@ -1,0 +1,83 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+        int[]res=new int[2];
+        int n=arr.length;
+        for(int i=0;i<n;i++)
+          for(int j=i+1;j<n;j++)
+            if((arr[i]+arr[j])==target)
+            {
+              res[0]=i;
+              res[1]=j;
+              break;
+            }
+
+        return res; 
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+        int[]res=new int[2];
+        int[] temp=arr.clone();
+        
+        Arrays.sort(arr);
+        int n=arr.length,i=0,j=(n-1),num1=Integer.MAX_VALUE,num2=Integer.MAX_VALUE;
+
+        while(i<j)
+          if((arr[i]+arr[j])==target)
+          {
+                num1=arr[i];
+                num2=arr[j];
+                break;
+          }
+          else if((arr[i]+arr[j])<target)
+            i++;
+          else
+            j--;
+        
+        
+        for(int k=0;k<n;k++)
+          if(num1==temp[k])
+          {
+            res[0]=k;
+            break;
+          }
+         
+        for(int k=0;k<n;k++)
+          if(k!=res[0] && num2==temp[k])
+          {
+            res[1]=k;
+            break;
+          }
+
+        return res; 
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+       int[]res=new int[2];
+       HashMap<Integer,Integer>hm=new HashMap<>();
+
+       for(int i=0;i<arr.length;i++)
+       {
+         if(hm.containsKey(target-arr[i]))
+         {
+            res[0]=hm.get(target-arr[i]);
+            res[1]=i;
+            break;
+         }
+         hm.put(arr[i],i);
+       }
+       
+       return res;
+    }
+}
