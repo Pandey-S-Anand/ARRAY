@@ -1,0 +1,65 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+      int res[]=new int[2];
+      int n=arr.length;
+
+      for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++)
+           if((arr[i]+arr[j])==target)
+           {
+              res[0]=i+1;
+              res[1]=j+1;
+              break;
+           }
+           
+      return res;          
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+       HashMap<Integer,Integer>hm=new HashMap<>();
+       int[] res=new int[2];
+
+       for(int i=0;i<arr.length;i++)
+       {
+         if(hm.containsKey(target-arr[i]))
+         {
+            res[0]=hm.get(target-arr[i])+1;
+            res[1]=i+1;
+            break;
+         }
+         hm.put(arr[i],i);
+       }
+     
+      return res;        
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+       int[] res=new int[2];
+       int i=0,j=(arr.length-1);
+       while(i<j)
+         if((arr[i]+arr[j])==target)
+         {
+            res[0]=i+1;
+            res[1]=j+1;
+            break;
+         }
+         else if((arr[i]+arr[j])<target)
+           i++;
+         else
+           j--;
+      
+       return res;     
+    }
+}
