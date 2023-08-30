@@ -1,0 +1,184 @@
+//Better Approach
+
+class Solution {
+    public List<Integer> countSmaller(int[] arr) {
+        int[]count=countSmaller(arr,arr.length);
+        List<Integer>res=new ArrayList<>();
+        for(int val:count)
+          res.add(val);
+        return res;
+    }
+
+    public static int[] countSmaller(int arr[], int n)
+    {
+        int[] count=new int[n];
+        int[] originalIndex = new int[n];
+
+        for(int i=0;i<n;i++)
+          originalIndex[i]=i;
+
+        mergeSort(arr,0,n-1,count,originalIndex);
+        
+        return count;
+    }
+    
+    
+    public static void mergeSort(int[] arr, int lb, int ub,int[] count,int[] originalIndex)
+    {
+        if(lb<ub)
+        {
+          int mid = (lb+ub)/2;
+          mergeSort(arr,lb, mid,count,originalIndex);
+          mergeSort(arr, mid+1,ub,count,originalIndex);
+          merge(arr,lb, mid,ub,count,originalIndex);  
+        }
+    }
+
+    public static void merge(int[] arr, int lb, int mid, int ub,int[] count,int[] originalIndex)
+    {
+      int i=0,j=0,k=lb,size1=(mid-lb+1),size2=(ub-mid);
+
+      int[]left=new int[size1];
+      int[]right=new int[size2];
+      int[]newLeftIdx=new int[size1];
+      int[]newRightIdx=new int[size2];
+
+      for(int idx=0;idx<size1;idx++)
+      {
+        left[idx]=arr[lb+idx];
+        newLeftIdx[idx]=originalIndex[lb+idx];
+      }
+        
+      for(int idx=0;idx<size2;idx++)
+      {
+        right[idx]=arr[mid+1+idx];
+        newRightIdx[idx]=originalIndex[mid+1+idx];
+      }
+      
+      while(i<size1 && j<size2)
+        if(left[i]>right[j])
+        {
+            count[newLeftIdx[i]]+=(size2-j);
+            arr[k]=left[i];
+            originalIndex[k]=newLeftIdx[i];
+            i++;
+            k++;
+        }
+        else
+        {
+           arr[k]=right[j];
+           originalIndex[k]=newRightIdx[j];
+           j++;
+           k++;
+        }
+         
+      
+       while(j<size2)
+       {
+          arr[k]=right[j]; 
+          originalIndex[k]=newRightIdx[j];
+          j++;
+          k++;
+       }
+         
+
+       while(i<size1)
+       {
+         arr[k]=left[i];  
+         originalIndex[k]=newLeftIdx[i];
+         i++;
+         k++;
+       }         
+    }
+}
+
+
+
+//Optimal Approach
+
+class Solution {
+    public List<Integer> countSmaller(int[] arr) {
+        List<Integer>count=new ArrayList<>();
+        int n=arr.length;
+        
+        for (int i = 0; i < n; i++)
+          count.add(0); // Initialize the count list
+
+        int[] originalIndex = new int[n];
+
+        for(int i=0;i<n;i++)
+          originalIndex[i]=i;
+
+        mergeSort(arr,0,n-1,count,originalIndex);
+        
+        return count;
+    }
+
+    public void mergeSort(int[] arr, int lb, int ub,List<Integer> count,int[] originalIndex)
+    {
+        if(lb<ub)
+        {
+          int mid = (lb+ub)/2;
+          mergeSort(arr,lb, mid,count,originalIndex);
+          mergeSort(arr, mid+1,ub,count,originalIndex);
+          merge(arr,lb, mid,ub,count,originalIndex);  
+        }
+    }
+
+    public void merge(int[] arr, int lb, int mid, int ub,List<Integer>count,int[] originalIndex)
+    {
+      int i=0,j=0,k=lb,size1=(mid-lb+1),size2=(ub-mid);
+
+      int[]left=new int[size1];
+      int[]right=new int[size2];
+      int[]newLeftIdx=new int[size1];
+      int[]newRightIdx=new int[size2];
+
+      for(int idx=0;idx<size1;idx++)
+      {
+        left[idx]=arr[lb+idx];
+        newLeftIdx[idx]=originalIndex[lb+idx];
+      }
+        
+      for(int idx=0;idx<size2;idx++)
+      {
+        right[idx]=arr[mid+1+idx];
+        newRightIdx[idx]=originalIndex[mid+1+idx];
+      }
+      
+      while(i<size1 && j<size2)
+        if(left[i]>right[j])
+        {
+            count.set(newLeftIdx[i], count.get(newLeftIdx[i]) + (size2 - j));
+            arr[k]=left[i];
+            originalIndex[k]=newLeftIdx[i];
+            i++;
+            k++;
+        }
+        else
+        {
+           arr[k]=right[j];
+           originalIndex[k]=newRightIdx[j];
+           j++;
+           k++;
+        }
+         
+      
+       while(j<size2)
+       {
+          arr[k]=right[j]; 
+          originalIndex[k]=newRightIdx[j];
+          j++;
+          k++;
+       }
+         
+
+       while(i<size1)
+       {
+         arr[k]=left[i];  
+         originalIndex[k]=newLeftIdx[i];
+         i++;
+         k++;
+       }         
+    }
+}
