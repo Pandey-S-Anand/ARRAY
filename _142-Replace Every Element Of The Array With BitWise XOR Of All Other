@@ -1,15 +1,15 @@
 
 class Solution {
-	public static void ReplaceElements(int[] arr){
-	  int n=arr.length,XOR=arr[0];
+   public static void ReplaceElements(int[] arr){
+     int n=arr.length,XOR=arr[0];
       
-    if(n<2)
+     if(n<2)
       return;
         
-    for(int i=1;i<n;i++)
-      XOR=XOR^arr[i];
+     for(int i=1;i<n;i++)
+       XOR=XOR^arr[i];
         
-    for(int i=0;i<n;i++)
-      arr[i]=XOR^arr[i];
-	}
+     for(int i=0;i<n;i++)
+       arr[i]=XOR^arr[i];
+   }
 }
