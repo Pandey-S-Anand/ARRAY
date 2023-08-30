@@ -220,57 +220,58 @@ class Solution {
 
       int[]left=new int[size1];
       int[]right=new int[size2];
-      int[]newLeftIdx=new int[size1];
-      int[]newRightIdx=new int[size2];
+      int[]leftOrgIdx=new int[size1];
+      int[]rightOrgIdx=new int[size2];
 
       for(int idx=0;idx<size1;idx++)
       {
         left[idx]=arr[lb+idx];
-        newLeftIdx[idx]=originalIndex[lb+idx];
+        leftOrgIdx[idx]=originalIndex[lb+idx];
       }
         
       for(int idx=0;idx<size2;idx++)
       {
         right[idx]=arr[mid+1+idx];
-        newRightIdx[idx]=originalIndex[mid+1+idx];
+        rightOrgIdx[idx]=originalIndex[mid+1+idx];
       }
       
       while(i<size1 && j<size2)
         if(left[i]>right[j])
         {
-            count[newLeftIdx[i]]+=(size2-j);
+            count[leftOrgIdx[i]]+=(size2-j);
             arr[k]=left[i];
-            originalIndex[k]=newLeftIdx[i];
+            originalIndex[k]=leftOrgIdx[i];
             i++;
             k++;
         }
         else
         {
            arr[k]=right[j];
-           originalIndex[k]=newRightIdx[j];
+           originalIndex[k]=rightOrgIdx[j];
            j++;
            k++;
         }
          
-      
-       while(j<size2)
-       {
-          arr[k]=right[j]; 
-          originalIndex[k]=newRightIdx[j];
-          j++;
-          k++;
-       }
-         
-
-       while(i<size1)
-       {
+       
+      while(i<size1)
+      {
          arr[k]=left[i];  
-         originalIndex[k]=newLeftIdx[i];
+         originalIndex[k]=leftOrgIdx[i];
          i++;
          k++;
-       }         
+      }
+
+
+      while(j<size2)
+      {
+          arr[k]=right[j]; 
+          originalIndex[k]=rightOrgIdx[j];
+          j++;
+          k++;
+      } 
     }
 }
+
 
 
 /*
@@ -283,7 +284,7 @@ class Solution {
   
 (result)count[]={5, 2 ,3 ,4 ,0 ,1 ,4 ,0 ,1 ,0 ,0 }
 
-//originalIndex[i]=original index of element present at ith index
+Note : originalIndex[i]=original index of element present at ith index
         
 */
 
@@ -309,7 +310,7 @@ class Solution {
         return count;
     }
 
-    public void mergeSort(int[] arr, int lb, int ub,List<Integer> count,int[] originalIndex)
+    public static void mergeSort(int[] arr, int lb, int ub,List<Integer>count,int[] originalIndex)
     {
         if(lb<ub)
         {
@@ -320,61 +321,61 @@ class Solution {
         }
     }
 
-    public void merge(int[] arr, int lb, int mid, int ub,List<Integer>count,int[] originalIndex)
+    public static void merge(int[] arr, int lb, int mid, int ub,List<Integer>count,int[] originalIndex)
     {
       int i=0,j=0,k=lb,size1=(mid-lb+1),size2=(ub-mid);
 
       int[]left=new int[size1];
       int[]right=new int[size2];
-      int[]newLeftIdx=new int[size1];
-      int[]newRightIdx=new int[size2];
+      int[]leftOrgIdx=new int[size1];
+      int[]rightOrgIdx=new int[size2];
 
       for(int idx=0;idx<size1;idx++)
       {
         left[idx]=arr[lb+idx];
-        newLeftIdx[idx]=originalIndex[lb+idx];
+        leftOrgIdx[idx]=originalIndex[lb+idx];
       }
         
       for(int idx=0;idx<size2;idx++)
       {
         right[idx]=arr[mid+1+idx];
-        newRightIdx[idx]=originalIndex[mid+1+idx];
+        rightOrgIdx[idx]=originalIndex[mid+1+idx];
       }
       
       while(i<size1 && j<size2)
         if(left[i]>right[j])
         {
-            count.set(newLeftIdx[i], count.get(newLeftIdx[i]) + (size2 - j));
+            count.set(leftOrgIdx[i], count.get(leftOrgIdx[i]) + (size2 - j));
             arr[k]=left[i];
-            originalIndex[k]=newLeftIdx[i];
+            originalIndex[k]=leftOrgIdx[i];
             i++;
             k++;
         }
         else
         {
            arr[k]=right[j];
-           originalIndex[k]=newRightIdx[j];
+           originalIndex[k]=rightOrgIdx[j];
            j++;
            k++;
         }
          
-      
-       while(j<size2)
-       {
-          arr[k]=right[j]; 
-          originalIndex[k]=newRightIdx[j];
-          j++;
-          k++;
-       }
-         
-
-       while(i<size1)
-       {
+       
+      while(i<size1)
+      {
          arr[k]=left[i];  
-         originalIndex[k]=newLeftIdx[i];
+         originalIndex[k]=leftOrgIdx[i];
          i++;
          k++;
-       }         
+      }
+
+
+      while(j<size2)
+      {
+          arr[k]=right[j]; 
+          originalIndex[k]=rightOrgIdx[j];
+          j++;
+          k++;
+      } 
     }
 }
 
