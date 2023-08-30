@@ -1,0 +1,78 @@
+//Bruteforce Approach
+
+class Solution {
+    public int reversePairs(int[] arr) {
+      int n=arr.length,cntInversion=0;
+      for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++)
+          if(arr[i]>2*(long)arr[j])
+            cntInversion++;
+
+      return cntInversion; 
+    }
+}
+
+
+
+//Optimal Approach
+
+class Solution {
+    public int reversePairs(int[] arr) {
+      return mergeSort(arr,0,(arr.length-1)); 
+    }
+
+    public static int mergeSort(int[] arr,int lb,int ub)
+    {
+      int inv_count = 0;
+      if(lb<ub)
+      {
+        int mid = (lb + ub)/2;
+        inv_count+=mergeSort(arr,lb,mid);
+        inv_count+=mergeSort(arr,mid+1,ub);
+        inv_count+=merge(arr,lb,mid,ub);
+      }
+      return inv_count;
+    }
+   
+    public static int merge(int arr[],int lb,int mid,int ub)
+    { 
+      int invCount=0,i=lb,j=mid+1;
+
+      while((i <= mid) && (j <= ub))
+        if(arr[i] <=2*(long)arr[j])
+            i++;
+        else
+        {
+          j++;
+          invCount+=(mid-i+1);  
+        }
+
+//<-----Below Is Normal/Conventional Merge function of Merge Sort----->  
+      
+      i=0;
+      j=0;
+      int size1=(mid-lb+1),size2=(ub-mid),k =lb;
+      int[] left=new int[size1];
+      int[] right=new int[size2];
+
+      for(int idx=0;idx<size1;idx++)
+        left[idx]=arr[lb+idx];
+      
+      for(int idx=0;idx<size2;idx++)
+        right[idx]=arr[mid+1+idx];
+
+      while((i <size1) && (j <size2))
+        if(left[i] <= right[j])
+           arr[k++] = left[i++];
+        else
+           arr[k++] = right[j++];
+
+      while(i <size1)
+        arr[k++] = left[i++];
+
+      while(j <size2)
+        arr[k++] = right[j++];
+    
+     return invCount;    
+  }
+}
