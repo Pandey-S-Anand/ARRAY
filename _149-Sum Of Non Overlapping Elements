@@ -1,4 +1,4 @@
-//Bruteforce Approach
+// Bruteforce Approach
 
 class Solution {	
    public static int sumOfNonOverlapping(int[] arr1,int[] arr2,int n){
