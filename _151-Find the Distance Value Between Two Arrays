@@ -52,8 +52,8 @@ class Solution {
     }
 
      // Checks if the array doesn't contain any value in range (from <= value <= to) using binary search
-     private boolean isNotInRange(int[] arr, int from, int to) 
-     {
+    private boolean isNotInRange(int[] arr, int from, int to) 
+    {
         int low= 0,high=arr.length - 1,mid;
         
         while (low<=high)
@@ -68,5 +68,5 @@ class Solution {
         }
         //arr2 doesn't contain any value in range (from <= value <= to) so return true
         return true;
-     }
+    }
 }
