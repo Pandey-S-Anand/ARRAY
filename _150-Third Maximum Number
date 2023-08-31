@@ -1,6 +1,6 @@
 //Bruteforce Approach
 
-lass Solution {
+class Solution {
     public int thirdMax(int[] arr) {
       Arrays.sort(arr);
       int newLen=removeDuplicatesFromSortedArray(arr);
