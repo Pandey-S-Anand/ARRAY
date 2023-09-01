@@ -3,18 +3,18 @@
 class Solution {
     public int maxProduct(int[] arr) {
        int n=arr.length,maxProd=Integer.MIN_VALUE;
-	     for(int start=0;start<n;start++)
-	       for(int end=start;end<n;end++)
-	       {
-	         int prod=1;
-	         for(int range=start;range<=end;range++)
-             prod*=arr[range];
+       for(int start=0;start<n;start++)
+	  for(int end=start;end<n;end++)
+	  {
+	     int prod=1;
+	     for(int range=start;range<=end;range++)
+               prod*=arr[range];
           
-           if(prod>maxProd)
-            maxProd=prod;
-	       }
- 
-	    return maxProd; 
+             if(prod>maxProd)
+               maxProd=prod;
+	  }
+
+      return maxProd; 
     }
 }
 
@@ -24,19 +24,19 @@ class Solution {
 class Solution {
     public int maxProduct(int[] arr) {
       int n=arr.length,maxProd=Integer.MIN_VALUE;
-	    for(int start=0;start<n;start++)
-	    {
-	      int prod=1;
-	      for(int end=start;end<n;end++)
-	      {
-	        prod*=arr[end];
+      for(int start=0;start<n;start++)
+      {
+	int prod=1;
+	for(int end=start;end<n;end++)
+	{
+	  prod*=arr[end];
           
           if(prod>maxProd)
             maxProd=prod;
-	      }
-	    }
+	}
+      }
  
-  	  return maxProd;
+     return maxProd;
     }
 }
 
@@ -69,7 +69,7 @@ class Solution {
           maxProd=currProd;
       }
       
-	   return maxProd;
+     return maxProd;
     }
 }
 
@@ -80,33 +80,33 @@ class Solution {
     public int maxProduct(int[] arr) {
       int n=arr.length,maxProdSoFar=1,minProdSoFar=1,maxProd=Integer.MIN_VALUE;
 	  
-	    for(int i=0;i<n;i++)
-	    {
-	      int temp=maxProdSoFar;
+      for(int i=0;i<n;i++)
+      {
+	 int temp=maxProdSoFar;
 	    
-	      maxProdSoFar=maximum(arr[i],maxProdSoFar*arr[i],minProdSoFar*arr[i]);
-	      minProdSoFar=minimum(arr[i],temp*arr[i],minProdSoFar*arr[i]);
+	 maxProdSoFar=maximum(arr[i],maxProdSoFar*arr[i],minProdSoFar*arr[i]);
+	 minProdSoFar=minimum(arr[i],temp*arr[i],minProdSoFar*arr[i]);
 	    
-	      if(maxProdSoFar>maxProd)
-	        maxProd=maxProdSoFar;
+	 if(maxProdSoFar>maxProd)
+	    maxProd=maxProdSoFar;
 	    
-	      if(arr[i]==0)
-	      {
-	        maxProdSoFar=1;
-	        minProdSoFar=1;
-	      }  
-	    }
+	 if(arr[i]==0)
+	 {
+	    maxProdSoFar=1;
+	    minProdSoFar=1;
+	 }  
+      }
 	  
-	    return maxProd;  
+     return maxProd;  
     }
 
     public int maximum(int x,int y,int z)
-	  {
-	    return Math.max(x,Math.max(y,z));
-	  }
+    {
+      return Math.max(x,Math.max(y,z));
+    }
 	
     public int minimum(int x,int y,int z)
-	  {
-	     return Math.min(x,Math.min(y,z));
-	  }
+    {
+      return Math.min(x,Math.min(y,z));
+    }
 }
