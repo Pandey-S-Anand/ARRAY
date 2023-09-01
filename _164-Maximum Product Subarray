@@ -1,0 +1,112 @@
+//Bruteforce Approach
+
+class Solution {
+    public int maxProduct(int[] arr) {
+       int n=arr.length,maxProd=Integer.MIN_VALUE;
+	     for(int start=0;start<n;start++)
+	       for(int end=start;end<n;end++)
+	       {
+	         int prod=1;
+	         for(int range=start;range<=end;range++)
+             prod*=arr[range];
+          
+           if(prod>maxProd)
+            maxProd=prod;
+	       }
+ 
+	    return maxProd; 
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int maxProduct(int[] arr) {
+      int n=arr.length,maxProd=Integer.MIN_VALUE;
+	    for(int start=0;start<n;start++)
+	    {
+	      int prod=1;
+	      for(int end=start;end<n;end++)
+	      {
+	        prod*=arr[end];
+          
+          if(prod>maxProd)
+            maxProd=prod;
+	      }
+	    }
+ 
+  	  return maxProd;
+    }
+}
+
+
+//Good Approach
+
+class Solution {
+    public int maxProduct(int[] arr) {
+      int n=arr.length,currProd=1,maxProd=Integer.MIN_VALUE;
+      for(int i=0;i<n;i++)
+      {
+        if(currProd!=0)
+          currProd*=arr[i];
+        else
+          currProd=arr[i];
+        
+        if(currProd>maxProd)
+          maxProd=currProd;
+      }
+      
+      currProd=1;
+      for(int i=n-1;i>=0;i--)
+      {
+        if(currProd!=0)
+          currProd*=arr[i];
+        else
+          currProd=arr[i];
+        
+        if(currProd>maxProd)
+          maxProd=currProd;
+      }
+      
+	   return maxProd;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int maxProduct(int[] arr) {
+      int n=arr.length,maxProdSoFar=1,minProdSoFar=1,maxProd=Integer.MIN_VALUE;
+	  
+	    for(int i=0;i<n;i++)
+	    {
+	      int temp=maxProdSoFar;
+	    
+	      maxProdSoFar=maximum(arr[i],maxProdSoFar*arr[i],minProdSoFar*arr[i]);
+	      minProdSoFar=minimum(arr[i],temp*arr[i],minProdSoFar*arr[i]);
+	    
+	      if(maxProdSoFar>maxProd)
+	        maxProd=maxProdSoFar;
+	    
+	      if(arr[i]==0)
+	      {
+	        maxProdSoFar=1;
+	        minProdSoFar=1;
+	      }  
+	    }
+	  
+	    return maxProd;  
+    }
+
+    public int maximum(int x,int y,int z)
+	  {
+	    return Math.max(x,Math.max(y,z));
+	  }
+	
+    public int minimum(int x,int y,int z)
+	  {
+	     return Math.min(x,Math.min(y,z));
+	  }
+}
