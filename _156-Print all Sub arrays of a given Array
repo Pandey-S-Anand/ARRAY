@@ -9,8 +9,8 @@
 //Iterative Approach
 
 class Solution {
-	public static void printAllSubarrays(int[] arr,int n){
-	  for(int start=0;start<n;start++)
+    public static void printAllSubarrays(int[] arr,int n){
+	for(int start=0;start<n;start++)
 	   for(int end=start;end<n;end++)
 	   {
 	      System.out.print("{");
@@ -23,7 +23,7 @@ class Solution {
 	      }
 	      System.out.println("}");
 	   }
-  }
+    }
 }
 
 
