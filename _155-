@@ -8,14 +8,14 @@ Logic : Sum of any two sides of a triangle is always greater than the third side
 
 class Solution {
     public int largestPerimeter(int[] arr) {
-      int n=arr.length,max=0; 
-	    for(int i=0;i<n-2;i++)
-	      for(int j=i+1;j<n-1;j++)
-	        for(int k=j+1;k<n;k++)
-	           if(arr[i]<(arr[j]+arr[k]) && arr[j]<(arr[i]+arr[k]) && arr[k]<(arr[i]+arr[j])) //checking if the three sides form triangle
-	              if((arr[i]+arr[j]+arr[k])>max) //checking if Current Perimeter is Greater than Max. perimeter till Now
-	                 max=arr[i]+arr[j]+arr[k];
-	    return max;   
+       int n=arr.length,max=0; 
+       for(int i=0;i<n-2;i++)
+	 for(int j=i+1;j<n-1;j++)
+	   for(int k=j+1;k<n;k++)
+	      if(arr[i]<(arr[j]+arr[k]) && arr[j]<(arr[i]+arr[k]) && arr[k]<(arr[i]+arr[j])) //checking if the three sides form triangle
+	         if((arr[i]+arr[j]+arr[k])>max) //checking if Current Perimeter is Greater than Max. perimeter till Now
+	           max=arr[i]+arr[j]+arr[k];
+       return max;   
     }
 }
 
@@ -23,23 +23,23 @@ class Solution {
 
 class Solution {
     public int largestPerimeter(int[] arr) {
-      Arrays.sort(arr);
-	    for(int i=arr.length-1;i>=2;i--)
-	      if((arr[i-1]+arr[i-2])>arr[i]) //checking if the three sides form triangle
-	        return arr[i]+arr[i-1]+arr[i-2];
+       Arrays.sort(arr);
+       for(int i=arr.length-1;i>=2;i--)
+	if((arr[i-1]+arr[i-2])>arr[i]) //checking if the three sides form triangle
+	   return arr[i]+arr[i-1]+arr[i-2];
    
-	    return 0; // it is impossible to form any triangle of a non-zero area,so return 0
-	    
-	    /*
-       1 <= arr[i] <= 10^6
-       
-       As arr[i]+arr[i-1] > arr[i-2] similarly arr[i] + arr[i-2] > arr[i-1]  so we are not required to check for these 2 Conditions.
-	     (Reason : arr[i-2]<=arr[i-1]<=arr[i] as Array is sorted) 
-	     if(arr[i]>=arr[i-2]) then obv. arr[i]+arr[i-1]>arr[i-2]
-	     
-	     similarly,
-	     
-	     if(arr[i]>=arr[i-1]) then obv. arr[i]+arr[i-2]>arr[i-1]
-	     */
+      return 0; // it is impossible to form any triangle of a non-zero area,so return 0
     }
 }
+
+/*
+   1 <= arr[i] <= 10^6
+       
+   As arr[i]+arr[i-1] > arr[i-2] similarly arr[i] + arr[i-2] > arr[i-1]  so we are not required to check for these 2 Conditions.
+  (Reason : arr[i-2]<=arr[i-1]<=arr[i] as Array is sorted) 
+  if(arr[i]>=arr[i-2]) then obv. arr[i]+arr[i-1]>arr[i-2]
+	     
+  similarly,
+	     
+  if(arr[i]>=arr[i-1]) then obv. arr[i]+arr[i-2]>arr[i-1]
+*/
