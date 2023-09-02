@@ -1,0 +1,56 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] nextGreaterElement(int[]sub, int[] arr) {
+      int m=sub.length,n=arr.length;
+	    HashMap<Integer,Integer>hm=new HashMap<>();
+
+      for(int i=0;i<n;i++)
+	      hm.put(arr[i],nextGreater(i,arr,n));	      
+      
+      int[]res=new int[m];
+      for(int i=0;i<m;i++)
+        res[i]=hm.get(sub[i]);
+
+      return res;
+    }
+
+    public static int nextGreater(int idx,int[] arr,int n)
+	  {
+      for(int i=idx+1;i<n;i++)
+	      if(arr[i]>arr[idx])
+          return arr[i];
+          
+      return -1;
+	  }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] nextGreaterElement(int[]sub, int[] arr) {
+      int m=sub.length,n=arr.length;
+      ArrayDeque<Integer>stack=new ArrayDeque<>();
+      HashMap<Integer,Integer>hm=new HashMap<>();
+      
+      for(int i=n-1;i>=0;i--)
+      {
+	      while(stack.size()!=0 && stack.peek()<=arr[i])
+	        stack.pop();
+	     
+	      if(stack.size()==0)
+          hm.put(arr[i],-1);
+	      else
+          hm.put(arr[i],stack.peek());
+	    
+	      stack.push(arr[i]);
+      }
+	  
+      int[] res=new int[m];
+      for(int i=0;i<m;i++)
+       res[i]=hm.get(sub[i]);
+
+     return res;
+    }
+}
