@@ -1,5 +1,4 @@
-//Bruteforce Approach
-/*
+/* Bruteforce Approach :
 The idea is to generate all subsets of size m of arr[0..n-1]. 
 For every subset, find the difference between the maximum and minimum elements in it. Finally, return the minimum difference.
 */
