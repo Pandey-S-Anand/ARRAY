@@ -1,0 +1,30 @@
+//Bruteforce Approach
+/*
+The idea is to generate all subsets of size m of arr[0..n-1]. 
+For every subset, find the difference between the maximum and minimum elements in it. Finally, return the minimum difference.
+*/
+
+
+//Optimal Approach
+
+class Solution{
+    public long findMinDiff (ArrayList<Integer> arr, int n, int m){
+       int minDiff=Integer.MAX_VALUE;
+      
+       Collections.sort(arr);
+       
+       int i=0,j=m-1;
+       
+       while(j<n)
+       {
+         int currDiff=arr.get(j)-arr.get(i);
+         if(currDiff<minDiff) 
+           minDiff=currDiff;
+           
+         i++;
+         j++;
+       }
+      
+      return (long)minDiff;
+    }
+}
