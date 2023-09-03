@@ -28,7 +28,7 @@ class Solution {
           ss.remove(ss.size()-1);
           generateUniqueSubsets(arr,n,arrIdx+1,ss,hs); 
         }
-	  }
+    }
 }
 
 
@@ -40,7 +40,7 @@ class Solution {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer>subset=new ArrayList<>();
        
-	      generateUniqueSubsets(arr,arr.length,0,subset,res);
+	generateUniqueSubsets(arr,arr.length,0,subset,res);
 
       return res;   
     }
@@ -61,7 +61,7 @@ class Solution {
           ss.remove(ss.size()-1);
           generateUniqueSubsets(arr,n,arrIdx+1,ss,res); 
         }
-	  }
+    }
 }
 
 
@@ -73,7 +73,7 @@ class Solution {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer>subset=new ArrayList<>();
        
-	      generateUniqueSubsets(arr,arr.length,0,subset,res);
+	generateUniqueSubsets(arr,arr.length,0,subset,res);
 
       return res;   
     }
@@ -94,5 +94,5 @@ class Solution {
            ss.remove(ss.size()-1);
            generateUniqueSubsets(arr,n,arrIdx+1,ss,res); 
        } 
-	  }
+    }
 }
