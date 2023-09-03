@@ -1,0 +1,98 @@
+//Bruteforce Approach
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] arr) {
+         Arrays.sort(arr);
+         List<List<Integer> > res = new ArrayList<>();
+         List<Integer>subset=new ArrayList<Integer>();
+         Set<List<Integer>>hs= new HashSet<>();
+
+         generateUniqueSubsets(arr,arr.length,0,subset,hs);
+       
+         for(List<Integer>l :hs)
+           res.add(l);
+       
+         return res;    
+    }
+
+    public void generateUniqueSubsets(int[] arr,int n,int arrIdx,List<Integer>ss,Set<List<Integer>>hs)
+    {
+        if(arrIdx==n)
+          hs.add(new ArrayList<Integer>(ss));
+        else
+        {
+          //Include element
+          ss.add(arr[arrIdx]);
+          generateUniqueSubsets(arr,n,arrIdx+1,ss,hs);
+          //Exclude Element
+          ss.remove(ss.size()-1);
+          generateUniqueSubsets(arr,n,arrIdx+1,ss,hs); 
+        }
+	  }
+}
+
+
+//Better Approach
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] arr) {
+        Arrays.sort(arr);
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer>subset=new ArrayList<>();
+       
+	      generateUniqueSubsets(arr,arr.length,0,subset,res);
+
+      return res;   
+    }
+
+    public void generateUniqueSubsets(int[] arr,int n,int arrIdx,List<Integer>ss,List<List<Integer>> res)
+    {
+        if(arrIdx==n)
+        {
+          if(res.contains(new ArrayList<Integer>(ss))==false)
+            res.add(new ArrayList<>(ss));
+        }  
+        else
+        {
+          //Include element
+          ss.add(arr[arrIdx]);
+          generateUniqueSubsets(arr,n,arrIdx+1,ss,res);
+          //Exclude Element
+          ss.remove(ss.size()-1);
+          generateUniqueSubsets(arr,n,arrIdx+1,ss,res); 
+        }
+	  }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] arr) {
+        Arrays.sort(arr);
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer>subset=new ArrayList<>();
+       
+	      generateUniqueSubsets(arr,arr.length,0,subset,res);
+
+      return res;   
+    }
+
+    public void generateUniqueSubsets(int[] arr,int n,int arrIdx,List<Integer>ss,List<List<Integer>> res)
+    {
+       if(arrIdx==n)
+          res.add(new ArrayList<>(ss));
+       else
+       {
+           //Include element
+           ss.add(arr[arrIdx]);
+           generateUniqueSubsets(arr,n,arrIdx+1,ss,res);
+           //Exclude Element
+           while(arrIdx+1<n && arr[arrIdx]==arr[arrIdx+1])
+             arrIdx++;
+
+           ss.remove(ss.size()-1);
+           generateUniqueSubsets(arr,n,arrIdx+1,ss,res); 
+       } 
+	  }
+}
