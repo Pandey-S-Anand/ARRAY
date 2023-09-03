@@ -4,9 +4,9 @@ class Solution {
     public int trap(int[] arr) {
       int n=arr.length;
       if(n<3 || isAscSorted(arr) || isDescSorted(arr))
-	      return 0;
+	return 0;
 	     
-	    int sum=0;
+      int sum=0;
 
       for(int i=0;i<n;i++)
       {
@@ -22,12 +22,12 @@ class Solution {
 
     public int maxOnLeft(int[] arr,int n,int idx)
     {
-        int max=Integer.MIN_VALUE;
+        int max=arr[idx];
         for(int i=0;i<idx;i++)
           if(arr[i]>max)
             max=arr[i];
        
-        if(max<=arr[idx])
+        if(max==arr[idx])
           return -1;
 
       return max;
@@ -35,12 +35,12 @@ class Solution {
 
     public int maxOnRight(int[] arr,int n,int idx)
     {
-        int max=Integer.MIN_VALUE;
+        int max=arr[idx];
         for(int i=idx+1;i<n;i++)
           if(arr[i]>max)
             max=arr[i];
 
-        if(max<=arr[idx])
+        if(max==arr[idx])
           return -1;
 
       return max; 
