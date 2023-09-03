@@ -1,0 +1,97 @@
+//Bruteforce Approach
+
+class Solution {
+    public int largestRectangleArea(int[] arr) {
+        int n=arr.length,maxArea=0;
+        for(int i=0;i<n;i++)
+        {
+            int currArea=arr[i]*(nextSmallerIdxRight(arr,n,i)-nextSmallerIdxLeft(arr,n,i)-1);
+	    
+            if(currArea>maxArea)  
+              maxArea=currArea;
+        }
+
+      return maxArea;  
+    }
+
+    public static int nextSmallerIdxLeft(int[] arr,int n,int idx)
+    {
+      for(int i=idx-1;i>=0;i--)
+        if(arr[i]<arr[idx])
+          return i; 
+        
+      return -1;
+    }
+
+    public static int nextSmallerIdxRight(int[] arr,int n,int idx)
+    {
+      for(int i=idx+1;i<n;i++)
+        if(arr[i]<arr[idx])
+          return i; 
+
+      return n;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+  	public int largestRectangleArea(int[] arr) {
+           int n=arr.length,maxArea=0;
+           
+           int[] nseIdxRight=nextSmallerElementIdxRight(arr,n);
+           int[] nseIdxLeft=nextSmallerElementIdxLeft(arr,n);
+
+           for(int i=0;i<n;i++)
+           {
+             int currArea=arr[i]*(nseIdxRight[i]-nseIdxLeft[i]-1);
+             if(currArea>maxArea)  
+               maxArea=currArea;
+           }
+
+           return maxArea;
+        }
+	
+        public int[] nextSmallerElementIdxLeft(int[] arr,int n)
+        {
+           ArrayDeque<Integer>stack=new ArrayDeque<>();
+           int[] nseIdxLeft=new int[n];
+      
+           for(int i=0;i<n;i++)
+	         {
+	            while(stack.size()!=0 && arr[stack.peek()]>=arr[i])
+	               stack.pop();
+	     
+	            if(stack.size()==0)
+	              nseIdxLeft[i]=-1;
+	            else
+	              nseIdxLeft[i]=stack.peek();
+	    
+	            stack.push(i);
+	         }
+
+           return nseIdxLeft;
+        }
+
+        public int[] nextSmallerElementIdxRight(int[] arr,int n)
+        {
+           ArrayDeque<Integer>stack=new ArrayDeque<>();
+           int[] nseIdxRight=new int[n];
+
+           for(int i=n-1;i>=0;i--)
+	         {
+	            while(stack.size()!=0 && arr[stack.peek()]>=arr[i])
+	              stack.pop();
+	     
+	            if(stack.size()==0)
+	              nseIdxRight[i]=n;
+	            else
+	              nseIdxRight[i]=stack.peek();
+	    
+	            stack.push(i);
+	         }
+
+          return nseIdxRight;
+        }
+}
