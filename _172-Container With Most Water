@@ -22,27 +22,27 @@ class Solution {
 
 class Solution {
     public int maxArea(int[] arr) {
-      int left=0,right=arr.length-1,maxArea=0;
+       int left=0,right=arr.length-1,maxArea=0;
 	    
-	    while(left<right)
-	    {
-	      int breadth=right-left;
-	      int height=Math.min(arr[left],arr[right]);
-	      int currArea=breadth*height;
-	      maxArea=Math.max(maxArea,currArea);
+       while(left<right)
+       {
+	  int breadth=right-left;
+	  int height=Math.min(arr[left],arr[right]);
+	  int currArea=breadth*height;
+	  maxArea=Math.max(maxArea,currArea);
 	      
-	      if(arr[left]<arr[right])
-	        left++;
-	      else if(arr[right]<arr[left])
-	        right--;
-	      else //arr[left]==arr[right]
-	      {
-	        left++;
-	        right--;
-	      }
-	    }
+	  if(arr[left]<arr[right])
+	    left++;
+	  else if(arr[right]<arr[left])
+	    right--;
+	  else //arr[left]==arr[right]
+	  {
+	    left++;
+	    right--;
+	  }
+       }
 	    
-	    return maxArea; 
+      return maxArea; 
     }
 }
 
