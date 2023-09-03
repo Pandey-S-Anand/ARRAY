@@ -9,7 +9,7 @@ class Solution{
         res.add(0);
 	   
       for(int i=0;i<n;i++)
-	    res.set(i,previousSmallerElement(arr,n,i));
+	res.set(i,previousSmallerElement(arr,n,i));
 	   
      return res;
     }
@@ -37,15 +37,15 @@ class Solution{
 	   
       for(int i=0;i<n;i++)
       {
-	      while(stack.size()!=0 && stack.peek()>=arr[i])
-	        stack.pop();
+	 while(stack.size()!=0 && stack.peek()>=arr[i])
+	   stack.pop();
 	     
-	      if(stack.size()==0)
-	        res.set(i,-1);
-	      else
-	        res.set(i,stack.peek());
+	 if(stack.size()==0)
+	   res.set(i,-1);
+	 else
+	   res.set(i,stack.peek());
 	    
-	      stack.push(arr[i]);
+	stack.push(arr[i]);
       }
 	   
      return res;
