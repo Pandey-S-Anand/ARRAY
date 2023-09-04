@@ -4,8 +4,6 @@
       for(int i=0;i<arr.length-1;i++)
         if(arr[i]>arr[i+1])
           cnt++;
-
-      System.out.println(cnt);
       
       if(cnt==0)
         return true; //was originally sorted in Asc. order but not Left/Right rotated (i.e left/right rotated by 0 positions) 
