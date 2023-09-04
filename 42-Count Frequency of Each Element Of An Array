@@ -1,4 +1,3 @@
-//Method 1
 
 class Solution{	
    public static void countFrequecy(int[] arr){
@@ -27,63 +26,3 @@ class Solution{
    }
 }
 
-//Method 2
-
-class Solution{
-    public static void countFrequecy(int[] arr){
-        System.out.println("Frequency :");
-        int n =arr.length;
-	   
-	HashMap<Integer,Integer>hm=new HashMap<>(n);
-        for(int i=0;i<n;i++)
-          if(hm.containsKey(arr[i]))
-            hm.put(arr[i],hm.get(arr[i])+1);
-          else
-            hm.put(arr[i],1);
-        
-        for(int key:hm.keySet())
-           System.out.println(key+"==>"+hm.get(key));
-    }
-}
-
-
-//Method 3(Prints elements(Along with Their Frequency) in same order as they appear in input)
-
-class Solution{
-   public static void countFrequecy(int[] arr){
-        System.out.println("Frequency :");
-	int n =arr.length;
-	HashMap<Integer,Integer>hm=new HashMap<>(n);
-	   
-        for(int i=0;i<n;i++)
-          if(hm.containsKey(arr[i]))
-            hm.put(arr[i],hm.get(arr[i])+1);
-          else
-            hm.put(arr[i],1);
-        
-        for(int i=0;i<n;i++)
-	  if(hm.containsKey(arr[i]))
-          {
-	    System.out.println(arr[i]+"==>"+hm.get(arr[i])); 
-            hm.remove(arr[i]);
-          }
-   }
-}
-
-                   //ALITER (Using LinkedHashMap)
-
-class Solution{
-   public static void countFrequecy(int[] arr){
-      System.out.println("Frequency :");
-      int n =arr.length;
-      LinkedHashMap<Integer,Integer>lhm=new LinkedHashMap<>(n);
-      for(int i=0;i<n;i++)
-        if(lhm.containsKey(arr[i]))
-           lhm.put(arr[i],lhm.get(arr[i])+1);
-        else
-           lhm.put(arr[i],1);
-        
-       for(int key :lhm.keySet())
-	  System.out.println(key+"==>"+lhm.get(key)); 
-   }
-}
