@@ -14,7 +14,7 @@
         else
           return true; // was originally sorted in Asc. order and then Left/Right Rotated by some positions
       }
-      return false;
+      return false; //cnt>1
     }
 }
 
