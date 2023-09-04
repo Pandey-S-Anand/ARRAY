@@ -1,4 +1,4 @@
-//Bruteforce Implementation
+//Naive Approach
 
 class Solution{
     static ArrayList<Integer> sieveOfEratosthenes(int n){
@@ -24,7 +24,7 @@ class Solution{
 }
 
 
-//Better Implementation
+//Better Implementation 
 
 class Solution{
     static ArrayList<Integer> sieveOfEratosthenes(int n){
@@ -50,7 +50,7 @@ class Solution{
 }
 
 
-//Further optimised
+//Good Implementation
 
 class Solution{
     static ArrayList<Integer> sieveOfEratosthenes(int n){
