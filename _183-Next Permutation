@@ -55,3 +55,93 @@ class Solution {
         arr[j] = temp;
     }
 }
+
+
+//Better Approach
+
+class Solution {
+    public void nextPermutation(int[] arr) {
+        int bp=-1;
+
+        for(int i=arr.length-2;i>=0;i--)
+            if(arr[i]<arr[i+1])
+            {
+                bp=i;
+                break;
+            }
+  
+        if(bp==-1)
+          Arrays.sort(arr);
+        else
+        {
+            int idx=-1;
+            for(int i=arr.length-1;i>=(bp+1);i--)
+                if(arr[i]>arr[bp])
+                {
+                  idx=i;
+                  break;
+                }
+
+            swap(arr,bp,idx);
+            Arrays.sort(arr,bp+1,arr.length);
+        }
+    }
+    void swap(int[] arr,int i,int j)
+    {
+        int temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public void nextPermutation(int[] arr) {
+        int bp=-1;
+
+        for(int i=arr.length-2;i>=0;i--)
+            if(arr[i]<arr[i+1])
+            {
+                bp=i;
+                break;
+            }
+  
+        if(bp==-1)
+          reverse(arr,0);
+        else
+        {
+            int idx=-1;
+            for(int i=arr.length-1;i>=(bp+1);i--)
+                if(arr[i]>arr[bp])
+                {
+                  idx=i;
+                  break;
+                }
+
+            swap(arr,bp,idx);
+            reverse(arr,bp+1);
+        }
+    }
+
+    
+    void swap(int[] arr,int i,int j)
+    {
+        int temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+
+    void reverse(int[] arr,int start)
+    {
+        int i=start;
+        int j=arr.length-1;
+        while(i<j)
+        {
+          swap(arr,i,j);
+          i++;
+          j--;
+        }
+    }
+}
