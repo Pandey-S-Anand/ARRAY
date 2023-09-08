@@ -1,0 +1,57 @@
+//Bruteforce Approach
+
+class Solution {
+    public void nextPermutation(int[] arr) {
+      StringBuilder sb=new StringBuilder();
+
+      for(int i=0;i<arr.length;i++)
+         sb.append(arr[i]);
+      
+      List<String>res=findPermutation(sb.toString());
+
+      for(int i=0;i<res.size()-1;i++)
+        if(res.get(i).equals(sb.toString()))
+        {
+          String ans=res.get(i+1);
+          for(int j=0;j<ans.length();j++)
+           arr[j]=ans.charAt(j)-'0';
+          return; 
+        }
+
+      Arrays.sort(arr);
+    }
+
+    public List<String> findPermutation(String str) {
+     List<String>res=new ArrayList<>();
+     permute(str.toCharArray(), 0, (str.length()-1),res);
+     
+     Collections.sort(res);
+     
+     return res;
+    }
+    
+    private void permute(char[]arr, int start, int end,List<String>res)
+    {
+        if (start == end)
+        {
+          if(res.contains(String.valueOf(arr))==false)
+            res.add(String.valueOf(arr));
+        }
+        else 
+        {
+          for (int i = start; i <= end; i++)
+          {
+            swap(arr, start, i);
+            permute(arr, start + 1, end,res);
+            swap(arr, start, i);
+          }
+        }
+    }
+
+    public void swap(char[]arr, int i, int j)
+    {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
