@@ -34,17 +34,16 @@ class Solution {
     private void permute(char[]arr, int start, int end,List<String>res)
     {
         if (start == end)
-        {
-          if(res.contains(String.valueOf(arr))==false)
-            res.add(String.valueOf(arr));
-        }
+          res.add(String.valueOf(arr));
         else 
         {
           for (int i = start; i <= end; i++)
           {
-            swap(arr, start, i);
-            permute(arr, start + 1, end,res);
-            swap(arr, start, i);
+            if (hasDuplicate(arr, start, i)==false)   // Check for duplicates before swapping
+            {  swap(arr, start, i);
+               permute(arr, start + 1, end,res);
+               swap(arr, start, i);
+            }
           }
         }
     }
@@ -55,7 +54,17 @@ class Solution {
         arr[i] = arr[j];
         arr[j] = temp;
     }
+
+    public boolean hasDuplicate(char[]arr, int start, int idx) 
+    {
+        for (int i = start; i < idx; i++)
+          if (arr[i]==arr[idx])
+            return true;
+
+        return false;
+    }
 }
+
 
 
 //Better Approach
