@@ -1,3 +1,4 @@
+
 class Solution {
     public List<List<Integer>> permute(int[] arr) {
      List<List<Integer>>res=new ArrayList<>();
