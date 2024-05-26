@@ -5,100 +5,58 @@ Prime numbers are the numbers that have only two factors, 1 and the number itsel
 
 //Bruteforce Approach
 
-class Solution{
-    public int[] AllPrimeFactors(int num){
-        ArrayList<Integer>uniquePrimeFactors=new ArrayList<>();
-	int cnt;
-        for(int i=2;i<=num;i++)
-        {
-            cnt=0;
-            while ((num % i) == 0)
-            {
-              cnt++;
-              num=num/i;
+class Solution {
+    public int[] AllPrimeFactors(int num) {
+        ArrayList<Integer> uniquePrimeFactors = new ArrayList<>();
+        
+        for (int i = 2; i <= num; i++) {
+            if (num % i == 0) {
+                uniquePrimeFactors.add(i);
+                while (num % i == 0) {
+                    num /= i;
+                }
             }
-            
-            if(cnt>=1)
-               uniquePrimeFactors.add(i);
+        }
+
+        int n=uniquePrimeFactors.size();
+        int[] primeFactors = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            primeFactors[i] = uniquePrimeFactors.get(i);
         }
         
-        if(num!=1)
-          uniquePrimeFactors.add(num);
-          
-        int[]res=new int[uniquePrimeFactors.size()];
-        int idx = 0;
-        
-        for (int upf : uniquePrimeFactors)
-          res[idx++] = upf;
-        
-        return res;
+        return primeFactors;
     }
 }
+
 
 //Better Approach
 
-class Solution{
-    public int[] AllPrimeFactors(int num){
-        ArrayList<Integer>uniquePrimeFactors=new ArrayList<>();
-	int cnt;
-        for(int i=2;i<=(num/2);i++)
-        {
-            cnt=0;
-            while ((num % i) == 0)
-            {
-              cnt++;
-              num=num/i;
+class Solution {
+    public int[] AllPrimeFactors(int num) {
+        ArrayList<Integer> uniquePrimeFactors = new ArrayList<>();
+        
+        for (int i = 2; i <= (num/2); i++) {
+            if (num % i == 0) {
+                uniquePrimeFactors.add(i);
+                while (num % i == 0) {
+                    num /= i;
+                }
             }
-            
-            if(cnt>=1)
-               uniquePrimeFactors.add(i);
         }
         
-        if(num!=1)
-          uniquePrimeFactors.add(num);
-          
-        int[]res=new int[uniquePrimeFactors.size()];
-        int idx = 0;
-        
-        for (int upf : uniquePrimeFactors)
-          res[idx++] = upf;
-        
+        if(num!=1){
+           uniquePrimeFactors.add(num);
+        }
 
-        return res;
-    }
-}
+        int n=uniquePrimeFactors.size();
+        int[] primeFactors = new int[n];
 
-
-//Further Optimised Approach
-
-class Solution{
-    public int[] AllPrimeFactors(int num){
-        ArrayList<Integer>uniquePrimeFactors=new ArrayList<>();
-        int cnt;
-        for(int i=2;i<=(int)Math.sqrt(num);i++)
-        {
-            cnt=0;
-            while ((num % i) == 0)
-            {
-              cnt++;
-              num=num/i;
-            }
-            
-            if(cnt>=1)
-               uniquePrimeFactors.add(i);
+        for (int i = 0; i < n; i++) {
+            primeFactors[i] = uniquePrimeFactors.get(i);
         }
         
-        if(num!=1)
-          uniquePrimeFactors.add(num);
-          
-        int[]res=new int[uniquePrimeFactors.size()];
-        int idx = 0;
-        
-        for (int upf : uniquePrimeFactors)
-          res[idx++] = upf;
-        
-
-        return res;
+        return primeFactors;
     }
 }
 
@@ -107,52 +65,83 @@ class Solution{
 
 class Solution {
     public int[] AllPrimeFactors(int num) {
-        ArrayList<Integer>prime= sieveOfEratosthenes(num);
-
         ArrayList<Integer> uniquePrimeFactors = new ArrayList<>();
         
-        int cnt;
-        for(int primeNum : prime)
-        {
-            cnt=0;
-            while ((num % primeNum) == 0)
-            {
-                cnt++; 
-                num=num/primeNum;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                uniquePrimeFactors.add(i);
+                while (num % i == 0) {
+                    num /= i;
+                }
             }
-            
-            if(cnt>=1)
-             uniquePrimeFactors.add(primeNum);
+        }
+        
+        if(num!=1){
+           uniquePrimeFactors.add(num);
         }
 
-        int[]res = new int[uniquePrimeFactors.size()];
-        int idx = 0;
-        
-        for (int upf : uniquePrimeFactors)
-          res[idx++] = upf;
-        
+        int n=uniquePrimeFactors.size();
+        int[] primeFactors = new int[n];
 
-        return res;
+        for (int i = 0; i < n; i++) {
+            primeFactors[i] = uniquePrimeFactors.get(i);
+        }
+        
+        return primeFactors;
+    }
+}
+
+//Aliter
+
+class Solution {
+    public int[] AllPrimeFactors(int num) {
+        ArrayList<Integer>primes= sieveOfEratosthenes(num);
+        ArrayList<Integer> uniquePrimeFactors = new ArrayList<>();
+        
+        for(int prime : primes){
+           if(num%prime==0){
+             uniquePrimeFactors.add(prime);
+            
+             while ((num % prime)==0){
+                num=num/prime;
+             }
+           }
+        }
+        
+        int n=uniquePrimeFactors.size();
+        int[] primeFactors = new int[n];
+        
+        for (int i = 0; i < n; i++) {
+            primeFactors[i] = uniquePrimeFactors.get(i);
+        }
+        
+        return primeFactors;
     }
 
-    static ArrayList<Integer> sieveOfEratosthenes(int n) {
-        ArrayList<Integer> res = new ArrayList<>();
-        if (n < 2)
-          return res;
+    public ArrayList<Integer> sieveOfEratosthenes(int n) {
+        ArrayList<Integer>primes = new ArrayList<>();
+        
+        if (n < 2){
+          return primes;
+        }
 
         boolean isPrime[] = new boolean[n + 1];
-        for (int i = 2; i <= n; i++)
-            isPrime[i] = true;
+        Arrays.fill(isPrime,2,n+1,true);
 
-        for (int num = 2; num <= (int) Math.sqrt(n); num++)
-            if (isPrime[num] == true)
-                for (int mark = (num * num); mark <= n; mark += num)
+        for (int num = 2; num <= (int) Math.sqrt(n); num++){
+            if (isPrime[num] == true){
+                for (int mark = (num * num); mark <= n; mark += num){
                     isPrime[mark] = false;
+                }
+            }
+        }
 
-        for (int i = 2; i <= n; i++)
-            if (isPrime[i] == true)
-                res.add(i);
+        for (int i = 2; i <= n; i++){
+            if (isPrime[i] == true){
+                primes.add(i);
+            }
+        }
 
-        return res;
+        return primes;
     }
 }
