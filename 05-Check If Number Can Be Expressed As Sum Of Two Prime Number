@@ -1,0 +1,49 @@
+class Solution{
+    public static void canBeExpressedAsSumOfTwoPrimes(int n) {
+       if (n < 4) {
+          System.out.println("No");
+       }
+    
+       boolean found=false;
+       List<Integer>primes = sieveOfEratosthenes(n);
+
+       for (int i = 0; primes.get(i) <= (n / 2); i++) {
+          if (primes.contains(n-primes.get(i))) {
+             System.out.println((n-primes.get(i))+" and "+primes.get(i));
+             found=true;
+          }
+       }
+    
+       if(!found){
+          System.out.println("No");
+       }
+    }
+
+    public static List<Integer> sieveOfEratosthenes(int n){
+       List<Integer>primes=new ArrayList<>();
+    
+       if(n<2){
+         return primes;
+       }
+   
+      boolean isPrime[]=new boolean[n+1];
+
+      Arrays.fill(isPrime,2,n+1,true);
+      
+      for(int num=2;num<=(int)Math.sqrt(n);num++){
+        if(isPrime[num]==true){
+           for(int mark=(num*num);mark<=n;mark+=num){
+             isPrime[mark]=false;
+           }
+        }
+      }
+            
+      for(int i=2;i<=n;i++){
+        if(isPrime[i]==true){
+           primes.add(i);
+        }
+      }
+    
+      return primes;
+   }
+}
