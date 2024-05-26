@@ -1,12 +1,11 @@
 
 class Solution {
     public static void insertionSort(int arr[], int n) {
-      for(int i=1;i<n;i++)
-      {
+      for(int i=1;i<n;i++){
           int j=i-1;
           int temp=arr[i];
-          while(j>=0 && arr[j]>temp)
-          {
+
+          while(j>=0 && arr[j]>temp){
               arr[j+1]=arr[j];
               j--;
           }
@@ -17,9 +16,10 @@ class Solution {
     }
 
     private static void printArray(int[] arr) {
-      for (int num : arr) 
+      for (int num : arr){
         System.out.print(num + " ");
-		
+      }
+
       System.out.println();
     }
 }
