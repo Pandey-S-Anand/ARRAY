@@ -1,3 +1,53 @@
+//Bruteforce Approach
+
+class Solution{
+    public static void canBeExpressedAsSumOfTwoPrimes(int n) {
+       if (n < 4) {
+          System.out.println("No");
+       }
+    
+       boolean found=false;
+
+       for (int prime = 2; prime<= (n / 2); prime=nextPrime(prime)) {
+         if(isPrime(n-prime)){
+            System.out.println(prime+" and "+(n-prime));
+            found=true;
+         }
+       }
+    
+       if(!found){
+          System.out.println("No");
+       }
+    }
+
+    public static boolean isPrime(int num){
+       if(num<2){
+         return false; //Not Prime
+       }
+	  
+       for(int i=2;i<=(int)Math.sqrt(num);i++){
+          if((num%i)==0){
+            return false;  //Not Prime 
+          }
+       }
+                 
+       return true; //Prime
+    }
+    
+    public static int nextPrime(int prime){
+        int nextPrime=prime+1;
+        
+        while(!isPrime(nextPrime)){
+           nextPrime++;
+        }
+        
+        return nextPrime;
+    }
+}
+
+
+//Optimal Approach
+
 class Solution{
     public static void canBeExpressedAsSumOfTwoPrimes(int n) {
        if (n < 4) {
