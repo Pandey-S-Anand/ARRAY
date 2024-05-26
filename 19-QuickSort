@@ -1,30 +1,29 @@
 class Solution{
   public static void quickSort(int[]arr,int lb,int ub){
-      if(lb<ub)
-      {
+      if(lb<ub){
           int index=partition(arr,lb,ub);
           quickSort(arr,lb,index-1);
           quickSort(arr,index+1,ub);
       }
   }
    
-   
-  public static int partition(int[] arr,int lb,int ub)
-  {
+  public static int partition(int[] arr,int lb,int ub){
      int i=lb,j=ub,pivot=arr[lb],n=arr.length;
      
-     while(true)
-     {
-        while(i<n && arr[i]<=pivot )
+     while(true){
+        while(i<n && arr[i]<=pivot ){
           i++;
-          
-        while(j>=0 && arr[j]>pivot)
+        }
+        
+        while(j>=0 && arr[j]>pivot){
           j--;
-          
-        if(i<j) //Swap arr[i] and arr[j]
+        }
+        
+        if(i<j){
           swap(arr,i,j);
-        else
+        }else if(i>j){
           break;
+        }
      }
      //if i>j => Swap Pivot(arr[lb]) and arr[j]
      swap(arr,lb,j);
@@ -33,8 +32,7 @@ class Solution{
   }
    
     
-  public static void swap(int[]arr,int i,int j)
-  {
+  public static void swap(int[]arr,int i,int j){
        int temp=arr[i];
        arr[i]=arr[j];
        arr[j]=temp;
