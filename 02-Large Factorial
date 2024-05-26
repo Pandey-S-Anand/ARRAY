@@ -2,30 +2,32 @@ class Solution {
     static long mod=1000000007L;
 
     public long[] factorial(long arr[], int n) {
-      
-        long max=findMax(arr,n);
-
-        long[] fact = new long[(int)(max+1)]; //fact[i]=i! => fact[max]=max!       
-        fact[0] = 1L; // 0!=1
-
-        //find the factorial of maximum number in the array (i.e 'max') using Dynamic programming
-        for (int i = 1; i <= max; i++)
-            fact[i] = (fact[i-1] * i) % mod; 
-            
+        long[] factorial=findFactorialOfMaxNumber(arr,n);
+        long[] result = new long[n]; 
         
-        long[] ans = new long[n];        
-        for (int i = 0; i < n; i++)
-            ans[i] = fact[(int)arr[i]];
+        for (int i = 0; i < n; i++){
+            result[i] = factorial[(int)arr[i]];
+        }
         
-        return ans;
+        return result;
     }
     
-    public static long findMax(long[]arr,int n)
-    {
+    public long[] findFactorialOfMaxNumber(long[]arr,int n){
       long max=arr[0];
-      for(int i=1;i<n;i++)
-         if(arr[i]>max)
+      for(int i=1;i<n;i++){
+         if(arr[i]>max){
            max=arr[i];
-      return max;
+         }
+      }
+      
+      long[] factorial = new long[(int)(max+1)]; //fact[i]=i! => fact[max]=max!       
+      factorial[0] = 1L; // 0!=1
+
+      //find the factorial of maximum number in the array (i.e 'max') using Dynamic programming
+      for (int num = 1; num <= max; num++){
+        factorial[num] = (factorial[num-1] * num) % mod; 
+      }
+      
+      return factorial;
     }
 }
