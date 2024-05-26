@@ -5,7 +5,7 @@ class Solution{
        ArrayList<Integer>primes=new ArrayList<>();
        
        if(n<2){
-	     return primes;
+	 return primes;
        }
 	   
        boolean isPrime[]=new boolean[n+1];
