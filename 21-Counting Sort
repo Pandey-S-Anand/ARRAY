@@ -5,34 +5,34 @@
 */
 
 //will only work for +ve integers
+
 class Solution{
    public static void countingSort(int[]arr) { 
-        int maxEle=getMax(arr);
-        int[] count=new int[maxEle+1];
-        int n=arr.length;
-        int[] temp=new  int[n];
-       
-        for(int i=0;i<n;i++)
+        int max=findMaxInArray(arr);
+
+        int[] count=new int[max+1];
+        int[] result=new  int[arr.length];
+      
+        for(int i=0;i<arr.length;i++){
            count[arr[i]]++;
+        }
           
-        for(int i=1;i<(maxEle+1);i++)
+        for(int i=1;i<(max+1);i++){
            count[i]+=count[i-1];
+        }
            
-        for(int i=(n-1);i>=0;i--)
-           temp[--count[arr[i]]]=arr[i];
-          
-        for(int i=0;i<n;i++)
-           arr[i]=temp[i];
+        for(int i=(arr.length-1);i>=0;i--){
+           result[--count[arr[i]]]=arr[i];
+        }
+        
+        System.arraycopy(result, 0, arr, 0, arr.length);
    }
    
-   public static int getMax(int[] arr)
-   {
-      int n=arr.length,max=arr[0];
-      for(int i=1;i<n;i++)
-        if(arr[i]>max)
-          max=arr[i];
-      
-      return max;
+   public static int findMaxInArray(int[] arr){
+      if(arr.length==1){
+         return arr[0];
+      }
+      return Math.max(arr[0],findMaxInArray(Arrays.copyOfRange(arr,1,arr.length)));
    }
 }
 
@@ -42,25 +42,23 @@ class Solution{
 class Solution{
     public static String countSort(String str){
        char[] arr=str.toCharArray();
-       
-       int n=arr.length;
-       
+       char[] result=new char[arr.length];
        int[] count=new int[26];
        
-       for(int i=0;i<n;i++)
+       for(int i=0;i<arr.length;i++){
           count[arr[i]-'a']++;
+       }
           
-       for(int i=1;i<26;i++)
+       for(int i=1;i<26;i++){
           count[i]+=count[i-1];
-       
-       char[] temp=new char[n];
+       }
            
-       for(int i=(n-1);i>=0;i--)
-           temp[--count[arr[i]-'a']]=arr[i];
+       for(int i=(arr.length-1);i>=0;i--){
+           result[--count[arr[i]-'a']]=arr[i];
+       }
           
-        for(int i=0;i<n;i++)
-           arr[i]=temp[i];
+       System.arraycopy(result,0,arr,0,arr.length);
         
-        return new String(arr);
+       return new String(arr);
     }
 }
