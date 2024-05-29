@@ -1,23 +1,23 @@
 
 class Solution {
-    void segregateEvenOdd(int arr[], int n) {
-       int i=0,j=0;
-       while(i<n)
-         if((arr[i]%2)==0)
-         {
-            //Swapping
-            int temp=arr[i];
-            arr[i]=arr[j];
-            arr[j]=temp;
-             
-            i++;
-            j++;
+    public static void segregateEvenAndOdd(int[]arr){
+       int oddIdxTracker=0;
+
+       for(int i=0;i<arr.length;i++){
+         if((arr[i]%2)==0){
+            swap(arr,i,oddIdxTracker);          
+            oddIdxTracker++;
          }
-         else
-           i++;
-           
-      Arrays.sort(arr,0,j);
-      Arrays.sort(arr,j,n);
-    }
+       }
+       
+       Arrays.sort(arr,0,oddIdxTracker);
+       Arrays.sort(arr,oddIdxTracker,arr.length);
+   } 
+
+   public static void swap(int[]arr,int i,int j){
+      int temp=arr[i];
+      arr[i]=arr[j];
+      arr[j]=temp;
+   }
 }
 
