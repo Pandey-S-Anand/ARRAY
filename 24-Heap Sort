@@ -17,16 +17,14 @@ class Solution{
  
     //Heapify function to maintain MaxHeap property.
     void heapify(int arr[], int n, int i){
-      int maxIdx=i;
-      int lc=(2*i)+1;
-      int rc=(2*i)+2;
+      int maxIdx=i,leftChildIdx=(2*i)+1,rightChildIdx=(2*i)+2;
       
-      if(lc<n && arr[maxIdx]<arr[lc]){
-        maxIdx=lc;
+      if(leftChildIdx<n && arr[maxIdx]<arr[leftChildIdx]){
+        maxIdx=leftChildIdx;
       }
       
-      if(rc<n && arr[maxIdx]<arr[rc]){
-        maxIdx=rc;
+      if(rightChildIdx<n && arr[maxIdx]<arr[rightChildIdx]){
+        maxIdx=rightChildIdx;
       }
         
       if(maxIdx!=i){
