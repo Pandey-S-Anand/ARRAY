@@ -168,12 +168,13 @@ class MaxHeapComparator implements Comparator<Integer>{
 /*
 n=8;
 k=3
-
+       0 1 2 3 4 5 6 7
 arr[]={1,2,3,4,5,6,7,8}
 
-3 rd largest(index=2) is 6th smallest(index=5)(i.e 5=8-3 =n-k)
+3 rd largest(index=5)(i.e 5=8-3 =n-k) is 6th smallest
 
-So if we delete (n-(k+1)) elements from the min heap then the (n-k)th element will be at index 0 of the array and it will be the 6th largest element.  */
+So if we delete elements from index 0 to (n-(k+1)) (i.e 0 to 4 here) from the min heap then the (n-k)th index element (i.e here, element at 5th index) will be at index 0 of the array and it will be the 3rd largest/6th smallest element.
+*/
 
 class Solution {
     public int findKthLargest(int[] arr, int k) {
