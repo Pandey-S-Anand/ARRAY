@@ -202,11 +202,11 @@ class Solution {
         minIdx=leftChildIdx;
       }
 
-      if(rightChildIdx<n && arr[minIdx]>arr[rightChildIdx])
+      if(rightChildIdx<n && arr[minIdx]>arr[rightChildIdx]){
         minIdx=rightChildIdx;
+      }
         
-      if(minIdx!=i)
-      {
+      if(minIdx!=i){
         swap(arr,i,minIdx);
         heapify(arr,n,minIdx);
       }
