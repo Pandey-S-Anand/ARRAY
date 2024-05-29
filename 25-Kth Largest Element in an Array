@@ -97,10 +97,10 @@ class Solution {
 class Solution {
     public int findKthLargest(int[] arr, int k) {
       buildMaxHeap(arr,arr.length);
-      
-      for(int i=(arr.length-1);i>=(arr.length-(k-1));i--){
-         arr[0]=arr[i];
-         heapify(arr,i,0);
+
+      for(int i=1;i<=(k-1);i++){
+        arr[0]=arr[arr.length-i];
+        heapify(arr,arr.length-i,0);
       }
 
       return arr[0];
@@ -171,18 +171,18 @@ k=3
        0 1 2 3 4 5 6 7
 arr[]={1,2,3,4,5,6,7,8}
 
-3 rd largest(index=5)(i.e 5=8-3 =n-k) is 6th smallest
+3 rd largest(position=6)(i.e 6=8-2 =(n-k)+1)) is 6th smallest
 
-So if we delete elements from index 0 to (n-(k+1)) (i.e 0 to 4 here) from the min heap then the (n-k)th index element (i.e here, element at 5th index) will be at index 0 of the array and it will be the 3rd largest/6th smallest element.
+So if we delete elements from position : 1 to (n-k) (i.e 1 to 5 here) from the min heap then the ((n-k)+1)th position element (i.e here, 6) will be at position 1 in the array and it will be the 3rd largest/6th smallest element.
 */
 
 class Solution {
     public int findKthLargest(int[] arr, int k) {
       buildMinHeap(arr);
       
-      for(int i=0;i<=(arr.length-(k+1));i++){
-         arr[0]=arr[arr.length-1-i];
-         heapify(arr,arr.length-1-i,0);
+      for(int i=1;i<=(arr.length-k);i++){
+         arr[0]=arr[arr.length-i];
+         heapify(arr,arr.length-i,0);
       }
 
       return arr[0];
