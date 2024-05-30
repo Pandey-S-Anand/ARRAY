@@ -122,7 +122,7 @@ Below are the steps to convert [Ln Lp Rn Rp] to [Ln Rn Lp Rp] without using extr
 */
 
 class Solution {
-   public void Rearrange(int arr[], int n){
+   public void rearrange(int arr[], int n){
        mergeSort(arr,0,n-1);
    }
     
@@ -144,14 +144,14 @@ class Solution {
         }
         //Now arr[i..mid] is positive and  arr[lb..i-1] is negative
         
+        //reverse positive part of left Sub-List (i.e arr[i..mid])
+        reverse(arr,i,mid);
+        
         while(j<=ub && arr[j]<0){ //Right Sublist : arr[mid+1...ub] 
             j++;
         }
         //Now arr[j..ub] is positive and  arr[mid+1..j-1] is negative
         
-        //reverse positive part of left Sub-List (i.e arr[i..mid])
-        reverse(arr,i,mid);
-          
         //reverse Negative part right Sub-List (i.e arr[mid+1..j-1])
         reverse(arr,mid+1,j-1);
         
