@@ -1,25 +1,30 @@
+//Bruteforce Implementation
+
 class Solution {
     public String largestNumber(int[] arr) {
-      int n=arr.length;
-      String[]strArr = new String[n];
+      String[]strArr = new String[arr.length];
 
-      for(int i = 0; i < arr.length; i++)
+      for(int i = 0; i < arr.length; i++){
          strArr[i]=Integer.toString(arr[i]);
+      }
 
-      Arrays.sort(strArr,new comp());
+      Arrays.sort(strArr,new comparator());
 
-      String res="";
-      for(int i=0;i<n;i++)
-	res+=strArr[i];
+      StringBuilder result=new StringBuilder();
+
+      for(String num:strArr){
+	result.append(num);
+      }
 	   
-      if(res.charAt(0)=='0') 
-	 return "0";      
+      if(result.charAt(0)=='0'){ 
+	return "0";      
+      }
              
-      return res;    
+      return result.toString();    
     }
 }
 
-class comp implements Comparator<String> {
+class comparator implements Comparator<String> {
    public int compare(String s1,String s2){
       int res=s1.concat(s2).compareTo(s2.concat(s1));
       
@@ -29,5 +34,64 @@ class comp implements Comparator<String> {
         return -1;
       else
         return 0;
+   }
+}
+
+//Better Implementation
+
+class Solution {
+    public String largestNumber(int[] arr) {
+      String[]strArr = new String[arr.length];
+
+      for(int i = 0; i < arr.length; i++){
+         strArr[i]=Integer.toString(arr[i]);
+      }
+
+      Arrays.sort(strArr,new comparator());
+
+      StringBuilder result=new StringBuilder();
+
+      for(String num:strArr){
+	result.append(num);
+      }
+	   
+      if(result.charAt(0)=='0'){ 
+	return "0";      
+      }
+             
+      return result.toString();    
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public String largestNumber(int[] arr) {
+      String[]strArr = new String[arr.length];
+
+      for(int i = 0; i < arr.length; i++){
+         strArr[i]=Integer.toString(arr[i]);
+      }
+      
+      Arrays.sort(strArr,(s1,s2) -> s2.concat(s1).compareTo(s1.concat(s2)));
+
+      StringBuilder result=new StringBuilder();
+
+      for(String num:strArr){
+	    result.append(num);
+      }
+	   
+      if(result.charAt(0)=='0'){ 
+	    return "0";      
+      }
+             
+      return result.toString();    
+    }
+}
+
+class comparator implements Comparator<String> {
+   public int compare(String s1,String s2){
+      return s2.concat(s1).compareTo(s1.concat(s2));
    }
 }
