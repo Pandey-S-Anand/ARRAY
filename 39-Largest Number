@@ -79,11 +79,11 @@ class Solution {
       StringBuilder result=new StringBuilder();
 
       for(String num:strArr){
-	    result.append(num);
+	result.append(num);
       }
 	   
       if(result.charAt(0)=='0'){ 
-	    return "0";      
+	return "0";      
       }
              
       return result.toString();    
