@@ -1,19 +1,23 @@
 //Bruteforce Approach
+
 class Solution {
-    public void Rearrange(int arr[], int n){
+    public void rearrange(int arr[], int n){
        int k=0;
        int temp[]=new int[n];
              
-       for(int i=0;i<n;i++)
-          if(arr[i]<0)
-             temp[k++]=arr[i];
+       for(int val:arr){
+          if(val<0){
+             temp[k++]=val;
+          }
+       }
        
-       for(int i=0;i<n;i++)
-          if(arr[i]>=0)
-             temp[k++]=arr[i];
+       for(int val:arr){
+          if(val>=0){
+             temp[k++]=val;
+          }
+       }
              
-       for(int i=0;i<n;i++)
-         arr[i]=temp[i];
+       System.arraycopy(temp,0,arr,0,n);
     }
 }
 
@@ -21,23 +25,21 @@ class Solution {
 //Better Approach
 
 class Solution {
-    public void Rearrange(int arr[], int n){
-       int i=0,j=0;
-       while(i < n) //'j' is tracking the +ve Elemnent while 'i' is used for iterating over the array 
-         if(arr[i]<0)
-         {
-            for (int k = i; k > j; k--) //This loop maintains the order of appearence
+    public void rearrange(int arr[], int n){
+       int positiveTracker=0;
+       
+       for(int i=0;i < n;i++){//'positiveTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array 
+         if(arr[i]<0){
+            for (int k = i; k >positiveTracker; k--){ //This loop maintains the order of appearence
               swap(arr,k,k-1);
+            }
 
-            j++;
-            i++;
+            positiveTracker++;
          }
-         else
-           i++;
+       }
     }
     
-    public void swap(int[] arr,int i,int j)
-    {
+    public void swap(int[] arr,int i,int j){
         int temp = arr[i];
         arr[i] = arr[i-1];
         arr[i-1] = temp;
@@ -51,52 +53,54 @@ we need to merge in such a way that negative part of left and right sub-array is
 */
 
 class Solution {
-   public void Rearrange(int arr[], int n){
+   public void rearrange(int arr[], int n){
        mergeSort(arr,0,n-1);
    }
     
-   public void mergeSort(int[]arr,int lb,int ub)
-   {
-      if(lb<ub)
-      {
-          int mid=(lb+ub)/2;
+   public void mergeSort(int[]arr,int lb,int ub){
+      if(lb<ub){
+          int mid=lb+(ub-lb)/2;
           mergeSort(arr,lb,mid);
           mergeSort(arr,(mid+1),ub);
           modifiedMerge(arr,lb,mid,ub);
       }
    }
    
-   public void modifiedMerge(int[] arr,int lb,int mid,int ub)
-   {
+   public void modifiedMerge(int[] arr,int lb,int mid,int ub){
         int m=(mid-lb+1),n=(ub-mid);
-        int[] Left=new int[m];
-        int[] Right=new int[n];  
+        int[] left=new int[m];
+        int[] right=new int[n];  
    
-        for(int i=0;i<m;i++)
-          Left[i]=arr[lb+i];
+        for(int i=0;i<m;i++){
+          left[i]=arr[lb+i];
+        }
         
-        for(int i=0;i<n;i++)
-          Right[i]=arr[mid+1+i];
+        for(int i=0;i<n;i++){
+          right[i]=arr[mid+1+i];
+        }
         
         int i=0,j=0,k=lb;
         // copy negative elements of left sublist  
-        while(i<m && Left[i]<0)
-          arr[k++]=Left[i++];
+        while(i<m && left[i]<0){
+          arr[k++]=left[i++];
+        }
           
         // copy negative elements of Right sublist
-        while(j<n && Right[j]<0)
-          arr[k++]=Right[j++];
+        while(j<n && right[j]<0){
+          arr[k++]=right[j++];
+        }
           
         // copy Positive elements of Left sublist  
-        while(i<m)
-          arr[k++]=Left[i++];
+        while(i<m){
+          arr[k++]=left[i++];
+        }
           
         // copy Positive elements of Right sublist  
-        while(j<n)
-          arr[k++]=Right[j++];  
+        while(j<n){
+          arr[k++]=right[j++];  
+        }
    } 
 }
-
 
 
 //Optimal Approach
@@ -122,29 +126,27 @@ class Solution {
        mergeSort(arr,0,n-1);
    }
     
-   public void mergeSort(int[]arr,int lb,int ub)
-   {
-      if(lb<ub)
-      {
-          int mid=(lb+ub)/2;
+   public void mergeSort(int[]arr,int lb,int ub){
+      if(lb<ub){
+          int mid=lb+(ub-lb)/2;
           mergeSort(arr,lb,mid);
           mergeSort(arr,(mid+1),ub);
           modifiedMerge(arr,lb,mid,ub);
       }
    }
    
-    public void modifiedMerge(int[] arr,int lb,int mid,int ub)
-   {
-        
+   public void modifiedMerge(int[] arr,int lb,int mid,int ub){    
         int i=lb;       // Initial index of Left Sublist
         int j=mid+1;  // Initial index of Right Sublist
         
-        while(i<=mid && arr[i]<0) //Left Sublist : arr[lb...mid] 
-            i++;
+        while(i<=mid && arr[i]<0){ //Left Sublist : arr[lb...mid] 
+          i++;
+        }
         //Now arr[i..mid] is positive and  arr[lb..i-1] is negative
         
-        while(j<=ub && arr[j]<0) //Right Sublist : arr[mid+1...ub] 
+        while(j<=ub && arr[j]<0){ //Right Sublist : arr[mid+1...ub] 
             j++;
+        }
         //Now arr[j..ub] is positive and  arr[mid+1..j-1] is negative
         
         //reverse positive part of left Sub-List (i.e arr[i..mid])
@@ -157,14 +159,12 @@ class Solution {
         reverse(arr,i,j-1);
    }
    
-   
-   public void reverse(int arr[], int i, int j)
-   {
-    	if(i<j) 
-      {
-	      int temp=arr[i];
-	      arr[i]=arr[j];
-	      arr[j]=temp;
-	      reverse(arr,i+1,j-1);
-	    }
+   public void reverse(int arr[], int i, int j){
+      if(i<j) {
+	    int temp=arr[i];
+	    arr[i]=arr[j];
+	    arr[j]=temp;
+	    reverse(arr,i+1,j-1);
+      }
    }
+}
