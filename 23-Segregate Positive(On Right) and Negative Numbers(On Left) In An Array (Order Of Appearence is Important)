@@ -30,10 +30,8 @@ class Solution {
        
        for(int i=0;i < n;i++){//'positiveTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array 
          if(arr[i]<0){
-            for (int k = i; k >positiveTracker; k--){ //This loop maintains the order of appearence
-              swap(arr,k,k-1);
-            }
-
+            //This leftShiftBy1() method maintains the order of appearence
+            leftShiftBy1(arr,positiveTracker,i);
             positiveTracker++;
          }
        }
@@ -44,7 +42,17 @@ class Solution {
         arr[i] = arr[i-1];
         arr[i-1] = temp;
     }
+    
+    public void leftShiftBy1(int[]arr,int start,int end){
+      int temp=arr[end];
+      for(int i=end;i>start;i--){
+          arr[i]=arr[i-1];
+      }
+      
+      arr[start]=temp;
+    }
 }
+
 
 //Best Approach
 /*
@@ -164,13 +172,13 @@ class Solution {
           return;
       }
       
-	  swap(arr,i,j);
-	  reverse(arr,i+1,j-1);
+      swap(arr,i,j);
+      reverse(arr,i+1,j-1);
    }
    
    public void swap(int arr[], int i, int j){
-	  int temp=arr[i];
-	  arr[i]=arr[j];
-	  arr[j]=temp;
+      int temp=arr[i];
+      arr[i]=arr[j];
+      arr[j]=temp;
    }
 }
