@@ -4,18 +4,18 @@ class Solution{
     public static void merge(long arr1[], long arr2[], int m, int n) {
        	int i=m-1,j=0;
 
-        while(i>=0 && j<n)
-          if(arr1[i]>arr2[j])
-          {
+        while(i>=0 && j<n){
+          if(arr1[i]>arr2[j]){
              long temp=arr1[i];
              arr1[i]=arr2[j];
              arr2[j]=temp;
 		 
               i--;
               j++;
-          }
-          else
+          }else{
             break;
+          }
+        }
        
         Arrays.sort(arr1);
         Arrays.sort(arr2);
@@ -73,14 +73,15 @@ arr2 = [5, 6, 7]
 
 class Solution{
     public static void merge(long arr1[], long arr2[], int m, int n) {
-       	for(int i=0;i<m;i++)
-          if(arr1[i]>arr2[0])
-          {
+       	for(int i=0;i<m;i++){
+          if(arr1[i]>arr2[0]){
             long temp=arr1[i];
             arr1[i]=arr2[0];
             arr2[0]=temp;
+            
             Arrays.sort(arr2);
           }
+       	}
     }
 }
 
@@ -182,36 +183,43 @@ arr2: [5, 6, 7]
 
 //Optimal Approach
 
-class Solution{
-    public static void merge(long arr1[], long arr2[], int m, int n) {
-        int len=m+n;
-        int gap=(int) Math.ceil((double)len/ 2.0);
-        while(gap>0)
-        {
-    	      for(int i=0,j=gap;j<len;i++,j++)	 // comparing elements in the first array.
-              if (j < m && (arr1[i] > arr1[j]))
-              {
-                  long temp=arr1[i];
-                  arr1[i]=arr1[j];
-                  arr1[j]=temp;
-              }
-              else if (j >= m && i < m && (arr1[i] > arr2[j - m]))// comparing elements in both arrays.
-              {
-                  long temp=arr1[i];
-                  arr1[i]=arr2[j-m];
-                  arr2[j-m]=temp;
-              }
-              else if (j >= m && i >= m && (arr2[i - m] > arr2[j - m]))// comparing elements in the Second array..
-              {
-                 long temp=arr2[i-m];
- 	               arr2[i-m]=arr2[j-m];
- 	               arr2[j-m]=temp;
-              }
-    	   
-    	      if(gap==1)
-    	      	gap=(int) Math.ceil(gap/ 2);//gap=0
-    	      else
-    	        gap=(int) Math.ceil((double)gap/ 2.0);
+class Solution {
+    public static void merge(long[] arr1, long[] arr2, int m, int n) {
+        int gap = (int) Math.ceil((double) (n + m) / 2);
+
+        while (gap > 0) {
+            int i = 0,j = gap;
+
+            while (j < (n + m)) {
+                if (i < m && j >= m) { // case 1: i in arr1[] and j in arr2[]:
+                    if(arr1[i]>arr2[j-m]){
+                      long temp = arr1[i];
+                      arr1[i] = arr2[j - m];
+                      arr2[j - m] = temp;  
+                    }
+                } else if (i >= m) { // case 2: both pointers in arr2[]:
+                    if(arr2[i-m]>arr2[j-m]){
+                      long temp = arr2[i-m];
+                      arr2[i-m] = arr2[j - m];
+                      arr2[j - m] = temp;  
+                    }
+                } else if(j<m) { // case 3: both pointers in arr1[]:
+                    if(arr1[i]>arr1[j]){
+                      long temp = arr1[i];
+                      arr1[i] = arr1[j];
+                      arr1[j] = temp;  
+                    }
+                }
+                i++;
+                j++;
+            }
+
+            // Break if iteration, gap=1 is completed:
+            if (gap == 1) {
+                break;
+            }
+            // Otherwise, calculate new gap:
+            gap = (int) Math.ceil((double) gap / 2.0);
         }
     }
 }
