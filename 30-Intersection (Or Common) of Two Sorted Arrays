@@ -44,7 +44,7 @@ class Solution {
 	   
       for(int val:arr1){
         if(set.contains(val)){
-	       intersection.add(val);
+	  intersection.add(val);
         }
       }
 	   
