@@ -1,0 +1,81 @@
+//Bruteforce Approach
+
+class Solution {
+    public int singleNumber(int[] arr) {
+        int result = -1;
+        for (int i = 0; i < arr.length; i++) {
+            int count = 0;
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[i] == arr[j]) {
+                    count++;
+                }
+            }
+
+            if ((count % 2) != 0) {
+                result = arr[i];
+                break;
+            }
+        }
+
+        return result;
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int singleNumber(int[] arr) {
+        Map<Integer, Integer> frequencyMap = new HashMap<>(arr.length);
+        int result = -1;
+
+        for (int val : arr) {
+            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
+        }
+
+        for (int key : frequencyMap.keySet()) {
+            if ((frequencyMap.get(key) % 2) == 1) {
+                result = key;
+                break;
+            }
+        }
+
+        return result;
+    }
+}
+
+
+//Good Approach
+
+class Solution {
+    public int singleNumber(int[] arr) {
+       int arrSum=0,UniqueSum=0;
+       Set<Integer>set=new HashSet<>(arr.length);
+
+       for(int val:arr){
+         set.add(val);
+         arrSum+=val;
+       }
+         
+       for(int val: set){
+         UniqueSum+=val; 
+       }
+        
+       return (2*UniqueSum)-arrSum;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int singleNumber(int[] arr) {
+      int result=arr[0];
+
+      for(int i=1;i<arr.length;i++){
+         result=result^arr[i];
+      }
+	       
+      return result;  
+    }
+}
