@@ -20,7 +20,7 @@ class Solution {
                     if (mid > 1 && arr[mid - 2] == arr[mid - 1]) {
                         return arr[mid];
                     } else {
-                        if (mid == 0) {
+                        if (mid == 0) { //When Single Element is at 0 th index
                            return arr[0];
                         }
                         high = mid - 1;
