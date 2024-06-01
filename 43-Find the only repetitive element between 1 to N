@@ -2,17 +2,17 @@
 
 class Solution{
    public static int findOnlyRepeated(int arr[]){
-      int n=arr.length,res=-1;
-      for(int i=0;i<n;i++)
-	for(int j=i+1;j<n;j++)
-	   if(arr[i]==arr[j])
-	   {
-	      res=arr[i];
+      int repeating=-1;
+      for(int i=0;i<arr.length;i++){
+      	for(int j=i+1;j<arr.length;j++){
+	   if(arr[i]==arr[j]){
+	      repeating=arr[i];
 	      break;
 	   }
-
-   return res;
-  }
+      	}
+      }
+      return repeating;
+   }
 }
 
 
@@ -20,16 +20,17 @@ class Solution{
 
 class Solution{
    public static int findOnlyRepeated(int arr[]){
-      int n=arr.length,res=-1;
+      int repeating=-1;
       Arrays.sort(arr);
-      for(int i=0;i<n-1;i++)
-	if(arr[i]==arr[i+1])
-	{
-	   res=arr[i];
-	   break;
-	}
-	      
-      return res;
+      
+      for(int i=0;i<(arr.length-1);i++){
+	 if(arr[i]==arr[i+1]){
+	    repeating=arr[i];
+	    break;
+	 }
+      }
+
+      return repeating;
    }
 }
 
@@ -37,43 +38,41 @@ class Solution{
 //Method 3
 
 class Solution {
-    public static int findOnlyRepeated(int arr[]){
-       int n=arr.length,res=-1;
-       HashMap<Integer,Integer>hm=new HashMap<>(n);
+   public static int findOnlyRepeated(int arr[]){
+       int repeating=-1;
+       Map<Integer,Integer>frequencyMap=new HashMap<>(arr.length);
        
-       for(int i=0;i<n;i++)
-         if(hm.containsKey(arr[i]))
-           hm.put(arr[i],hm.get(arr[i])+1);
-         else
-           hm.put(arr[i],1);
+       for(int val:arr){
+          frequencyMap.put(val,frequencyMap.getOrDefault(val,0)+1);
+       }
        
-       for(int key:hm.keySet())
-         if(hm.get(key)==2)
-         {
-            res=key;
-            break;
-         }
-             
-       return res; 
-    }
+       for(int key:frequencyMap.keySet()){
+          if(frequencyMap.get(key)==2){
+             repeating=key;
+             break;
+          }
+       }
+
+       return repeating;   
+   }
 }
 
 
 //Method 4
 
 class Solution {
-    public int findDuplicate(int[] arr) {
-      int n=arr.length,repeating=-1;
-      boolean[] visited=new boolean[n];
+    public static int findOnlyRepeated(int[] arr) {
+      int repeating=-1;
+      boolean[] visited=new boolean[arr.length];
 
-      for(int i=0;i<n;i++)
-         if(visited[arr[i]]==false)
-           visited[arr[i]]=true;
-         else
-         {
-           repeating=arr[i];
+      for(int val:arr){
+         if(!visited[val]){
+           visited[val]=true;
+         }else{
+           repeating=val;
            break;
          }
+      }
 
       return repeating;
     }
@@ -82,19 +81,17 @@ class Solution {
 //Method 5
 
 class Solution {
-    public int findDuplicate(int[] arr) {
-      int n=arr.length,repeated=-1;
-      for(int i=0;i<n;i++)
-      {
+    public static int findOnlyRepeated(int[] arr) {
+      int repeated=-1;
+      for(int i=0;i<arr.length;i++){
          int ele=Math.abs(arr[i]);
-	 
-         if(arr[ele]<0)
-         {
+         
+         if(arr[ele]<0){
            repeated=ele;
            break;
          }
-	
-         arr[ele]*=-1;
+         
+        arr[ele]*=-1;
       }
       
       return repeated;  
@@ -105,40 +102,38 @@ class Solution {
 //Method 6
 
 class Solution {
-    public int findDuplicate(int[] arr) {
-      HashSet<Integer>hs=new HashSet<>();
-      int n=arr.length,repeated=-1;
+    public static int findOnlyRepeated(int[] arr) {
+      Set<Integer>set=new HashSet<>();
+      int repeated=-1;
         
-      for(int i=0;i<n;i++)
-       if(hs.contains(arr[i]))
-       {
-          repeated=arr[i];
-          break;
-       }
-       else
-         hs.add(arr[i]);
-        
-       return repeated;
+      for(int val:arr){
+         if(set.contains(val)){
+           repeated=val;
+           break;
+         }
+         set.add(val);
+      }
+      
+      return repeated;
     }
 }
 
 //Method 7
 
 class Solution {
-    public int findDuplicate(int[] arr) {
-       int n=arr.length,arrSum=0,UniqueSum=0;
-       HashSet<Integer>hs=new HashSet<>(n);
-       for(int i=0;i<n;i++)
-       {
-          hs.add(arr[i]);
-          arrSum+=arr[i];
-       }
-         
-       for(int val: hs)
-          UniqueSum+=val; 
-        
-       int repeated=arrSum-UniqueSum;
-       return repeated;
+    public static int findOnlyRepeated(int[] arr) {
+      Set<Integer>set=new HashSet<>();
+      int arrSum=0,uniqueSum=0;
+      
+      for(int val:arr){
+         if(!set.contains(val)){
+           uniqueSum+=val;
+         }
+         arrSum+=val;
+         set.add(val);
+      }
+      
+      return arrSum-uniqueSum;
     }
 }
 
@@ -146,30 +141,33 @@ class Solution {
 //Method 8
 
 class Solution{
-    public static int findDuplicate(int arr[]){
-       int n=arr.length,arrSum=0,sum=((n-1)*((n-1)+1))/2;//sum of first (n-1) Natural Numbers
-       for(int i=0;i<n;i++)
-          arrSum+=arr[i];
-          
-       int repeating=arrSum-sum;
-       return repeating;
-    }
+  public static int findOnlyRepeated(int[] arr) {
+     int arrSum=0,uniqueSum=((arr.length-1)*((arr.length-1)+1))/2;//sum of first (n-1) Natural Numbers
+       
+     for(int val:arr){
+        arrSum+=val;
+     }
+         
+     return arrSum-uniqueSum;
+  }
 }
 
 
 //Method 9
 
 class Solution{
-    public static int findDuplicate(int arr[]) {
-        int n=arr.length,XOR1=0,XOR2=0;
-        for(int i=1;i<=(n-1);i++)
-           XOR1=XOR1^i;
+    public static int findOnlyRepeated(int[] arr) {
+        int xor1=0,xor2=arr[0];
+
+        for(int num=1;num<=(arr.length-1);num++){
+           xor1=xor1^num;
+        }
            
-        for(int i=0;i<n;i++)
-           XOR2=XOR2^arr[i];
+        for(int i=1;i<arr.length;i++){
+           xor2=xor2^arr[i];
+        }
            
-        int repeating=XOR1^XOR2;
-        return repeating;
+        return xor1^xor2;
     }
 }
 
