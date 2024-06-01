@@ -1,5 +1,5 @@
 //Method 1
-
+ 
 class Solution{
    public static int findOnlyRepeated(int arr[]){
       int repeating=-1;
