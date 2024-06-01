@@ -270,21 +270,24 @@ class Solution {
 //Method 11
 
 class Solution {
-    public int findDuplicate(int[] arr) {
+    public static int findOnlyRepeated(int[] arr) {
       int low = 1,high = arr.length - 1; //coz array consists of Elements in range [1,n] while size of array is n+1
 
-      while (low < high)
-      {
-	 int mid = (low + high) / 2;
+      while (low < high) {
+	 int mid = low + (high+low) / 2;
     	 int count = 0;
-         for(int val:arr)
-	   if (val <= mid)
+    	 
+         for(int val:arr){
+	    if (val <= mid){
               count++;
+	    }
+         }
 
-	 if (count > mid)//Duplicate would be present in the range [low ,mid](both inclusive) so search space [low,mid]
+	 if (count > mid){//Duplicate would be present in the range [low ,mid](both inclusive) so search space [low,mid]
            high=mid;
-         else //if(count<=mid) => Duplicate is not present in the range [low ,mid](both inclusive) so search space [mid+1,high]
+         }else{ //if(count<=mid) => Duplicate is not present in the range [low ,mid](both inclusive) so search space [mid+1,high]
 	   low=mid + 1;
+         }
       }
 
       return low; // or return high;
@@ -338,7 +341,6 @@ class Solution {
 
 class Solution {
     public int findDuplicate(int[] arr) {
-       
         //Slow ptr moves 1 step while fast ptr moves 2 steps at a time.
        //if they meet then there is a cycle.
       //the starting point of that cycle is the no. which is repeating.
@@ -347,19 +349,17 @@ class Solution {
         int fast =arr[arr[0]];
 	
         //DETECTING CYCLE -> use floyd's cycle detection 
-        while(slow != fast)
-        {
+        while(slow != fast){
            slow=arr[slow];
            fast=arr[arr[fast]];
         }
         
-	      //DETECTING STARTING POINT OF THE CYCLE
+	//DETECTING STARTING POINT OF THE CYCLE
         //reset slow or fast anyone and then move both by 1 step,Wherever They meet is the starting Point of the Cycle.
         fast = 0; // or slow=0
-        while(slow!=fast)
-        {
-            slow=arr[slow];
-            fast=arr[fast];
+        while(slow!=fast){
+          slow=arr[slow];
+          fast=arr[fast];
         }
         
         return slow;// return fast; //both are pointing at starting pt of cycle
