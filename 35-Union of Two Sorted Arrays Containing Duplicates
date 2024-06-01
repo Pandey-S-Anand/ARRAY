@@ -1,0 +1,190 @@
+//Bruteforce Approach
+
+class Solution {
+  public static List<Integer> unionOfTwoSortedArraysContainingDuplicates(int[] arr1,int[] arr2){
+     int newLen1=removeDuplicatesFromSortedArray(arr1);
+     int newLen2=removeDuplicatesFromSortedArray(arr2);
+     return unionOfTwoSortedArrays(arr1,newLen1,arr2,newLen2);
+  }
+	
+  public static int removeDuplicatesFromSortedArray(int[] arr){
+     int idx=0;
+     for(int i=0;i<(arr.length-1);i++){
+        if(arr[i]!=arr[i+1]){
+           arr[idx++]=arr[i];
+        }
+     }
+	       
+     arr[idx++]=arr[arr.length-1];
+	   
+    return idx;
+  }
+	
+  public static List<Integer> unionOfTwoSortedArrays(int[] arr1,int m,int[] arr2,int n){
+      int i=0,j=0;
+      List<Integer>union=new ArrayList<>();
+	    
+      while(i<m && j<n){
+         if(arr1[i]==arr2[j]){
+            union.add(arr1[i]);
+            i++;
+            j++;
+         }else if(arr1[i]<arr2[j]){
+           union.add(arr1[i++]); 
+         }else{
+           union.add(arr2[j++]);
+         }
+      }
+          
+      while(i<m){
+        union.add(arr1[i++]);
+      }
+          
+      while(j<n){
+        union.add(arr2[j++]);
+      }
+               
+     return union;
+  }
+}
+
+
+//Better Approach
+
+class Solution {
+    public static List<Integer> unionOfTwoSortedArraysContainingDuplicates(int[] arr1,int[] arr2){
+       Set<Integer>set=new TreeSet<>();
+       List<Integer>union=new ArrayList<>();
+      
+       for(int val :arr1){
+         set.add(val);
+       }
+	    
+       for(int val :arr2){
+         set.add(val);
+       }
+            
+       for(int val:set){
+         union.add(val);
+       }
+          
+      return union;
+    } 
+}
+
+
+//Optimal Approach
+
+class Solution{
+   public static List<Integer> unionOfTwoSortedArraysContainingDuplicates(int[] arr1,int[] arr2){
+        int i=0,j=0,prev1=Integer.MIN_VALUE,prev2=Integer.MIN_VALUE;
+        List<Integer>union=new ArrayList<>();
+	    
+        while(i<arr1.length && j<arr2.length){     
+           while(i<arr1.length && prev1==arr1[i]){
+             i++;
+           }
+          
+           while(j<arr2.length && prev2==arr2[j]){
+             j++;
+           }
+
+           if(i<arr1.length && j<arr2.length){
+              if(arr1[i]==arr2[j]){
+                union.add(arr1[i]);
+                prev1=arr1[i++];
+                prev2=arr2[j++];
+              }else if(arr1[i]<arr2[j]){
+                union.add(arr1[i]);
+                prev1=arr1[i++];
+              }else{
+                union.add(arr2[j]); 
+                prev2=arr2[j++];
+              }
+           }
+        }
+            
+        if(i<arr1.length){
+           while(i<arr1.length && arr1[i]==prev1){
+             i++;
+           }
+            
+           while(i<(arr1.length-1)){
+             if(arr1[i]!=arr1[i+1]){
+               union.add(arr1[i++]);
+             }
+           }
+        
+           if(i==(arr1.length-1)){    
+             union.add(arr1[i]); 
+           }
+        } 
+        
+      
+        if(j<arr2.length){
+           while(j<arr2.length && arr2[j]==prev2){
+             j++;
+           }
+            
+           while(j<(arr2.length-1)){
+             if(arr2[j]!=arr2[j+1]){
+               union.add(arr2[j++]);
+             }
+           }
+            
+           if(j==(arr2.length-1)){
+             union.add(arr2[j]);
+           }
+        }
+          
+     return union;
+  }
+}
+
+//Aliter
+
+class Solution{
+    public static List<Integer> unionOfTwoSortedArraysContainingDuplicates(int[] arr1,int[] arr2){
+        int i=0,j=0,prev1=Integer.MIN_VALUE,prev2=Integer.MIN_VALUE;
+        List<Integer>union=new ArrayList<>();
+	    
+        while(i<arr1.length && j<arr2.length){     
+            if(arr1[i]==arr2[j]){
+              if(union.isEmpty() || union.get(union.size()-1)!=arr1[i]){
+                union.add(arr1[i]); 
+              }
+              i++;
+              j++;
+            }else if(arr1[i]<arr2[j]){
+              if(union.isEmpty() || union.get(union.size()-1)!=arr1[i]){
+                union.add(arr1[i]); 
+              }
+              i++;
+            }else{
+              if(union.isEmpty() || union.get(union.size()-1)!=arr2[j]){
+                union.add(arr2[j]); 
+              }
+              j++;
+            }
+        }
+            
+        
+        // Add remaining elements from arr1
+        while (i < arr1.length) {
+          if (union.isEmpty() || union.get(union.size() - 1) != arr1[i]) {
+            union.add(arr1[i]);
+          }
+          i++;
+        }
+
+        // Add remaining elements from arr2
+        while (j < arr2.length) {
+          if (union.isEmpty() || union.get(union.size() - 1) != arr2[j]) {
+            union.add(arr2[j]);
+          }
+          j++;
+        }
+
+     return union;
+  }
+}
