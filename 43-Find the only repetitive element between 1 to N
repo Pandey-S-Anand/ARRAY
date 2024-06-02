@@ -274,7 +274,7 @@ class Solution {
       int low = 1,high = arr.length - 1; //coz array consists of Elements in range [1,n] while size of array is n+1
 
       while (low < high) {
-	 int mid = low + (high+low) / 2;
+	 int mid = low + (high-low) / 2;
     	 int count = 0;
     	 
          for(int val:arr){
