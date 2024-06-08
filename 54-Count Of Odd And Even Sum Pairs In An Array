@@ -1,19 +1,21 @@
 //Bruteforce Approach
 
 class Solution {
-    public static void countPairs(int[] arr) {
-        int countEven = 0;
+    public static void countEvenOddSumPair(int[] arr) {
+        int countEvenSumPair = 0, countOddSumPair = 0;
 
         for (int i = 0; i < arr.length; i++) {
             for (int j = i + 1; j < arr.length; j++) {
-                if ((arr[i] + arr[j]) % 2 == 0) {
-                    countEven++;
+                if ((arr[i] ^ arr[j]) % 2 == 0) {
+                    countEvenSumPair++;
+                } else {
+                    countOddSumPair++;
                 }
             }
         }
 
-        System.out.println("Count of Pairs With Even Sum =" + countEven);
-        System.out.println("Count of Pairs With Even Sum =" + (arr.length - countEven));
+        System.out.println("Count of Pairs With Even Xor =" + countEvenSumPair);
+        System.out.println("Count of Pairs With Even Xor =" + countOddSumPair);
     }
 }
 
@@ -21,7 +23,7 @@ class Solution {
 //Optimal Approach
 
 class Solution {
-    public static void countPairs(int[] arr) {
+    public static void countEvenOddSumPair(int[] arr) {
         int countEven = 0;
 
         for (int val : arr) {
