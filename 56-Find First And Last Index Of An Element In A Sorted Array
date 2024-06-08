@@ -2,14 +2,12 @@
 
 class Solution {
     public int[] searchRange(int[] arr, int target) {
-        int[] result = new int[2];
-        Arrays.fill(result, -1);
         int index = binarySearch(arr, target);
-        
         if (index == -1) {
-            return result;
+            return new int[] { -1, -1 };
         }
 
+        int[] result = new int[2];
         int firstIndex = index - 1;
         while (firstIndex >= 0 && arr[firstIndex] == target) {
             firstIndex--;
@@ -45,6 +43,7 @@ class Solution {
         return -1;// key doesnot exists
     }
 }
+
 
 
 
