@@ -1,0 +1,59 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] plusOne(int[] arr) {
+        boolean all_9s = true;
+
+        for (int val : arr) {
+            if (val != 9) {
+                all_9s = false;
+                break;
+            }
+        }
+
+        if (all_9s) {
+            int[] result = new int[arr.length + 1]; // Ex: arr[]={9,9,9} +1 = res[]=> {1,0,0,0}
+            result[0] = 1;
+            return result;
+        }
+
+        return add1(arr);
+    }
+
+    public int[] add1(int[] arr) {
+        int[] result = new int[arr.length];
+
+        result[arr.length - 1] = (arr[arr.length - 1] + 1) % 10;
+        int carry = (arr[arr.length - 1] + 1) / 10;
+
+        for (int i = arr.length - 2; i >= 0; i--) {
+            result[i] = (arr[i] + carry) % 10;
+            carry = (arr[i] + carry) / 10;
+        }
+
+        return result;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] plusOne(int[] arr) {
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] < 9) {
+                arr[i] += 1;
+                return arr;
+            } else { // if digit[i]==9
+                arr[i] = 0;
+            }
+        }
+
+        // The last part of code is only for the case that the whole input array is 9s. ex- 99,9999,9999999 etc.
+        int[] newNumber = new int[arr.length + 1];
+        newNumber[0] = 1;
+
+        return newNumber;
+    }
+}
+
