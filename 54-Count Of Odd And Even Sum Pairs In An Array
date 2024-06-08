@@ -1,17 +1,19 @@
 //Bruteforce Approach
 
 class Solution {
-    public static void countPairs(int[] arr){
-      int n=arr.length,cntOdd=0,cntEven=0;
-      for(int i=0;i<n;i++)
-        for(int j=i+1;j<n;j++)
-           if((arr[i]+arr[j])%2==0)
-             cntEven++;
-           else
-             cntOdd++;
-              
-      System.out.println("Count of Pairs With Even Sum ="+cntEven);
-      System.out.println("Count of Pairs With Even Sum ="+cntOdd);
+    public static void countPairs(int[] arr) {
+        int countEven = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if ((arr[i] + arr[j]) % 2 == 0) {
+                    countEven++;
+                }
+            }
+        }
+
+        System.out.println("Count of Pairs With Even Sum =" + countEven);
+        System.out.println("Count of Pairs With Even Sum =" + (arr.length - countEven));
     }
 }
 
@@ -19,19 +21,21 @@ class Solution {
 //Optimal Approach
 
 class Solution {
-    public static void countPairs(int[] arr){
-       int n=arr.length,cntOdd=0,cntEven=0,cntEvenSumPairs,cntOddSumPairs;
-       for(int i=0;i<n;i++)
-         if((arr[i]%2)==0)
-           cntEven++;
-         else
-           cntOdd++;
-        
-       cntEvenSumPairs=(cntEven*(cntEven-1))/2 + (cntOdd*(cntOdd-1))/2;
-       cntOddSumPairs=(cntEven*cntOdd);
-        
-       System.out.println("Count of Pairs With Even Sum ="+cntEvenSumPairs);
-       System.out.println("Count of Pairs With Even Sum ="+cntOddSumPairs);
+    public static void countPairs(int[] arr) {
+        int countEven = 0;
+
+        for (int val : arr) {
+            if ((val % 2) == 0) {
+                countEven++;
+            }
+        }
+
+        int countOdd = arr.length - countEven;
+        int cntEvenSumPairs = (countEven * (countEven - 1)) / 2 + (countOdd * (countOdd - 1)) / 2;
+        int cntOddSumPairs = (countEven * countOdd);
+
+        System.out.println("Count of Pairs With Even Sum =" + cntEvenSumPairs);
+        System.out.println("Count of Pairs With Even Sum =" + cntOddSumPairs);
     }
 }
 
@@ -58,7 +62,7 @@ class Solution {
   (7,3) (Sum=7+3=10)    }
   (7,5) (Sum=7+5=12)    }
   (1,3) (Sum=1+3=4)     }=>   6 i.e (4C2)  (4C2 =Number of Ways Of Selecting 2 Elements(I.e Pair) out of 4 Elements (i.e cntOdd ) ) 
-  (1,3) (Sum=1+3=6)     } 
+  (1,5) (Sum=1+5=6)     } 
   (3,5) (Sum=3+5=8)     }
   
   Therefore No. of Possible Pairs With Even Sum are : 3C2 + 4C2 = 3 + 6 = 9.
