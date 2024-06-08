@@ -1,0 +1,56 @@
+/*
+Note : This Questiton is Similar to Q-261
+*/
+
+//Bruteforce Approach
+
+class Solution {
+    public static void countEvenOddXor(int[] arr) {
+        int countEvenXorPair = 0, countOddXorPair = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if ((arr[i] ^ arr[j]) % 2 == 0) {
+                    countEvenXorPair++;
+                } else {
+                    countOddXorPair++;
+                }
+            }
+        }
+
+        System.out.println("Count of Pairs With Even Xor =" + countEvenXorPair);
+        System.out.println("Count of Pairs With Even Xor =" + countOddXorPair);
+    }
+}
+
+
+/* Optimal Approach
+
+=>Even XOR
+  
+Even Element + Even Element =Even XOR
+Odd Element + Odd Element =Even XOR
+  
+=>Odd Sum
+  
+Even Element + Odd Element =Odd XOR
+*/
+
+class Solution {
+    public static void countEvenOddXorPair(int[] arr) {
+        int countEven = 0;
+
+        for (int val : arr) {
+            if ((val % 2) == 0) {
+                countEven++;
+            }
+        }
+
+        int countOdd = arr.length - countEven;
+        int cntEvenXorPairs = (countEven * (countEven - 1)) / 2 + (countOdd * (countOdd - 1)) / 2;
+        int cntOddXorPairs = (countEven * countOdd);
+
+        System.out.println("Count of Pairs With Even Sum =" + cntEvenXorPairs);
+        System.out.println("Count of Pairs With Even Sum =" + cntOddXorPairs);
+    }
+}
