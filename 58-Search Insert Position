@@ -1,0 +1,120 @@
+//Bruteforce Approach
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        int index = binarySearch(arr, target);
+
+        if (index != -1) {
+            return index;
+        }
+
+        int[] temp = new int[arr.length + 1];
+
+        System.arraycopy(arr, 0, temp, 0, arr.length);
+        temp[arr.length] = target;
+
+        Arrays.sort(temp);
+
+        return binarySearch(temp, target);
+    }
+
+    public int binarySearch(int[] arr, int key) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == key) {
+                return mid;
+            } else if (key < arr[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;// key doesnot exists
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        int index = binarySearch(arr, target);
+
+        if (index != -1) {
+            return index;
+        }
+
+        int[] newArr = new int[arr.length + 1];
+
+        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        newArr[arr.length] = target;
+
+        // Using insertion sort logic
+
+        int temp = newArr[arr.length];
+        int j = arr.length - 1;
+
+        while (j >= 0 && arr[j] > temp) {
+            newArr[j + 1] = newArr[j];
+            j--;
+        }
+
+        newArr[j + 1] = temp;
+
+        return j + 1;
+    }
+
+    public int binarySearch(int[] arr, int key) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == key) {
+                return mid;
+            } else if (key < arr[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;// key doesnot exists
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        if (target <= arr[0]) {
+            return 0;
+        }
+        if (target >= arr[arr.length - 1]) {
+            return target == arr[arr.length - 1] ? arr.length - 1 : arr.length;
+        }
+        return binarySearch(arr, target);
+    }
+
+    public int binarySearch(int[] arr, int key) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == key) {
+                return mid;
+            } else if (key < arr[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        // target Doesnot Exists in the Array however the Correct index of target in the
+        // array would be low or high+1
+        return low; // return high+1;
+    }
+}
