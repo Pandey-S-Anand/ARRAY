@@ -144,59 +144,22 @@ class Solution {
 
 class Solution {
     public int findKthPositive(int[] arr, int k) {
-        int kthPositive = k;
-        for (int val : arr) {
-            if (val > kthPositive) {
-                break;
-            }
+        int num = 1, i = 0;
 
-            kthPositive++;
+        while (i < arr.length && k != 0) {
+            if (arr[i] == num) {
+                i++;
+            } else {
+                k--;
+            }
+            num++;
         }
-        return kthPositive;
+
+        num--;
+
+        return num + k;
     }
 }
-
-/*
-Dry Run :
-
-Given arr = [2, 3, 4, 7, 11] and k = 5:
-
-Initialize kthPositive to k, which is 5.
-
-Start iterating through the array:
-
-When val = 2, since 2 is not greater than kthPositive, increment kthPositive to 6.
-When val = 3, increment kthPositive to 7.
-When val = 4, increment kthPositive to 8.
-When val = 7, increment kthPositive to 9.
-When val = 11, 11 is greater than kthPositive, so the loop breaks.
-The loop ends, and the value of kthPositive is 9.
-
-The function returns 9 as the result, which is the kth missing positive integer.
-
-
-Intuition :
-
-Imagine you have a sorted list of positive numbers , like this: [2, 3, 4, 7, 11, ...]. But some numbers are missing from this list.
-
-Your goal is to find the kth missing positive number. For example, if k is 3, you want to find the third missing positive number in the list.
-
-Here's how code works step by step:
-
-Start with k as the number of missing positive integers you're looking for.
-
-Look at each number in the list one by one:
-
-If the current number is less than or equal to kthPositive, that means it's not one of the missing numbers, so you increase kthPositive by 1.
-
-If the current number is greater than kthPositive, that means the number kthPositive is missing. So, you've found one missing number. You stop looking because you've found what you were looking for.
-
-Finally, return the value of kthPositive.
-
-Here's an analogy: Imagine you're walking down a road where some numbers are written on stones, but some numbers are missing. You're counting the stones you step on, and when you reach the kth missing number, you stop and say, "Ah, this is the kth missing number!"
-
-So, the code essentially counts how many "stones" you've stepped on (the numbers you've encountered in the array) until you find the kth missing "stone." This tells you the kth missing positive number in the list.
-*/
 
 
 //Optimal Approach
