@@ -3,23 +3,23 @@
 public class Solution {
     public int solve(ArrayList<Integer> arr, int k) {
         int n = arr.size();
-        int breakPoint = findBreakPoint(arr, n);
+        int bitonic point = findBitonicPoint(arr, n);
 
-        int index = binarySearch(arr, 0, breakPoint, k, true);
+        int index = binarySearch(arr, 0, bitonic point, k, true);
         if (index != -1) {
             return index;
         }
 
-        return binarySearch(arr, breakPoint + 1, n - 1, k, false);
+        return binarySearch(arr, bitonic point + 1, n - 1, k, false);
     }
 
-    private int findBreakPoint(ArrayList<Integer> arr, int n) {
+    private int findBitonicPoint(ArrayList<Integer> arr, int n) {
         for (int i = 0; i < n - 1; i++) {
             if (arr.get(i) > arr.get(i + 1)) {
                 return i;
             }
         }
-        return n - 1; // No breakpoint means strictly increasing array
+        return n - 1; // No bitonic point means strictly increasing array
     }
 
     private int binarySearch(ArrayList<Integer> arr, int low, int high, int key, boolean isAscending) {
@@ -50,8 +50,7 @@ public class Solution {
     }
 }
 
-
-//Optimal Approach
+// Optimal Approach
 
 public class Solution {
     public int solve(ArrayList<Integer> arr, int k) {
@@ -85,7 +84,7 @@ public class Solution {
             }
         }
 
-        return -1; // No bitonic point found
+        return n - 1; // No bitonic point means strictly increasing array
     }
 
     private int binarySearch(ArrayList<Integer> arr, int low, int high, int key, boolean isAscending) {
