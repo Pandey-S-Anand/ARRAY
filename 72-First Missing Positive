@@ -2,18 +2,20 @@
 
 class Solution {
     public int firstMissingPositive(int[] arr) {
-       int n=arr.length,pos;
-	   for(pos=1;pos<=(n+1);pos++)
-	   {
-	       int i;
-	       for(i=0;i<n;i++)
-	         if(arr[i]==pos)
-	           break;
-		   
-	       if(i==n)
-	         break;
-	   }
-	   return pos; 
+        for (int num = 1; num <= arr.length; num++) {
+            boolean missing = true;
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == num) {
+                    missing = false;
+                    break;
+                }
+            }
+
+            if (missing) {
+                return num;
+            }
+        }
+        return arr.length + 1;
     }
 }
 
@@ -22,38 +24,18 @@ class Solution {
 
 class Solution {
     public int firstMissingPositive(int[] arr) {
-        Arrays.sort(arr);
-	int n=removeDuplicates(arr);
-
-	while(i<n && arr[i]<=0) //Skipping negative numbers
-          i++;
-
-        int i=0,pos=1;
-					 
-        while(i<n)
-        {
-            if(i<n && arr[i]==pos)
-            {
-              i++;
-              pos++; 
-            }
-            else
-              break;  
+        Set<Integer> set = new HashSet<>();
+        for (int num : arr) {
+            set.add(num);
         }
 
-	return pos;
-    }
+        for (int num = 1; num <= arr.length; num++) {
+            if (!set.contains(num)) {
+                return num;
+            }
+        }
 
-    public int removeDuplicates(int[]arr){
-        int n=arr.length,idx=0;
-
-	for(int i=0;i<(n-1);i++)
-	   if(arr[i]!=arr[i+1])
-	       arr[idx++]=arr[i];
-
-	arr[idx++]=arr[n-1];
-
-	return idx;
+        return arr.length + 1;
     }
 }
 
@@ -62,17 +44,24 @@ class Solution {
 
 class Solution {
     public int firstMissingPositive(int[] arr) {
-       int n=arr.length;
-       HashSet<Integer>hs=new HashSet<>(n);
-       
-       for(int i=0;i<n;i++)
-         hs.add(arr[i]);
-       
-       for(int pos=1;pos<=n;pos++)
-          if(hs.contains(pos)==false)
-             return pos; 
-             
-       return n+1; 
+        Arrays.sort(arr);
+        int num = 1, previous = 0;
+
+        for (int val : arr) {
+            if (val <= 0) {
+                continue;
+            }
+
+            if (val != previous) {
+                if (val != num) {
+                    return num;
+                }
+                previous = val;
+                num++;
+            }
+        }
+
+        return num;
     }
 }
 
