@@ -115,7 +115,7 @@ class Solution {
         return findMissing(arr, segregatePositiveAndNonPositive(arr));
     }
 
-    public static int findMissing(int[] arr, int startIndex) {
+    public int findMissing(int[] arr, int startIndex) {
         int size = (arr.length - startIndex);
 
         for (int i = startIndex; i < arr.length; i++) {
