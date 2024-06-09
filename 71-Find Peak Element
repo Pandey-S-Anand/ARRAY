@@ -1,5 +1,5 @@
 /*
-In this question we will always be having peak element because arr[-1]=arr[arr.length]= -INFINITY
+In this question we will always be having a peak element because arr[-1]=arr[arr.length]= -INFINITY
 */
 //Bruteforce Approach
 
