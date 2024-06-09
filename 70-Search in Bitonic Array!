@@ -3,14 +3,14 @@
 public class Solution {
     public int solve(ArrayList<Integer> arr, int k) {
         int n = arr.size();
-        int bitonic point = findBitonicPoint(arr, n);
+        int bitonicPoint = findBitonicPoint(arr, n);
 
-        int index = binarySearch(arr, 0, bitonic point, k, true);
+        int index = binarySearch(arr, 0, bitonicPoint, k, true);
         if (index != -1) {
             return index;
         }
 
-        return binarySearch(arr, bitonic point + 1, n - 1, k, false);
+        return binarySearch(arr, bitonicPoint + 1, n - 1, k, false);
     }
 
     private int findBitonicPoint(ArrayList<Integer> arr, int n) {
