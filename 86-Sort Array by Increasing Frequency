@@ -137,9 +137,7 @@ class Solution {
 
         Queue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((entry1, entry2) -> entry1.getValue() == entry2.getValue() ? entry2.getKey() - entry1.getKey(): entry1.getValue() - entry2.getValue());
 
-        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
-            minHeap.add(entry);
-        }
+        minHeap.addAll(frequencyMap.entrySet());
 
         int index = 0;
         while (!minHeap.isEmpty()) {
