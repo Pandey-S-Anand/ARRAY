@@ -135,19 +135,19 @@ class Solution {
             frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
         }
 
-        Queue<int[]> minHeap = new PriorityQueue<>((arr1, arr2) -> arr1[1] == arr2[1] ? arr2[0] - arr1[0] : arr1[1] - arr2[1]);
+        Queue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((entry1, entry2) -> entry1.getValue() == entry2.getValue() ? entry2.getKey() - entry1.getKey(): entry1.getValue() - entry2.getValue());
 
         for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
-            minHeap.add(new int[] { entry.getKey(), entry.getValue() });
+            minHeap.add(entry);
         }
 
         int index = 0;
         while (!minHeap.isEmpty()) {
-            int[]minArray = minHeap.poll();
-
-            while (minArray[1] != 0) {
-                arr[index++] = minArray[0];
-                minArray[1]--;
+            Map.Entry<Integer, Integer> entry = minHeap.poll();
+            int frequency = entry.getValue();
+            while (frequency != 0) {
+                arr[index++] = entry.getKey();
+                frequency--;
             }
         }
 
