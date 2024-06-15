@@ -124,3 +124,33 @@ class Solution {
         return arr;
     }
 }
+
+
+//Aliter
+
+class Solution {
+    public int[] frequencySort(int[] arr) {
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int val : arr) {
+            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
+        }
+
+        Queue<int[]> minHeap = new PriorityQueue<>((arr1, arr2) -> arr1[1] == arr2[1] ? arr2[0] - arr1[0] : arr1[1] - arr2[1]);
+
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            minHeap.add(new int[] { entry.getKey(), entry.getValue() });
+        }
+
+        int index = 0;
+        while (!minHeap.isEmpty()) {
+            int[]minArray = minHeap.poll();
+
+            while (minArray[1] != 0) {
+                arr[index++] = minArray[0];
+                minArray[1]--;
+            }
+        }
+
+        return arr;
+    }
+}
