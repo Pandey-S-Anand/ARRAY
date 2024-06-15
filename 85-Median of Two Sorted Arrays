@@ -189,3 +189,40 @@ class Solution {
         return -1;
     }
 }
+
+
+
+//Aliter
+
+class Solution {
+    public double findMedianSortedArrays(int[] arr1, int[] arr2) {
+        if (arr1.length > arr2.length) {
+            return findMedianSortedArrays(arr2, arr1); // ensuring that binary search happens on the smaller array
+        }
+
+        int low = 0, high = arr1.length;
+
+        while (low <= high) {
+            int elementsOnLeftOfPartitionInArr1 = low + (high - low) / 2;
+            int elementsOnLeftOfPartitionInArr2 = (arr1.length + arr2.length + 1) / 2 - elementsOnLeftOfPartitionInArr1;
+
+            int maxLeftArr1 = (elementsOnLeftOfPartitionInArr1 == 0) ? Integer.MIN_VALUE: arr1[elementsOnLeftOfPartitionInArr1 - 1];
+            int maxLeftArr2 = (elementsOnLeftOfPartitionInArr2 == 0) ? Integer.MIN_VALUE: arr2[elementsOnLeftOfPartitionInArr2 - 1];
+            int minRightArr1 = (elementsOnLeftOfPartitionInArr1 == arr1.length) ? Integer.MAX_VALUE: arr1[elementsOnLeftOfPartitionInArr1];
+            int minRightArr2 = (elementsOnLeftOfPartitionInArr2 == arr2.length) ? Integer.MAX_VALUE: arr2[elementsOnLeftOfPartitionInArr2];
+
+            if (maxLeftArr1 <= minRightArr2 && maxLeftArr2 <= minRightArr1) {
+                if ((arr1.length + arr2.length) % 2 == 0) {
+                    return (Math.max(maxLeftArr1, maxLeftArr2) + Math.min(minRightArr1, minRightArr2)) / 2.0;
+                }
+                return Math.max(maxLeftArr1, maxLeftArr2);
+
+            } else if (maxLeftArr1 > minRightArr2) {
+                high = elementsOnLeftOfPartitionInArr1 - 1;
+            } else {
+                low = elementsOnLeftOfPartitionInArr1 + 1;
+            }
+        }
+        return -1;
+    }
+}
