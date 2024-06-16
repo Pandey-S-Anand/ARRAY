@@ -88,7 +88,7 @@ class Solution {
 //Aliter
 
 class Solution {
-    public int[] frequencySort(int[] arr) {
+    public static int[] frequencySort(int[] arr) {
         Map<Integer, Integer> frequencyMap = new LinkedHashMap<>();
         for (int val : arr) {
             frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
@@ -98,7 +98,7 @@ class Solution {
 
         Collections.sort(elementFrequencyList, (entry1, entry2) -> {
             if (!entry1.getValue().equals(entry2.getValue())) {
-                return entry2.getValue() - entry1.getValue(); // Sort by frequency in descending order if frequencies are equal
+                return Integer.compare(entry2.getValue(), entry1.getValue()); // Sort by frequency in descending order if frequencies are equal
             }
             return 0;
         });
