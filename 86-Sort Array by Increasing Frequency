@@ -106,10 +106,9 @@ class Solution {
 
         Collections.sort(entryList, (entry1, entry2) -> {
             if (entry1.getValue().equals(entry2.getValue())) {
-                return entry2.getKey() - entry1.getKey(); // Sort by value in descending order if frequencies are equal
-            } else {
-                return entry1.getValue() - entry2.getValue(); // Sort by frequency in ascending order
+                return Integer.compare(entry2.getKey(), entry1.getKey()); // Sort by value in descending order if frequencies are equal
             }
+            return Integer.compare(entry1.getValue(), entry2.getValue()); // Sort by frequency in ascending order
         });
 
         int index = 0;
@@ -136,7 +135,7 @@ class Solution {
             frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
         }
 
-        Queue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((entry1, entry2) -> entry1.getValue() == entry2.getValue() ? entry2.getKey() - entry1.getKey(): entry1.getValue() - entry2.getValue());
+        Queue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((entry1, entry2) -> entry1.getValue().equals(entry2.getValue())? Integer.compare(entry2.getKey(), entry1.getKey()): Integer.compare(entry1.getValue(), entry2.getValue()));
 
         minHeap.addAll(frequencyMap.entrySet());
 
