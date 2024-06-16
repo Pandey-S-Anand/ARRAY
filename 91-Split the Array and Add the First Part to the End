@@ -1,0 +1,24 @@
+class Solution {
+    public static void splitArray(int[] arr, int n, int k) {
+        leftRotateByK(arr, n, k);
+    }
+
+    static void leftRotateByK(int arr[], int k, int n) {
+        k = k % n; // in case the rotating factor is greater than array length
+        reverseArray(arr, 0, k - 1);
+        reverseArray(arr, k, n - 1);
+        reverseArray(arr, 0, n - 1);
+    }
+
+    public static void reverseArray(int[] arr, int start, int end) {
+        while (start < end) {
+            swap(arr, start++, end--);
+        }
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
