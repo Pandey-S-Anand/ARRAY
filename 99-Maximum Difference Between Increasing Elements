@@ -1,0 +1,58 @@
+// Bruteforce Approach
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int maxDiff = -1;
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if ((arr[j] > arr[i]) && (arr[j] - arr[i]) > maxDiff) {
+                    maxDiff = (arr[j] - arr[i]);
+                }
+            }
+        }
+
+        return maxDiff;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int maxDiff = -1, maxSoFar = arr[arr.length - 1];
+
+        for (int i = (arr.length - 2); i >= 0; i--) {
+            if ((arr[i] < maxSoFar) && (maxSoFar - arr[i]) > maxDiff) {
+                maxDiff = (maxSoFar - arr[i]);
+            }
+
+            if (arr[i] > maxSoFar) {
+                maxSoFar = arr[i];
+            }
+        }
+
+        return maxDiff;
+    }
+}
+
+//Aliter Implementation
+
+class Solution {
+    public int maximumDifference(int[] arr) {
+        int maxDiff = -1, minSoFar = arr[0];
+
+        for (int i = 1; i < arr.length; i++) {
+            if ((arr[i] > minSoFar) && (arr[i] - minSoFar) > maxDiff) {
+                maxDiff = (arr[i] - minSoFar);
+            }
+
+            if (arr[i] < minSoFar) {
+                minSoFar = arr[i];
+            }
+        }
+
+        return maxDiff;
+    }
+}
