@@ -19,40 +19,37 @@ class Solution {
 
 class Solution {
     public int[] twoSum(int[] arr, int target) {
-        int[]res=new int[2];
-        int[] temp=arr.clone();
-        
+        int[] temp = arr.clone();
+
         Arrays.sort(arr);
-        int n=arr.length,i=0,j=(n-1),num1=Integer.MAX_VALUE,num2=Integer.MAX_VALUE;
+        int i = 0, j = (arr.length - 1), num1 = Integer.MIN_VALUE, num2 = Integer.MIN_VALUE;
 
-        while(i<j)
-          if((arr[i]+arr[j])==target)
-          {
-                num1=arr[i];
-                num2=arr[j];
+        while (i < j) {
+            if ((arr[i] + arr[j]) == target) {
+                num1 = arr[i];
+                num2 = arr[j];
                 break;
-          }
-          else if((arr[i]+arr[j])<target)
-            i++;
-          else
-            j--;
-        
-        
-        for(int k=0;k<n;k++)
-          if(num1==temp[k])
-          {
-            res[0]=k;
-            break;
-          }
-         
-        for(int k=0;k<n;k++)
-          if(k!=res[0] && num2==temp[k])
-          {
-            res[1]=k;
-            break;
-          }
+            } else if ((arr[i] + arr[j]) < target) {
+                i++;
+            } else {
+                j--;
+            }
+        }
 
-        return res; 
+        int[] indices = new int[2];
+        boolean foundFirst = false;
+
+        for (i = 0; i < temp.length; i++) {
+            if (!foundFirst && num1 == temp[i]) {
+                indices[0] = i;
+                foundFirst = true;
+            } else if (foundFirst && (i != indices[0] && num2 == temp[i])) {
+                indices[1] = i;
+                break;
+            }
+        }
+
+        return indices;
     }
 }
 
