@@ -4,20 +4,21 @@ class Solution {
         int rank = 1;
 
         for (int val : arr) {
-            frequencyMap.put(val, frequencyMap.getOrDefault(val) + 1);
+            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
         }
 
         for (int key : frequencyMap.keySet()) {
             int frequency = frequencyMap.get(key);
-            int sum = 0;
+            int count = frequency;
+            int sumOfRanks = 0;
 
-            while (frequency != 0) {
-                sum += rank;
+            while (count != 0) {
+                sumOfRanks += rank;
                 rank++;
-                frequency--;
+                count--;
             }
 
-            float avgRank = (float) sum / frequency;
+            float avgRank = (float) sumOfRanks / frequency;
             System.out.println(key + "=>" + avgRank);
         }
     }
