@@ -1,0 +1,47 @@
+//Bruteforce Approach
+
+class Solution {
+    static ArrayList<Integer> leaders(int n, int arr[]) {
+        ArrayList<Integer> leadersList = new ArrayList<>();
+
+        for (int i = 0; i < (n - 1); i++) {
+            if (arr[i] >= largestOnRight(arr, n, i)) {
+                leadersList.add(arr[i]);
+            }
+        }
+
+        leadersList.add(arr[n - 1]);
+
+        return leadersList;
+    }
+
+    public static int largestOnRight(int[] arr, int n, int idx) {
+        int max = Integer.MIN_VALUE;
+        for (int i = idx + 1; i < n; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+        }
+
+        return max;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    static ArrayList<Integer> leaders(int n, int arr[]) {
+        ArrayList<Integer> leadersList = new ArrayList<>();
+        int maxSoFar = -1;
+
+        for (int i = (n - 1); i >= 0; i--) {
+            if (arr[i] >= maxSoFar) {
+                leadersList.add(0,arr[i]);
+                maxSoFar = arr[i];
+            }
+        }
+
+        return leadersList;
+    }
+}
