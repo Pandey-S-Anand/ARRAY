@@ -1,0 +1,70 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        Map<Integer, Integer> valueRankMap = new HashMap<>();
+        int[] temp = arr.clone();
+        Arrays.sort(temp);
+        int rank = 1;
+
+        for (int val : temp) {
+            if (!valueRankMap.containsKey(val)) {
+                valueRankMap.put(val, rank++);
+            }
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = valueRankMap.get(arr[i]);
+        }
+
+        return arr;
+    }
+}
+
+//Better Approach
+
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        Map<Integer, Integer> valueRankMap = new HashMap<>();
+        Set<Integer> set = new TreeSet<>();
+        int rank = 1;
+
+        for (int val : arr) {
+            set.add(val);
+        }
+
+        for (int key : set) {
+            valueRankMap.put(key, rank++);
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = valueRankMap.get(arr[i]);
+        }
+
+        return arr;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        int rank = 1;
+        Map<Integer, Integer> valueRankMap = new TreeMap<>();
+
+        for (int val : arr) {
+            valueRankMap.put(val, 0);
+        }
+
+        for (int key : valueRankMap.keySet()) {
+            valueRankMap.put(key, rank++);
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = valueRankMap.get(arr[i]);
+        }
+
+        return arr;
+    }
+}
