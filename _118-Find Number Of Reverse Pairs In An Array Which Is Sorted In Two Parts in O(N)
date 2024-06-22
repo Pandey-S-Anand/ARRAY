@@ -56,7 +56,7 @@ class Solution {
     }
 
     public static int merge(int arr[], int lb, int mid, int ub) {
-        int inversionCount = 0, i = lb, j = 0, leftSize = mid - lb + 1, rightSize = ub - mid;
+        int inversionCount = 0, i = 0, j = 0, leftSize = mid - lb + 1, rightSize = ub - mid;
 
         while (i < leftSize && j < rightSize) {
             if (arr[i] <= arr[mid + 1 + j]) {
