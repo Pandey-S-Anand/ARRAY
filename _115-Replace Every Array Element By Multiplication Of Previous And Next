@@ -6,25 +6,30 @@ class Solution {
             return;
         }
 
-        int[] previous = new int[arr.length];
-        int[] next = new int[arr.length];
+        Pair[] aux = new Pair[arr.length];
 
         for (int i = 0; i < arr.length; i++) {
+            aux[i] = new Pair();
             if (i == 0) {
-                previous[i] = arr[i];
-                next[i] = arr[i + 1];
+                aux[i].previous = arr[i];
+                aux[i].next = arr[i + 1];
             } else if (i == arr.length - 1) {
-                previous[i] = arr[i - 1];
-                next[i] = arr[i];
+                aux[i].previous = arr[i - 1];
+                aux[i].next = arr[i];
             } else {
-                previous[i] = arr[i - 1];
-                next[i] = arr[i + 1];
+                aux[i].previous = arr[i - 1];
+                aux[i].next = arr[i + 1];
             }
         }
 
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = previous[i] * next[i];
+            arr[i] = aux[i].previous * aux[i].next;
         }
+    }
+
+    static class Pair {
+        private int previous;
+        private int next;
     }
 }
 
