@@ -173,100 +173,75 @@ class Solution {
 */
 
 
-//Better Approach
+//Optimal Approach
+
+//Naive Implementation
 
 class Solution {
     public List<Integer> countSmaller(int[] arr) {
-        int[]count=countSmaller(arr,arr.length);
-        List<Integer>res=new ArrayList<>();
-        for(int val:count)
-          res.add(val);
-        return res;
+        return countSmaller(arr, arr.length);
     }
 
-    public static int[] countSmaller(int arr[], int n)
-    {
-        int[] count=new int[n];
+    public List<Integer> countSmaller(int arr[], int n) {
+        int[] counts = new int[n];
         int[] originalIndex = new int[n];
-
-        for(int i=0;i<n;i++)
-          originalIndex[i]=i;
-
-        mergeSort(arr,0,n-1,count,originalIndex);
-        
-        return count;
-    }
-    
-    
-    public static void mergeSort(int[] arr, int lb, int ub,int[] count,int[] originalIndex)
-    {
-        if(lb<ub)
-        {
-          int mid = (lb+ub)/2;
-          mergeSort(arr,lb, mid,count,originalIndex);
-          mergeSort(arr, mid+1,ub,count,originalIndex);
-          merge(arr,lb, mid,ub,count,originalIndex);  
+        for (int i = 0; i < n; i++) {
+            originalIndex[i] = i;
         }
+
+        mergeSort(arr, 0, n - 1, counts, originalIndex);
+
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            result.add(counts[i]);
+        }
+
+        return result;
     }
 
-    public static void merge(int[] arr, int lb, int mid, int ub,int[] count,int[] originalIndex)
-    {
-      int i=0,j=0,k=lb,size1=(mid-lb+1),size2=(ub-mid);
-
-      int[]left=new int[size1];
-      int[]right=new int[size2];
-      int[]leftOrgIdx=new int[size1];
-      int[]rightOrgIdx=new int[size2];
-
-      for(int idx=0;idx<size1;idx++)
-      {
-        left[idx]=arr[lb+idx];
-        leftOrgIdx[idx]=originalIndex[lb+idx];
-      }
-        
-      for(int idx=0;idx<size2;idx++)
-      {
-        right[idx]=arr[mid+1+idx];
-        rightOrgIdx[idx]=originalIndex[mid+1+idx];
-      }
-      
-      while(i<size1 && j<size2)
-        if(left[i]>right[j])
-        {
-            count[leftOrgIdx[i]]+=(size2-j);
-            arr[k]=left[i];
-            originalIndex[k]=leftOrgIdx[i];
-            i++;
-            k++;
+    public void mergeSort(int[] arr, int lb, int ub, int[] counts, int[] originalIndex) {
+        if (lb < ub) {
+            int mid = lb + (ub - lb) / 2;
+            mergeSort(arr, lb, mid, counts, originalIndex);
+            mergeSort(arr, mid + 1, ub, counts, originalIndex);
+            merge(arr, lb, mid, ub, counts, originalIndex);
         }
-        else
-        {
-           arr[k]=right[j];
-           originalIndex[k]=rightOrgIdx[j];
-           j++;
-           k++;
+    }
+
+    public void merge(int[] arr, int lb, int mid, int ub, int[] counts, int[] originalIndex) {
+        int i = 0, j = 0, k = lb, leftSize = (mid - lb + 1), rightSize = (ub - mid);
+
+        int[] left = new int[leftSize];
+        int[] right = new int[rightSize];
+        int[] leftOrginalIndex = new int[leftSize];
+        int[] rightOrginalIndex = new int[rightSize];
+
+        System.arraycopy(arr, lb, left, 0, leftSize);
+        System.arraycopy(originalIndex, lb, leftOrginalIndex, 0, leftSize);
+        System.arraycopy(arr, mid + 1, right, 0, rightSize);
+        System.arraycopy(originalIndex, mid + 1, rightOrginalIndex, 0, rightSize);
+
+        while (i < leftSize && j < rightSize) {
+            if (left[i] > right[j]) {
+                counts[leftOrginalIndex[i]] += (rightSize - j);
+                arr[k] = left[i];
+                originalIndex[k] = leftOrginalIndex[i];
+                i++;
+                k++;
+            } else {
+                arr[k] = right[j];
+                originalIndex[k] = rightOrginalIndex[j];
+                j++;
+                k++;
+            }
         }
-         
-       
-      while(i<size1)
-      {
-         arr[k]=left[i];  
-         originalIndex[k]=leftOrgIdx[i];
-         i++;
-         k++;
-      }
 
-
-      while(j<size2)
-      {
-          arr[k]=right[j]; 
-          originalIndex[k]=rightOrgIdx[j];
-          j++;
-          k++;
-      } 
+        System.arraycopy(left, i, arr, k, leftSize - i);
+        System.arraycopy(leftOrginalIndex, i, originalIndex, k, leftSize - i);
+        System.arraycopy(right, j, arr, k, rightSize - j);
+        System.arraycopy(rightOrginalIndex, j, originalIndex, k, rightSize - j);
     }
 }
-
 
 
 /*
@@ -285,92 +260,64 @@ Note : originalIndex[i]=original index of element present at ith index
 
 
 
-//Optimal Approach
+//Optimal Implementation
 
 class Solution {
     public List<Integer> countSmaller(int[] arr) {
-        List<Integer>count=new ArrayList<>();
-        int n=arr.length;
-        
-        for (int i = 0; i < n; i++)
-          count.add(0); // Initialize the count list
+        return countSmaller(arr, arr.length);
+    }
 
+    public List<Integer> countSmaller(int arr[], int n) {
+        List<Integer> counts = new ArrayList<>(Collections.nCopies(n, 0)); // Intialize the list with 0
         int[] originalIndex = new int[n];
+        Arrays.setAll(originalIndex, i -> i); // Populate with original indices
 
-        for(int i=0;i<n;i++)
-          originalIndex[i]=i;
+        mergeSort(arr, 0, n - 1, counts, originalIndex);
 
-        mergeSort(arr,0,n-1,count,originalIndex);
-        
-        return count;
+        return counts;
     }
 
-    public static void mergeSort(int[] arr, int lb, int ub,List<Integer>count,int[] originalIndex)
-    {
-        if(lb<ub)
-        {
-          int mid = (lb+ub)/2;
-          mergeSort(arr,lb, mid,count,originalIndex);
-          mergeSort(arr, mid+1,ub,count,originalIndex);
-          merge(arr,lb, mid,ub,count,originalIndex);  
+    public void mergeSort(int[] arr, int lb, int ub, List<Integer> counts, int[] originalIndex) {
+        if (lb < ub) {
+            int mid = lb + (ub - lb) / 2;
+            mergeSort(arr, lb, mid, counts, originalIndex);
+            mergeSort(arr, mid + 1, ub, counts, originalIndex);
+            merge(arr, lb, mid, ub, counts, originalIndex);
         }
     }
 
-    public static void merge(int[] arr, int lb, int mid, int ub,List<Integer>count,int[] originalIndex)
-    {
-      int i=0,j=0,k=lb,size1=(mid-lb+1),size2=(ub-mid);
+    public void merge(int[] arr, int lb, int mid, int ub, List<Integer> counts, int[] originalIndex) {
+        int i = 0, j = 0, k = lb, leftSize = (mid - lb + 1), rightSize = (ub - mid);
 
-      int[]left=new int[size1];
-      int[]right=new int[size2];
-      int[]leftOrgIdx=new int[size1];
-      int[]rightOrgIdx=new int[size2];
+        int[] left = new int[leftSize];
+        int[] right = new int[rightSize];
+        int[] leftOrginalIndex = new int[leftSize];
+        int[] rightOrginalIndex = new int[rightSize];
 
-      for(int idx=0;idx<size1;idx++)
-      {
-        left[idx]=arr[lb+idx];
-        leftOrgIdx[idx]=originalIndex[lb+idx];
-      }
-        
-      for(int idx=0;idx<size2;idx++)
-      {
-        right[idx]=arr[mid+1+idx];
-        rightOrgIdx[idx]=originalIndex[mid+1+idx];
-      }
-      
-      while(i<size1 && j<size2)
-        if(left[i]>right[j])
-        {
-            count.set(leftOrgIdx[i], count.get(leftOrgIdx[i]) + (size2 - j));
-            arr[k]=left[i];
-            originalIndex[k]=leftOrgIdx[i];
-            i++;
-            k++;
+        System.arraycopy(arr, lb, left, 0, leftSize);
+        System.arraycopy(originalIndex, lb, leftOrginalIndex, 0, leftSize);
+        System.arraycopy(arr, mid + 1, right, 0, rightSize);
+        System.arraycopy(originalIndex, mid + 1, rightOrginalIndex, 0, rightSize);
+
+        while (i < leftSize && j < rightSize) {
+            if (left[i] > right[j]) {
+                counts.set(leftOrginalIndex[i], counts.get(leftOrginalIndex[i]) + (rightSize - j));
+                arr[k] = left[i];
+                originalIndex[k] = leftOrginalIndex[i];
+                i++;
+                k++;
+            } else {
+                arr[k] = right[j];
+                originalIndex[k] = rightOrginalIndex[j];
+                j++;
+                k++;
+            }
         }
-        else
-        {
-           arr[k]=right[j];
-           originalIndex[k]=rightOrgIdx[j];
-           j++;
-           k++;
-        }
-         
-       
-      while(i<size1)
-      {
-         arr[k]=left[i];  
-         originalIndex[k]=leftOrgIdx[i];
-         i++;
-         k++;
-      }
 
-
-      while(j<size2)
-      {
-          arr[k]=right[j]; 
-          originalIndex[k]=rightOrgIdx[j];
-          j++;
-          k++;
-      } 
+        System.arraycopy(left, i, arr, k, leftSize - i);
+        System.arraycopy(leftOrginalIndex, i, originalIndex, k, leftSize - i);
+        System.arraycopy(right, j, arr, k, rightSize - j);
+        System.arraycopy(rightOrginalIndex, j, originalIndex, k, rightSize - j);
     }
 }
 
