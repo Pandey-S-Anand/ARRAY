@@ -57,30 +57,59 @@ The loop terminates when low > high. At this point, low is at the index where th
 This index also represents the count of elements smaller than key in the sorted array.
 */
 
-
-//Optimal Approach
+//Better Approach
 
 class Solution {
     public int[] smallerNumbersThanCurrent(int[] arr) {
-        int[] counter = new int[101];
-        int n=arr.length;
-    
-        for(int i=0; i<n; i++)
-            counter[arr[i]]++;  // acting like a frequency Array
-        
-        
-        for(int i=1; i< 101; i++)
-            counter[i]+=counter[i-1]; //count[i]=Count of numbers which are <=i	
-        
-        for(int i=0; i< n; i++) 
-        {
-            if(arr[i]==0)
-              arr[i]=0;
-            else
-              arr[i]=counter[arr[i]-1]; // count[arr[i]-1]=Count of numbers which are < arr[i]	
-            //(minus one because without it we also get the ones equal to arr[i] and we only want smaller)
+        int[] sortedArray = arr.clone();
+        Arrays.sort(sortedArray);
+
+        // Create a hash map to store the first occurrence index of each element
+        Map<Integer, Integer> valueIndexMap = new HashMap<>();
+
+        for (int i = 0; i < sortedArray.length; i++) {
+            valueIndexMap.putIfAbsent(sortedArray[i], i);
         }
-        
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = valueIndexMap.get(arr[i]);
+        }
+
+        return arr;
+    }
+}
+
+
+//Optimal Approach (Inspired By Count Sort)
+
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] arr) {
+        int[] count = new int[101];
+
+        // Find the frequency of each value in the array
+        for (int val : arr) {
+            count[val]++;
+        }
+
+        /*
+         * Find the actual position(position=index+1) of each value in the sorted array
+         * count[val] = the position(position=index+1) in the array where the last
+         * occurence of the 'val' will be scored
+         * i.e count[val] = count of elements <= val
+         */
+        for (int val = 1; val <= 100; val++) {
+            count[val] += count[val - 1];
+        }
+
+        // count[val-1]=Count of numbers which are < arr[val] (minus 1 because we only want smaller elements than 'val')
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                arr[i] = 0;
+            } else {
+                arr[i] = count[arr[i] - 1];
+            }
+        }
+
         return arr;
     }
 }
