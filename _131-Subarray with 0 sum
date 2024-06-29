@@ -108,11 +108,11 @@ Subarrays starting from index 3:
 [4] : Sum = 7
 
 
-In first iteration the set lookup is for subarray [1] (for prefixSum=1)
+In first iteration the set lookup(for prefixSum=1) is for subarray : [1]
 
 In second iteration the set lookup (for prefixSum= 3)is for subarray [1,2] and [2] none of these subarray sum to 0 so ignored
 
-In third iteration the set lookup(for prefixSum= 6) is for subarrays [1, 2, 3] and [2, 3] and [3] but none of these subarray sum to 0 so ignored
+In third iteration the set lookup(for prefixSum= 6) is for subarrays [1, 2, 3] , [2, 3] and [3] but none of these subarray sum to 0 so ignored
 
-In fourth iteration the set lookup (for prefixSum= 10) is for subarrays [1, 2, 3, 4] and [2, 3, 4]  and [3, 4] and [4] but none of these subarray sum to 0 so ignored
+In fourth iteration the set lookup (for prefixSum= 10) is for subarrays [1, 2, 3, 4] , [2, 3, 4] , [3, 4] and [4] but none of these subarray sum to 0 so ignored
 */
