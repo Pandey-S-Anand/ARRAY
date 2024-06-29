@@ -67,7 +67,7 @@ class Solution{
             if(prefixSum==0){
               return true;
             }
-          
+            //if a prefix sum repeats, it means there is a subarray between the previous occurrence and the current index that sums to zero.
             if(prefixSumSet.contains(prefixSum)){
                 return true;
             }else{
@@ -78,3 +78,41 @@ class Solution{
       return false;
     }
 }
+
+
+/*
+Let's break down the method's implicit check for all subarrays:
+
+Possible Subarrays and Their Sums:
+
+Subarrays starting from index 0:
+
+[1] : Sum = 1
+[1, 2] : Sum = 3
+[1, 2, 3] : Sum = 6
+[1, 2, 3, 4] : Sum = 10
+
+Subarrays starting from index 1:
+
+[2] : Sum = 2 
+[2, 3] : Sum = 5 
+[2, 3, 4] : Sum = 9 
+
+Subarrays starting from index 2:
+
+[3] : Sum = 3 
+[3, 4] : Sum = 7
+
+Subarrays starting from index 3:
+
+[4] : Sum = 7
+
+
+In first iteration the set lookup is for subarray [1] (for prefixSum=1)
+
+In second iteration the set lookup (for prefixSum= 3)is for subarray [1,2] and [2] none of these subarray sum to 0 so ignored
+
+In third iteration the set lookup(for prefixSum= 6) is for subarrays [1, 2, 3] and [2, 3] and [3] but none of these subarray sum to 0 so ignored
+
+In fourth iteration the set lookup (for prefixSum= 10) is for subarrays [1, 2, 3, 4] and [2, 3, 4]  and [3, 4] and [4] but none of these subarray sum to 0 so ignored
+*/
