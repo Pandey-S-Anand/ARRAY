@@ -73,8 +73,8 @@ class Solution {
         int distance = 0;
         Arrays.sort(arr2);
 
-        for (int val1 : arr1) {
-            if (isNotInRange(arr2, 0, arr2.length - 1, val1 - d, val1 + d)) {
+        for (int val : arr1) {
+            if (isNotInRange(arr2, 0, arr2.length - 1, val - d, val + d)) {
                 distance++;
             }
         }
