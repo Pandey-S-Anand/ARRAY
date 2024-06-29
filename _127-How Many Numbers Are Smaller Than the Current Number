@@ -1,0 +1,86 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] arr) {
+        int[] result = new int[arr.length];
+        int index = 0;
+
+        for (int val1 : arr) {
+            for (int val2 : arr) {
+                if (val1 > val2) {
+                    result[index]++;
+                }
+            }
+            index++;
+        }
+        return result;
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] arr) {
+        int[] sortedCopy = arr.clone();
+        Arrays.sort(sortedCopy);
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = firstIndex(sortedCopy, arr[i]);
+        }
+
+        return arr;
+    }
+
+    private int firstIndex(int[] arr, int key) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == key) {
+                high = mid - 1;
+            } else if (key > arr[mid]) {
+                low = mid + 1;
+            } else { // if(key<arr[mid])
+                high = mid - 1;
+            }
+        }
+
+        return low;
+    }
+}
+
+/*
+Why low Points to the First Occurrence?
+The loop terminates when low > high. At this point, low is at the index where the key would fit or the first occurrence of key in the array. 
+This index also represents the count of elements smaller than key in the sorted array.
+*/
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] smallerNumbersThanCurrent(int[] arr) {
+        int[] counter = new int[101];
+        int n=arr.length;
+    
+        for(int i=0; i<n; i++)
+            counter[arr[i]]++;  // acting like a frequency Array
+        
+        
+        for(int i=1; i< 101; i++)
+            counter[i]+=counter[i-1]; //count[i]=Count of numbers which are <=i	
+        
+        for(int i=0; i< n; i++) 
+        {
+            if(arr[i]==0)
+              arr[i]=0;
+            else
+              arr[i]=counter[arr[i]-1]; // count[arr[i]-1]=Count of numbers which are < arr[i]	
+            //(minus one because without it we also get the ones equal to arr[i] and we only want smaller)
+        }
+        
+        return arr;
+    }
+}
