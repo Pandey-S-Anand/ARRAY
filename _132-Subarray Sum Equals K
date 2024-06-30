@@ -83,7 +83,7 @@ class Solution {
 
 /*
 
-int[] arr = {3, 4, 7 ,2 ,-3 ,1 ,4 ,2}; and k = 7
+int[] arr = {3, 0, 7 ,2 ,-3 ,1 ,4 ,2}; and k = 7
 Let's break down the method's implicit check for all subarrays:
 
 Possible Subarrays and Their Sums:
@@ -91,24 +91,24 @@ Possible Subarrays and Their Sums:
 Subarrays starting from index 0:
 
 [3] : Sum = 3
-[3, 4] : Sum = 7
-[3, 4, 7] : Sum = 14
-[3, 4, 7, 2] : Sum = 16
-[3, 4, 7, 2, -3] : Sum= 13
-[3, 4, 7, 2, -3 ,1] : Sum= 14
-[3, 4, 7, 2, -3, 1, 4]: Sum= 18
-[3, 4, 7, 2, -3, 1, 4 , 2]: Sum= 20
+[3, 0] : Sum = 3
+[3, 0, 7] : Sum = 10
+[3, 0, 7, 2] : Sum = 12
+[3, 0, 7, 2, -3] : Sum= 9
+[3, 0, 7, 2, -3 ,1] : Sum= 10
+[3, 0, 7, 2, -3, 1, 4]: Sum= 14
+[3, 0, 7, 2, -3, 1, 4 , 2]: Sum= 16
 
 
 Subarrays starting from index 1:
 
-[4] : Sum = 4 
-[4, 7] : Sum = 11 
-[4, 7, 2] : Sum = 13
-[4, 7, 2, -3] : Sum = 10
-[4, 7, 2, -3, 1] : Sum = 11
-[4, 7, 2, -3, 1, 4] : Sum = 15
-[4, 7, 2, -3, 1, 4, 2] : Sum = 17
+[0] : Sum = 0 
+[0, 7] : Sum = 7 
+[0, 7, 2] : Sum = 9
+[0, 7, 2, -3] : Sum = 6
+[0, 7, 2, -3, 1] : Sum = 7
+[0, 7, 2, -3, 1, 4] : Sum = 11
+[0, 7, 2, -3, 1, 4, 2] : Sum = 13
 
 Subarrays starting from index 2:
 
@@ -154,35 +154,37 @@ Subarrays starting from index 7:
 [2] : Sum = 2
 
 
+Observation :
 
-In first iteration the direct lookup(for prefixSum= 3) is for subarray [3] and map lookup(for repetition of (prefixSum-7) i.e -4) is for [] subarray (hence count=0 )
-
-
-In second iteration  the direct lookup(for prefixSum= 7) is for subarray [3 ,4] (which sums to 7) and  the map lookup (for repetition of (prefixSum-7) i.e 0) is for subarray  [4] ,
-which does not sum to 7 so ignored. (Hence count =1 Subarray : [3, 4])
+In first iteration the direct lookup(for prefixSum= 3) is for subarray [3] (doesnot sum to 7) and map lookup(for repetition of (prefixSum-7) i.e -4) is for [] subarray,
+which does not sum to 7 so ignored. (Hence count=0 )
 
 
-In third iteration the direct lookup(for prefixSum= 14) is for subarray[3 ,4 ,7] and the map lookup(for repetition of (prefixSum-7)= 7) is for subarrays [4, 7] and [7] ,
-one of these subarrays sum to 7 so include it. (i.e count=1+1=2 i.e [3, 4] and [7])
+In second iteration  the direct lookup(for prefixSum= 3) is for subarray [3 ,0] (doesnot sum to 7) and  the map lookup (for repetition of (prefixSum-7) i.e -4) is for subarray  [0] ,
+which does not sum to 7 so ignored. (Hence count =0)
 
 
-In fourth iteration the the direct lookup(for prefixSum= 16) is for subarray [3 , 4, 7, 2] and the map lookup (for repetition of (prefixSum-7)= 9) is for subarrays [4, 7, 2] , [7, 2] and [2]  
-but none of these subarray sum to 7 so ignored (i.e count=2 i.e [3, 4] and [7])
+In third iteration the direct lookup(for prefixSum= 10) is for subarray[3 ,0 ,7] (doesnot sum to 7) and the map lookup(for repetition of (prefixSum-7)= 3) is for subarrays [0, 7] and [7] ,
+both of these subarrays sum to 7 so include it. (i.e count=0+1+1= 2 i.e [0, 7] and [7])
 
 
-In fifth iteration the the direct lookup(for prefixSum= 13) is for subarray [3, 4, 7, 2, -3] and the map lookup (for repetition of (prefixSum-7)= 6) is for subarrays [4, 7, 2, -3] , [7, 2, -3] and [2, -3] and [-3]  
-but none of these subarray sum to 7 so ignored (i.e count=2 i.e [3, 4] and [7])
+In fourth iteration the the direct lookup(for prefixSum= 12) is for subarray [3 , 0, 7, 2] (doesnot sum to 7) and the map lookup (for repetition of (prefixSum-7)= 5) is for subarrays [0, 7, 2] , [7, 2] and [2]  
+but none of these subarrays sum to 7 so ignored (i.e count=2 i.e i.e [0, 7] and [7])
 
 
-In sixth iteration the the direct lookup(for prefixSum= 14) is for subarray [3, 4, 7, 2, -3 ,1]  and the map lookup (for repetition of (prefixSum-7)= 7) is for subarrays [4, 7, 2, -3, 1], [7, 2, -3, 1] and [2, -3, 1] and [-3, 1] ,
-one of these subarray sum to 7 (i.e count=2+1=3 i.e [3, 4] , [7] and [7, 2, -3, 1] )
+In fifth iteration the the direct lookup(for prefixSum= 9) is for subarray [3, 0, 7, 2, -3] (doesnot sum to 7) and the map lookup (for repetition of (prefixSum-7)= 2) is for subarrays [0, 7, 2, -3] , [7, 2, -3] and [2, -3] and [-3]  
+but none of these subarray sum to 7 so ignored (i.e count=2 i.e [0, 7] and [7])
 
 
-In seventh iteration the the direct lookup(for prefixSum= 18) is for subarray [3, 4, 7, 2, -3, 1, 4]  and the map lookup (for repetition of (prefixSum-7)= 11) is for subarrays [4, 7, 2, -3, 1, 4] , [7, 2, -3, 1, 4] , [2, -3, 1, 4] , [-3, 1, 4] , [1, 4] and [4] ,
-None of these subarray sum to 7 (i.e count=3 i.e [3, 4] , [7] and [7, 2, -3, 1] )
+In sixth iteration the the direct lookup(for prefixSum= 10) is for subarray [3, 0, 7, 2, -3 ,1] (doesnot sum to 7)  and the map lookup (for repetition of (prefixSum-7)= 3) is for subarrays [0, 7, 2, -3, 1], [7, 2, -3, 1] and [2, -3, 1] and [-3, 1] ,
+two of these subarray sum to 7 (i.e count=2+1+1=4 i.e [0, 7], [7], [0, 7, 2, -3, 1] and [7, 2, -3, 1])
 
 
-In eight iteration the the direct lookup(for prefixSum= 20) is for subarray [3, 4, 7, 2, -3, 1, 4 , 2]  and the map lookup (for repetition of (prefixSum-7)= 13) is for subarrays [4, 7, 2, -3, 1, 4, 2] , [7, 2, -3, 1, 4 , 2] , [2, -3, 1, 4 , 2]  , [-3, 1, 4, 2] , [1, 4, 2] , [4, 2] and [2] 
-,one of these subarray sum to 7 (i.e count=3+1 = 4  i.e [3, 4] , [7] and [7, 2, -3, 1] and [1, 4, 2] )
+In seventh iteration the the direct lookup(for prefixSum= 14) is for subarray [3, 0, 7, 2, -3, 1, 4] (doesnot sum to 7)  and the map lookup (for repetition of (prefixSum-7)= 7) is for subarrays [0, 7, 2, -3, 1, 4] , [7, 2, -3, 1, 4] , [2, -3, 1, 4] , [-3, 1, 4] , [1, 4] and [4] ,
+None of these subarray sum to 7 (i.e count=4 i.e [0, 7] ,[7], [0, 7, 2, -3, 1] and [7, 2, -3, 1])
+
+
+In eight iteration the the direct lookup(for prefixSum= 16) is for subarray [3, 0, 7, 2, -3, 1, 4 , 2] (doesnot sum to 7)  and the map lookup (for repetition of (prefixSum-7)= 9) is for subarrays [0, 7, 2, -3, 1, 4, 2] , [7, 2, -3, 1, 4 , 2] , [2, -3, 1, 4 , 2]  , [-3, 1, 4, 2] , [1, 4, 2] , [4, 2] and [2] 
+,one of these subarray sum to 7 (i.e count=4 + 1 = 5  i.e [0, 7] ,[7], [0, 7, 2, -3, 1], [7, 2, -3, 1] and [1, 4, 2] )
 
 */
