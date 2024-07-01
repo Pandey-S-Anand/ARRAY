@@ -46,7 +46,7 @@ class GfG {
 
 class GfG {
     int maxLen(int arr[], int n) {
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> sumIndexMap = new HashMap<>();
         int prefixSum = 0, maxLength = 0;
 
         for (int i = 0; i < n; i++) {
@@ -56,10 +56,10 @@ class GfG {
                 maxLength = Math.max(i + 1, maxLength);
             }
 
-            if (map.containsKey(prefixSum)) {
-                maxLength = Math.max(i - map.get(prefixSum), maxLength);
+            if (sumIndexMap.containsKey(prefixSum)) {
+                maxLength = Math.max(i - sumIndexMap.get(prefixSum), maxLength);
             } else {
-                map.put(prefixSum, i);
+                sumIndexMap.put(prefixSum, i);
             }
         }
 
