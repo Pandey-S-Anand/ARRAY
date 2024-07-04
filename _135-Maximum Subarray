@@ -41,17 +41,16 @@ class Solution {
 
 class Solution {
     public int maxSubArray(int[] arr) {
-        int currentSum = 0, maxSum = Integer.MIN_VALUE;
+        int currentSum = 0, maximumSum = Integer.MIN_VALUE;
         for (int val : arr) {
-            if (currentSum >= 0) {
-                currentSum += val;
-            } else {
-                currentSum = val;
-            }
+            currentSum += val;
+            maximumSum = Math.max(currentSum, maximumSum);
 
-            maxSum = Math.max(currentSum, maxSum);
+            if (currentSum < 0) {
+                currentSum = 0;
+            }
         }
 
-        return maxSum;
+        return maximumSum;
     }
 }
