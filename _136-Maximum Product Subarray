@@ -152,35 +152,26 @@ class Solution {
 
 class Solution {
     public int maxProduct(int[] arr) {
-      int n=arr.length,maxProdSoFar=1,minProdSoFar=1,maxProd=Integer.MIN_VALUE;
-	  
-      for(int i=0;i<n;i++)
-      {
-	 int temp=maxProdSoFar;
-	    
-	 maxProdSoFar=maximum(arr[i],maxProdSoFar*arr[i],minProdSoFar*arr[i]);
-	 minProdSoFar=minimum(arr[i],temp*arr[i],minProdSoFar*arr[i]);
-	    
-	 if(maxProdSoFar>maxProd)
-	    maxProd=maxProdSoFar;
-	    
-	 if(arr[i]==0)
-	 {
-	    maxProdSoFar=1;
-	    minProdSoFar=1;
-	 }  
-      }
-	  
-     return maxProd;  
-    }
+        long prefixProduct = 1, suffixProduct = 1;
+        int maxProductSubArray = Integer.MIN_VALUE;
 
-    public int maximum(int x,int y,int z)
-    {
-      return Math.max(x,Math.max(y,z));
-    }
-	
-    public int minimum(int x,int y,int z)
-    {
-      return Math.min(x,Math.min(y,z));
+        for (int i = 0; i < arr.length; i++) {
+            if (prefixProduct == 0) {
+                prefixProduct = 1;
+            }
+            if (suffixProduct == 0) {
+                suffixProduct = 1;
+            }
+
+            prefixProduct *= arr[i];
+            suffixProduct *= arr[arr.length - 1 - i];
+
+            if (prefixProduct >= Integer.MIN_VALUE && prefixProduct <= Integer.MAX_VALUE
+                    && suffixProduct >= Integer.MIN_VALUE && suffixProduct <= Integer.MAX_VALUE) {
+                maxProductSubArray = Math.max(maxProductSubArray, Math.max((int) prefixProduct, (int) suffixProduct));
+            }
+        }
+
+        return maxProductSubArray;
     }
 }
