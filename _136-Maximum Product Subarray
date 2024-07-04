@@ -103,7 +103,7 @@ Case 8:
 =>Not possible that a subarray can exist in middle, maximum product subarray  will start at 0th index 
 i.e maxSubArrayProduct= Left side product  *  Subarray Product
 
-The above algorithm can also be made to handle 0 as well,by resetting the current subarray product to 1 if the current value is 0.
+The above algorithm can also be made to handle 0 as well,by resetting the current subarray product to 1 if the current subarray product becomes 0 (i.e current value is 0).
 */
 
 class Solution {
