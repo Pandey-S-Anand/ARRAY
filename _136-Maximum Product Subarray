@@ -48,34 +48,98 @@ class Solution {
 
 //Good Approach
 
+/*
+If you are provided an array of positive and negative elements then following observation suggests that maximum product subarray will never lie in middle i.e either the maximum product subarray will always :
+
+1: start at 0 index and end at any index (in right) 
+OR
+2: It will start at any index(at left) but always end at last index 
+OR 
+3: it will start at 0th index and end at last index.
+
+Case 1:
+(Left side product is +ve)+ve Subarray Product(Right side product is +ve)
+
+=>Not possible that a subarray can exist in middle, maximum product will come by multiplying the entire array  (i.e maximum product subarray will start at 0 index and end at last index)
+
+Case 2:
+(Left side product is -ve)+ve Subarray Product(Right side product is -ve)
+
+=> Not possible that a subarray can exist in middle , maximum product will come by multiplying the entire array (i.e maximum product subarray will start at 0 index and end at last index)
+
+Case 3:
+(Left side product is +ve)+ve Subarray Product(Right side product is  -ve)
+
+=> Not possible that a subarray can exist in middle, maximum product subarray will always start from index 0,
+i.e  maxSubArrayProduct= Left side product * Subarray Product 
+
+Case 4:
+(Left side product is -ve)+ve Subarray Product(Right side product is +ve) 
+
+=>Not possible that a subarray can exist in middle, maximum product subarray will always end at last index,
+i.e i.e maxSubArrayProduct= Subarray Product * Right side product
+
+Case 5:
+(Left side product is +ve)- ve Subarray Product (Right side product is +ve) 
+
+=>Not possible that a subarray can exist in middle, maximum product subarray  will start at 0th index or will end at last index,
+i.e maxSubArrayProduct=Math.max(Left side product  ,  Right side product)
+
+Case 6:
+(Left side product is -ve)- ve Subarray Product (Right side product is -ve) 
+
+=>Not possible that a subarray can exist in middle, maximum product subarray will either start from zero index or it will end at last index 
+i.e maxSubArrayProduct=Math.max((Left side product *  Subarray Product), (Subarray Product * Right side product))
+
+Case 7:
+(Left side product is +ve)-ve Subarray Product (Right side product is -ve)  
+
+=> Not possible that a subarray can exist in middle, maximum product subarray will always end at last index,
+i.e maxSubArrayProduct= Subarray Product * Right side product)
+
+Case 8:
+(Left side product is -ve)-ve Subarray Product(Right side product is +ve)   
+
+=>Not possible that a subarray can exist in middle, maximum product subarray  will start at 0th index 
+i.e maxSubArrayProduct= Left side product  *  Subarray Product
+
+The above algorithm can also be made to handle 0 as well,by resetting the current subarray product to 1 if the current value is 0.
+*/
+
 class Solution {
     public int maxProduct(int[] arr) {
         long currentProduct = 1;
         int maximumProduct = Integer.MIN_VALUE;
 
         for (int val : arr) {
-            if (currentProduct == 0) {
-                currentProduct = val;
-            } else {
-                currentProduct *= val;
-            }
-
+            currentProduct *= val;
             if (currentProduct >= Integer.MIN_VALUE && currentProduct <= Integer.MAX_VALUE) {
                 maximumProduct = Math.max((int) currentProduct, maximumProduct);
+            }
+            /*
+             * if currentProduct is 0 implies that current element was 0 so reset the
+             * currentProduct to the 1
+             */
+            if (currentProduct == 0) {
+                currentProduct = 1;
             }
         }
 
         currentProduct = 1;
 
         for (int i = arr.length - 1; i >= 0; i--) {
-            if (currentProduct == 0) {
-                currentProduct = arr[i];
-            } else {
-                currentProduct *= arr[i];
-            }
+            currentProduct *= arr[i];
 
             if (currentProduct >= Integer.MIN_VALUE && currentProduct <= Integer.MAX_VALUE) {
                 maximumProduct = Math.max((int) currentProduct, maximumProduct);
+            }
+
+            /*
+             * if currentProduct is 0 implies that current element was 0 so reset the
+             * currentProduct to the 1
+             */
+            if (currentProduct == 0) {
+                currentProduct = 1;
             }
         }
 
