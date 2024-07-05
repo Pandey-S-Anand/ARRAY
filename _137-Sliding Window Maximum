@@ -18,6 +18,35 @@ class Solution {
 }
 
 
+//Good Approach (Using Max Heap)
+
+class Solution {
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        int[] maxInAllWindows = new int[arr.length - k + 1];
+        Queue<Integer> maxInWindow = new PriorityQueue<>((a, b) -> b - a);
+
+        // Initialize the heap with the first window elements
+        for (int i = 0; i <= k - 1; i++) {
+            maxInWindow.offer(arr[i]);
+        }
+        // Set the maximum for the first window
+        maxInAllWindows[0] = maxInWindow.peek();
+        // Remove the element that was part of the first window
+        maxInWindow.remove(arr[0]);
+
+        // To find max in second window and onwards
+        for (int i = k; i < arr.length; i++) {
+            maxInWindow.offer(arr[i]);
+            // Set the maximum for the current window
+            maxInAllWindows[i - k + 1] = maxInWindow.peek();
+            // Remove the element that was part of the current window
+            maxInWindow.remove(arr[i - k + 1]);
+        }
+
+        return maxInAllWindows;
+    }
+}
+
 
 //Better Approach
 
