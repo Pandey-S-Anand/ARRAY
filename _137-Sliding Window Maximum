@@ -1,0 +1,115 @@
+//Bruteforce Approach
+
+class Solution {
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        int[] maxInAllWindows = new int[arr.length - k + 1];
+
+        for (int i = 0; i < (arr.length - k + 1); i++) {
+            int maxInWindow = Integer.MIN_VALUE;
+            for (int j = i; j < (i + k); j++) {
+                maxInWindow = Math.max(arr[j], maxInWindow);
+            }
+
+            maxInAllWindows[i] = maxInWindow;
+        }
+
+        return maxInAllWindows;
+    }
+}
+
+
+
+//Better Approach
+
+class Solution {
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        int[] nextGreaterElementIndex = new int[arr.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int i = (arr.length - 1); i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextGreaterElementIndex[i] = arr.length;
+            } else {
+                nextGreaterElementIndex[i] = stack.peek();
+            }
+
+            stack.push(i);
+        }
+
+        int[] maxInAllWindows = new int[arr.length - k + 1];
+
+        for (int i = 0; i < (arr.length - k + 1); i++) {
+            int j = i;
+            /*
+             * The purpose of 'j' is to jump from next greater to next greater until the
+             * next greater is out of the current window,the last value of 'j' within the
+             * window is the max value index(i.e arr[j]) within the window
+             */
+            while (nextGreaterElementIndex[j] < (i + k)) {
+                j = nextGreaterElementIndex[j];
+            }
+
+            maxInAllWindows[i] = arr[j];
+        }
+
+        return maxInAllWindows;
+    }
+}
+
+
+
+//Optimal Approach
+
+
+class Solution {
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        int[] nextGreaterElementIndex = new int[arr.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        // Compute the next greater element index for each element
+        for (int i = (arr.length - 1); i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextGreaterElementIndex[i] = arr.length;
+            } else {
+                nextGreaterElementIndex[i] = stack.peek();
+            }
+
+            stack.push(i);
+        }
+
+        int[] maxInAllWindows = new int[arr.length - k + 1];
+        int j = 0;
+
+        for (int i = 0; i < (arr.length - k + 1); i++) {
+            /*
+             * if the next greater element index already lies out of the current window, we
+             * have our answer (i.e next greater element index) there is no point
+             * of reseting the value of 'j' as it will lead to redundant iterations.
+             */
+            if (j < i) {
+                j = i;
+            }
+            /*
+             * The purpose of 'j' is to jump from next greater element index to next greater
+             * element index until the next greater element index is out of the current
+             * window,the last value of 'j' within the window is the max value index within
+             * the window
+             */
+            while (nextGreaterElementIndex[j] < (i + k)) {
+                j = nextGreaterElementIndex[j];
+            }
+
+            maxInAllWindows[i] = arr[j];
+        }
+
+        return maxInAllWindows;
+    }
+}
