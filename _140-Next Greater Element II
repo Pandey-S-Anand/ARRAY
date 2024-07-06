@@ -1,0 +1,123 @@
+//Bruteforce Approach
+
+//Naive Implementation
+
+class Solution {
+    public int[] nextGreaterElements(int[] arr) {
+        int[] nextGreaterElements = new int[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            nextGreaterElements[i] = nextGreaterElement(arr, i);
+        }
+
+        return nextGreaterElements;
+    }
+
+    public int nextGreaterElement(int[] arr, int index) {
+        for (int i = index + 1; i < arr.length; i++) {
+            if (arr[i] > arr[index]) {
+                return arr[i];
+            }
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > arr[index]) {
+                return arr[i];
+            }
+        }
+
+        return -1;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public int[] nextGreaterElements(int[] arr) {
+        int[] nextGreaterElements = new int[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            nextGreaterElements[i] = nextGreaterElement(arr, i);
+        }
+
+        return nextGreaterElements;
+    }
+
+    private int nextGreaterElement(int[] arr, int index) {
+        for (int i = index + 1; i < (arr.length + index); i++) {
+            if (arr[i % arr.length] > arr[index]) {
+                return arr[i % arr.length];
+            }
+        }
+
+        return -1;
+    }
+}
+
+
+
+//Optimal Approach
+
+class Solution {
+    public int[] nextGreaterElements(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextGreaterElements = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextGreaterElements[i] = -1;
+            } else {
+                nextGreaterElements[i] = stack.peek();
+            }
+
+            stack.push(arr[i]);
+        }
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= arr[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextGreaterElements[i] = -1;
+            } else {
+                nextGreaterElements[i] = stack.peek();
+            }
+
+            stack.push(arr[i]);
+        }
+
+        return nextGreaterElements;
+    }
+}
+
+
+//Aliter
+
+class Solution {
+    public int[] nextGreaterElements(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextGreaterElements = new int[arr.length];
+
+        for (int i = (2 * arr.length) - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= arr[i % arr.length]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextGreaterElements[i % arr.length] = -1;
+            } else {
+                nextGreaterElements[i % arr.length] = stack.peek();
+            }
+
+            stack.push(arr[i % arr.length]);
+        }
+
+        return nextGreaterElements;
+    }
+}
