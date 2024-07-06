@@ -2,33 +2,36 @@
 
 class Solution {
     public int[] productExceptSelf(int[] arr) {
-        int totalProduct = 1, countZeroes = 0, productWithoutZero = 1;
+        int totalProduct = 1, countZeroes = 0, productWithoutZero = 1, zeroIndex = -1;
         int[] productExceptSelf = new int[arr.length];
 
-        for (int val : arr) {
-            if (val != 0) {
-                productWithoutZero *= val;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                productWithoutZero *= arr[i];
             } else {
                 countZeroes++;
+                zeroIndex = i;
                 if (countZeroes > 1) {
                     return productExceptSelf;
                 }
             }
 
-            totalProduct *= val;
+            totalProduct *= arr[i];
         }
 
+        if (countZeroes == 1) {
+            productExceptSelf[zeroIndex] = productWithoutZero;
+            return productExceptSelf;
+        }
+        // countZeroes == 0
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != 0) {
-                productExceptSelf[i] = totalProduct / arr[i];
-            } else { // arr[i]==0 and countZeroes==1
-                productExceptSelf[i] = productWithoutZero;
-            }
+            productExceptSelf[i] = totalProduct / arr[i];
         }
 
         return productExceptSelf;
     }
 }
+
 
 
 //Better Approach
