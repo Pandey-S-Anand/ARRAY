@@ -5,12 +5,12 @@ For every subset, find the difference between the maximum and minimum elements i
 
 class Solution {
     public long findMinDiff(ArrayList<Integer> arr, int n, int numberOfStudents) {
-        List<List<Integer>> subsets = subsetsWithDuplicate(arr);
+        List<List<Integer>> subsets = findSubsets(arr);
         long minDifference = Long.MAX_VALUE;
 
         for (List<Integer> subset : subsets) {
             if (subset.size() == numberOfStudents) { // Only consider subsets of size numberOfStudents
-                // Calculate max and min chocolates in the current subset and update the minimum difference
+                // Find maximum and minimum chocolates/values in the current subset and update the minimum difference
                 minDifference = Math.min(minDifference, (long) (Collections.max(subset) - Collections.min(subset)));
             }
         }
@@ -18,27 +18,23 @@ class Solution {
         return minDifference;
     }
 
-    private List<List<Integer>> subsetsWithDuplicate(List<Integer> arr) {
+    private List<List<Integer>> findSubsets(List<Integer> arr) {
         Collections.sort(arr);
         List<List<Integer>> subsets = new ArrayList<>();
-        generateUniqueSubsets(arr, arr.size(), 0, new ArrayList<>(), subsets);
+        generateSubsets(arr, 0, new ArrayList<>(), subsets);
         return subsets;
     }
 
-    private void generateUniqueSubsets(List<Integer> arr, int n, int index, List<Integer> subset,List<List<Integer>> subsets) {
-        if (index == n) {
+    private void generateSubsets(List<Integer> arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
+        if (index == arr.size()) {
             subsets.add(new ArrayList<>(subset));
         } else {
             // Include element
             subset.add(arr.get(index));
-            generateUniqueSubsets(arr, n, index + 1, subset, subsets);
+            generateSubsets(arr, index + 1, subset, subsets);
             // Exclude Element
-            while ((index + 1) < n && arr.get(index) == arr.get(index + 1)) {
-                index++;
-            }
-
             subset.remove(subset.size() - 1);
-            generateUniqueSubsets(arr, n, index + 1, subset, subsets);
+            generateSubsets(arr, index + 1, subset, subsets);
         }
     }
 }
