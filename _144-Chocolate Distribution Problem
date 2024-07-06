@@ -39,6 +39,47 @@ class Solution {
 }
 
 
+//Better Approach
+
+class Solution {
+    public long findMinDiff(ArrayList<Integer> arr, int n, int numberOfStudents) {
+        List<List<Integer>> subsets = findSubsetsOfSizeK(arr, numberOfStudents);
+        long minDifference = Long.MAX_VALUE;
+
+        for (List<Integer> subset : subsets) {
+            // Find maximum and minimum chocolates/values in the current subset and update the minimum difference .
+            minDifference = Math.min(minDifference, (long) (Collections.max(subset) - Collections.min(subset)));
+        }
+
+        return minDifference;
+    }
+
+    private List<List<Integer>> findSubsetsOfSizeK(List<Integer> arr, int k) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(arr, 0, new ArrayList<>(), subsets, k);
+        return subsets;
+    }
+
+    private void generateSubsets(List<Integer> arr, int index, List<Integer> subset, List<List<Integer>> subsets, int k) {
+        if (subset.size() == k) {
+            subsets.add(new ArrayList<>(subset));
+            return;
+        }
+        if (index == arr.size()) {
+            return;
+        }
+
+        // Include element
+        subset.add(arr.get(index));
+        generateSubsets(arr, index + 1, subset, subsets, k);
+
+        // Exclude element
+        subset.remove(subset.size() - 1);
+        generateSubsets(arr, index + 1, subset, subsets, k);
+    }
+}
+
+
 
 //Optimal Approach
 
