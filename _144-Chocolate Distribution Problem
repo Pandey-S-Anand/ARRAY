@@ -9,7 +9,7 @@ class Solution {
         long minDifference = Long.MAX_VALUE;
 
         for (List<Integer> subset : subsets) {
-            if (subset.size() == numberOfStudents) { // Only consider subsets of size numberOfStudents
+            if (subset.size() == numberOfStudents) { // Only consider subsets of size 'numberOfStudents'
                 // Find maximum and minimum chocolates/values in the current subset and update the minimum difference .
                 minDifference = Math.min(minDifference, (long) (Collections.max(subset) - Collections.min(subset)));
             }
