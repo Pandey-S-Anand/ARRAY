@@ -56,6 +56,37 @@ class Solution {
 }
 
 
+//Good Approach
+
+class Solution {
+    public int[] nextGreaterElements(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextGreaterElements = new int[arr.length];
+        int[] twiceCopy = new int[arr.length * 2];
+        System.arraycopy(arr, 0, twiceCopy, 0, arr.length);
+        System.arraycopy(arr, 0, twiceCopy, arr.length, arr.length);
+
+        for (int i = twiceCopy.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() <= twiceCopy[i]) {
+                stack.pop();
+            }
+
+            if (i < arr.length) {
+                if (stack.isEmpty()) {
+                    nextGreaterElements[i] = -1;
+                } else {
+                    nextGreaterElements[i] = stack.peek();
+                }
+            }
+
+            stack.push(twiceCopy[i]);
+        }
+
+        return nextGreaterElements;
+    }
+}
+
+
 
 //Better Approach
 
