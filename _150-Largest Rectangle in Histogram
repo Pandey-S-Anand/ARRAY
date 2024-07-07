@@ -35,6 +35,7 @@ class Solution {
 
 //Optimal Approach
 
+//Naive Implementation
 
 class Solution {
     public int largestRectangleArea(int[] heights) {
@@ -75,6 +76,54 @@ class Solution {
 
     private int[] findNextSmallerElementIndices(int[] heights) {
         Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextSmallerElementIndex = new int[heights.length];
+
+        for (int i = heights.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nextSmallerElementIndex[i] = heights.length;
+            } else {
+                nextSmallerElementIndex[i] = stack.peek();
+            }
+
+            stack.push(i);
+        }
+
+        return nextSmallerElementIndex;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int maxArea = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextSmallerElementIndex = findNextSmallerElementIndices(heights, stack);
+
+        stack.clear();
+
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
+
+            int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
+            int width = nextSmallerElementIndex[i] - (previousSmallerElementIndex + 1);
+            int area = heights[i] * width;
+            maxArea = Math.max(maxArea, area);
+
+            stack.push(i);
+        }
+
+        return maxArea;
+    }
+
+    private int[] findNextSmallerElementIndices(int[] heights, Deque<Integer> stack) {
         int[] nextSmallerElementIndex = new int[heights.length];
 
         for (int i = heights.length - 1; i >= 0; i--) {
