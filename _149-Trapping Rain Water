@@ -230,3 +230,7 @@ class Solution {
         return ascending || descending;
     }
 }
+
+
+
+//Optimal Approach (Two Pointers)  
