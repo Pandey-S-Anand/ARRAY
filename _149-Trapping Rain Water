@@ -1,0 +1,134 @@
+//Bruteforce Approach
+
+class Solution {
+    public int trap(int[] arr) {
+        if (arr.length < 3 || isSorted(arr)) {
+            return 0;
+        }
+
+        int totalUnitOfWaterTrapped = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            int maxOnLeft = maxOnLeft(arr, i);
+            int maxOnRight = maxOnRight(arr, i);
+
+            if (maxOnLeft != -1 && maxOnRight != -1) {
+                totalUnitOfWaterTrapped += (Math.min(maxOnLeft, maxOnRight) - arr[i]);
+            }
+        }
+
+        return totalUnitOfWaterTrapped;
+    }
+
+    private int maxOnLeft(int[] arr, int index) {
+        int max = arr[index];
+        for (int i = 0; i < index; i++) {
+            max = Math.max(max, arr[i]);
+        }
+
+        return max == arr[index] ? -1 : max;
+    }
+
+    private int maxOnRight(int[] arr, int index) {
+        int max = arr[index];
+        for (int i = index + 1; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
+        }
+        return max == arr[index] ? -1 : max;
+    }
+
+    private boolean isSorted(int[] arr) {
+        boolean ascending = true;
+        boolean descending = true;
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                ascending = false;
+            }
+            if (arr[i] < arr[i + 1]) {
+                descending = false;
+            }
+        }
+
+        return ascending || descending;
+    }
+}
+
+
+
+//Optimal Approach
+
+
+class Solution {
+    public int trap(int[] arr) {
+        if (arr.length < 3 || isSorted(arr)) {
+            return 0;
+        }
+
+        int totalUnitOfWaterTrapped = 0;
+        int[] maxOnLeft = maxOnLeft(arr);
+        int[] maxOnRight = maxOnRight(arr);
+
+        for (int i = 0; i < arr.length; i++) {
+            int leftMax = maxOnLeft[i];
+            int rightMax = maxOnRight[i];
+
+            if (leftMax != Integer.MIN_VALUE && rightMax != Integer.MIN_VALUE) {
+                totalUnitOfWaterTrapped += Math.min(leftMax, rightMax) - arr[i];
+            }
+        }
+
+        return totalUnitOfWaterTrapped;
+    }
+
+    private int[] maxOnLeft(int[] arr) {
+        int[] maxOnLeft = new int[arr.length];
+        int maxSoFarOnLeft = Integer.MIN_VALUE;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (maxSoFarOnLeft > arr[i]) {
+                maxOnLeft[i] = maxSoFarOnLeft;
+            } else {
+                maxOnLeft[i] = Integer.MIN_VALUE;
+            }
+
+            maxSoFarOnLeft = Math.max(maxSoFarOnLeft, arr[i]);
+        }
+
+        return maxOnLeft;
+    }
+
+    private int[] maxOnRight(int[] arr) {
+        int[] maxOnRight = new int[arr.length];
+        int maxSoFarOnRight = Integer.MIN_VALUE;
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (maxSoFarOnRight > arr[i]) {
+                maxOnRight[i] = maxSoFarOnRight;
+            } else {
+                maxOnRight[i] = Integer.MIN_VALUE;
+            }
+            maxSoFarOnRight = Math.max(maxSoFarOnRight, arr[i]);
+        }
+
+        return maxOnRight;
+    }
+
+    private boolean isSorted(int[] arr) {
+        boolean ascending = true;
+        boolean descending = true;
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                ascending = false;
+            }
+            if (arr[i] < arr[i + 1]) {
+                descending = false;
+            }
+        }
+
+        return ascending || descending;
+    }
+}
+
+
