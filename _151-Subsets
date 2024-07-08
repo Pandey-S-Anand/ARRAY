@@ -86,13 +86,64 @@ class Solution {
     }
 
     private void subset(int[] arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
+        /*
+         * When index equals arr.length, it means we have processed all elements of the
+         * array for the current subset. Thus, we add the current subset to subsets.
+         */
         if (index == arr.length) {
-            subsets.add(new ArrayList<>(subset));
+            subsets.add(new ArrayList<>(subset)); // Adds a copy of subset (to prevent reference issues) to subsets.
         } else {
+            // current element (arr[index]) is added to the subset
             subset.add(arr[index]);
+            // explore the path where the current element is included
             subset(arr, index + 1, subset, subsets);
+            /*
+             * Backtracking :After exploring the path where the current element is included,
+             * the element is removed from the subset. It reverts the state of subset to
+             * what it was before the current element was added, allowing the exploration
+             * of the path where the current element is excluded.
+             */
             subset.remove(subset.size() - 1);
+            // explore the path where the current element is excluded
             subset(arr, index + 1, subset, subsets);
         }
     }
 }
+
+
+//Aliter
+
+class Solution {
+    public List<List<Integer>> subsets(int[] arr) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        List<Integer> subset = new ArrayList<>();
+
+        subset(arr, 0, subset, subsets);
+        return subsets;
+    }
+
+    private void subset(int[] arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
+        /*
+         * When index equals arr.length, it means we have processed all elements of the
+         * array for the current subset. Thus, we add the current subset to subsets.
+         */
+        if (index == arr.length) {
+            subsets.add(new ArrayList<>(subset)); // Adds a copy of subset (to prevent reference issues) to subsets.
+        } else {
+            // explore the path where the current element is excluded
+            subset(arr, index + 1, subset, subsets);
+            // current element (arr[index]) is added to the subset
+            subset.add(arr[index]);
+            // explore the path where the current element is included
+            subset(arr, index + 1, subset, subsets);
+            /*
+             * Backtracking :After exploring the path where the current element is included,
+             * the element is removed from the subset. It reverts the state of subset to
+             * what it was before the current element was added
+             */
+            subset.remove(subset.size() - 1);
+        }
+    }
+}
+
+
