@@ -1,4 +1,61 @@
+/*
+ * Subarray:
+ * 1: Contiguous
+ * 2: Order of appearence is maintained
+ * 3: Every subarray is a subset.
+ * 4: Every subarray is a subsequence
+ * 
+ * Subsequence:
+ * 1: May or may not be contiguous
+ * 2: Order of appearence is maintained.
+ * 3: Derived by deleting some or none of the elements of the sequence without
+ * changing the order of
+ * the remaining elements.
+ * 4: Every subsequence is subset.
+ * 
+ * Subset:
+ * 1 : May or maynot be contiguous
+ * 2: Order of appearence may or may not be maintained.
+ * 
+ * Ex: arr[]={1, 2, 3}
+ * 
+ * Subarrays :
+ * 
+ * [1]
+ * [1,2]
+ * [1, 2, 3]
+ * [2]
+ * [2,3]
+ * [3]
+ * 
+ * 
+ * Subsequences:
+ * 
+ * []
+ * [1]
+ * [1, 2]
+ * [1, 3]
+ * [1, 2, 3]
+ * [2]
+ * [2, 3]
+ * [3]
+ * 
+ * Subsets:
+ * 
+ * []
+ * [1]
+ * [1, 2] or [2, 1]
+ * [1, 3] or [3, 1]
+ * [1, 2, 3] or [1, 3, 2] or [2, 3, 1] or [2, 1, 3] or [3, 1, 2] or [3, 2, 1]
+ * [2]
+ * [2, 3] or [3, 2]
+ * [3]
+ */
+
+
 //Iterative Approach
+
+//Method 1 :
 
 /*
 For arr[] = {1, 2, 3}:
@@ -36,6 +93,63 @@ class Solution {
         return subsets;
     }
 }
+
+
+//Method 2 : Bit Manipulation
+
+//Intuitive Implementation
+
+class Solution {
+    public List<List<Integer>> subsets(int[] arr) {
+        List<List<Integer>> subsets = new ArrayList<>();
+
+        // Total number of subsets is 2^n
+        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+
+        // Generate all subsets
+        for (int num = 0; num < totalSubsets; num++) {
+            List<Integer> subset = new ArrayList<>();
+            String binaryWithoutLeadingZeroes = Integer.toBinaryString(num);// to get binary representation without leading zeroes
+            /*
+             * Check each bit in binary representation of number(starting from right to
+             * left) to decide which elements to include in the current subset,
+             * if bit is set include the element corresponding to that position in the array
+             */
+            int length = binaryWithoutLeadingZeroes.length();
+            for (int i = length - 1; i >= 0; i--) {
+                if (binaryWithoutLeadingZeroes.charAt(i) == '1') {
+                    subset.add(arr[length - i - 1]);
+                }
+            }
+            subsets.add(subset);
+        }
+
+        return subsets;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> subsets(int[] arr) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+        
+        for (int num = 0; num < totalSubsets; num++) {
+            List<Integer> subset = new ArrayList<>();
+            for (int i = 0; i < arr.length; i++) {
+                if ((num & (1 << i)) != 0) {
+                    subset.add(arr[i]);
+                }
+            }
+            subsets.add(subset);
+        }
+
+        return subsets;
+    }
+}
+
 
 
 //Using Backtracking
