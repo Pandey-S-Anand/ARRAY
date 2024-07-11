@@ -7,11 +7,11 @@ Ex: arr[]= [[4,4,4,1,4]
 
 [4]
 
-[4]      //REMOVED COZ OF CHECK
+[4]      //Not Included Because Already Present
 [4, 4]
 
-[4].    //REMOVED COZ OF CHECK
-[4, 4]  //REMOVED COZ OF CHECK
+[4].    //Not Included Because Already Present
+[4, 4]  //Not Included Because Already Present
 [4, 4, 4]
 
 [1]
@@ -19,9 +19,9 @@ Ex: arr[]= [[4,4,4,1,4]
 [4, 4, 1]
 [4, 4, 4 ,1]
 
-[4]  //REMOVED COZ OF CHECK
-[4 , 4] //REMOVED COZ OF CHECK
-[4, 4, 4] //REMOVED COZ OF CHECK
+[4]         //Not Included Because Already Present
+[4 , 4]    //Not Included Because Already Present
+[4, 4, 4]  //Not Included Because Already Present
 [4, 4, 4, 4]
 [1, 4]
 [4, 1, 4]
