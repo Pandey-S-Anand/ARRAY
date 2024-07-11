@@ -1,5 +1,5 @@
 /*
-What if we dont sort the subset before storing ?
+What if we dont sort the subset before including in the result ?
 
 Ex: arr[]= [[4,4,4,1,4]
 
