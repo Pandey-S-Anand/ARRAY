@@ -28,7 +28,7 @@ Ex: arr[]= [[4,4,4,1,4]
 [4, 4, 1, 4]
 [4, 4, 4, 1, 4]
 
-(On observation : [1, 4] , [4, 1, 4] and  [4, 4, 1, 4] are duplicates )
+(On observation : [1, 4] , [4, 1, 4] and  [4, 4, 1, 4] are duplicate subsets)
 */
 
 //Iterative Approach
