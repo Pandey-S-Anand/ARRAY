@@ -365,10 +365,10 @@ class Solution {
         } else {
             subset.add(arr[index]);
             generateUniqueSubset(arr, index + 1, subset, subsets);
+            subset.remove(subset.size()-1);
             while (index + 1 < arr.length && arr[index] == arr[index + 1]) {
                 index++;
             }
-            subset.remove(subset.size() - 1);
             generateUniqueSubset(arr, index + 1, subset, subsets);
         }
     }
