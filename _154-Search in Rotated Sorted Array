@@ -126,14 +126,14 @@ class Solution {
             if (arr[low] <= arr[mid]) {
                 // Left part is sorted
                 if (target >= arr[low] && target <= arr[mid]) {
-                    high = mid;
+                    high = mid - 1;
                 } else {
                     low = mid + 1;
                 }
             } else {
                 // Right part is sorted
                 if (target >= arr[mid] && target <= arr[high]) {
-                    low = mid;
+                    low = mid + 1;
                 } else {
                     high = mid - 1;
                 }
