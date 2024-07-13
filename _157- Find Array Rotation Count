@@ -34,13 +34,19 @@ class Solution {
 
     private int findMinimumIndex(List<Integer> arr) {
       int size=arr.size();
-      for(int i=0;i<size;i++){
+      //Array is sorted but not rotated so minimum element is at index 0
+      if(size==1 || arr.get(0)<arr.get(size-1)){
+          return 0;
+      }
+      
+      for(int i=0;i<size-1;i++){
         if(arr.get(i)>arr.get(i+1)){
             return i+1; //index of minimum element in sorted rotated array
         } 
       }
-      //Array is sorted but not rotated so minimum element is at index 0
-      return 0;
+      
+      // This return statement is never reached
+      return -1;
     }
 }
 
