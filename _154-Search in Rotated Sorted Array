@@ -91,11 +91,18 @@ class Solution {
 
     private int findPartitionIndex(int[] arr) {
         /*
-          If the array is not rotated (first element <= last element) also
-          this check ensures that value of 'mid' never reaches '0' or 'arr.length-1',
-          the value of mid will reach '0' or 'arr.length-1' if the array is sorted and not rotated.
-        */
-        if (arr[0] <= arr[arr.length-1]) {
+         * Note :
+         * 1: If the array(with distinct elements) is sorted and rotated by any position
+         * (either left or right) the first element will always be
+         * greater than the last element.
+         * 
+         * 2: If the array(with distinct elements) is sorted and not rotated the the
+         * first element will always be less than the last element. This check also
+         * ensures that value of 'mid' never reaches '0' or 'arr.length-1',
+         * the value of mid will reach '0' or 'arr.length-1' only if the
+         * array(with distinct element) is sorted and not rotated.
+         */
+        if (arr[0] < arr[arr.length-1]) {
             return arr.length-1;
         }
         
