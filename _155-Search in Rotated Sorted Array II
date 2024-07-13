@@ -73,9 +73,9 @@ class Solution {
             }
 
             /*
-             * if (arr[mid]!=target) and (arr[mid]==arr[low] && arr[mid]==arr[high])
-             * then arr[low]!=target and arr[high]!=target, based on this obseravtion
-             * we are moving the low and high pointer.
+             * if (arr[mid]!=target) and arr[mid]==arr[low]
+             * then arr[low]!=target based on this obseravtion
+             * we are moving the low pointer.
              * Ex:
              * arr[]=[1,1,1,1,1,1,1,1,1,13,1,1,1,1,1,1,1,1,1,1,1,1]
              * 
