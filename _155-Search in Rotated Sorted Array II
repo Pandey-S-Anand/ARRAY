@@ -83,7 +83,7 @@ class Solution {
              * 13
              * 
              */
-            if ((arr[mid] == arr[low])) {
+            if (arr[mid] == arr[low]) {
                 low = low + 1;
                 continue;
             }
