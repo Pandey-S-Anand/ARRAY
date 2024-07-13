@@ -83,14 +83,13 @@ class Solution {
              * 13
              * 
              */
-            if ((arr[mid] == arr[low]) && (arr[mid] == arr[high])) {
+            if ((arr[mid] == arr[low])) {
                 low = low + 1;
-                high = high - 1;
                 continue;
             }
 
             // Determine which part is sorted
-            if (arr[low] <= arr[mid]) {
+            if (arr[low] < arr[mid]) {
                 // Left part is sorted
                 if (target >= arr[low] && target <= arr[mid]) {
                     high = mid - 1;
@@ -110,6 +109,7 @@ class Solution {
         return false; // Target not found
     }
 }
+
 
 
 /*
