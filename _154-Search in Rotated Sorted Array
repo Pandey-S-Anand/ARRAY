@@ -58,6 +58,7 @@ class Solution {
 
 
 
+
 //Better Approach
 
 class Solution {
@@ -96,16 +97,17 @@ class Solution {
          * (either left or right) the first element will always be
          * greater than the last element.
          * 
-         * 2: If the array(with distinct elements) is sorted and not rotated the the
+         * 2: If the array(with distinct elements) is sorted and not rotated the
          * first element will always be less than the last element. This check also
          * ensures that value of 'mid' never reaches '0' or 'arr.length-1',
          * the value of mid will reach '0' or 'arr.length-1' only if the
-         * array(with distinct element) is sorted and not rotated.
+         * array(with distinct element) is sorted and not rotated or the array
+         * length is 1)
          */
-        if (arr[0] < arr[arr.length-1]) {
-            return arr.length-1;
+        if (arr.length == 1 || arr[0] < arr[arr.length - 1]) {
+            return arr.length - 1;
         }
-        
+
         int low = 0, high = arr.length - 1;
 
         while (low <= high) {
@@ -130,6 +132,7 @@ class Solution {
         return -1;
     }
 }
+
 
 
 //Optimal Approach
