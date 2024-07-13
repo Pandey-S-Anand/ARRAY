@@ -111,6 +111,52 @@ class Solution {
 }
 
 
+//Aliter
+
+class Solution {
+    public boolean search(int[] arr, int target) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == target) {
+                return true;
+            }
+
+            /*
+             * if (arr[mid]!=target) and (arr[mid]==arr[low] && arr[mid]==arr[high])
+             * then arr[low]!=target and arr[high]!=target, based on this obseravtion
+             * we are moving the low and high pointer
+             */
+            if ((arr[mid] == arr[low]) && (arr[mid] == arr[high])) {
+                low = low + 1;
+                high = high - 1;
+                continue;
+            }
+
+            // Determine which part is sorted
+            if (arr[low] <= arr[mid]) {
+                // Left part is sorted
+                if (target >= arr[low] && target <= arr[mid]) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            } else {
+                // Right part is sorted
+                if (target >= arr[mid] && target <= arr[high]) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+        }
+
+        return false; // Target not found
+    }
+}
+
 
 /*
  * Note :
