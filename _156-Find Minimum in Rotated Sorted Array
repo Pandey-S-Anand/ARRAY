@@ -48,7 +48,7 @@ class Solution {
          * ensures that value of 'mid' never reaches '0' or 'arr.length-1',
          * the value of mid will reach '0' or 'arr.length-1' only if the
          * array(with distinct element) is sorted and not rotated or the array
-         * length is 1)
+         * length is 1
          */
 
         if (arr.length == 1 || arr[0] < arr[arr.length - 1]) {
