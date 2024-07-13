@@ -1,0 +1,116 @@
+//Bruteforce Approach
+
+class Solution {
+    public int findMin(int[] arr) {
+        Arrays.sort(arr);
+        return arr[0];
+    }
+}
+
+
+//Good Approach
+
+class Solution {
+    public int findMin(int[] arr) {
+        int minimum = Integer.MAX_VALUE, low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            minimum = Math.min(minimum, Math.min(arr[low++], arr[high--]));
+        }
+
+        return minimum;
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    public int findMin(int[] arr) {
+        int partitionIndex = findPartitionIndex(arr);
+        // Array is sorted but not rotated so smallest will be first element
+        if (partitionIndex == arr.length - 1) {
+            return arr[0];
+        }
+
+        return arr[partitionIndex + 1];
+    }
+
+    private int findPartitionIndex(int[] arr) {
+        /*
+         * Note :
+         * 1: If the array(with distinct elements) is sorted and rotated by any position
+         * (either left or right) the first element will always be
+         * greater than the last element.
+         * 
+         * 2: If the array(with distinct elements) is sorted and not rotated the
+         * first element will always be less than the last element. This check also
+         * ensures that value of 'mid' never reaches '0' or 'arr.length-1',
+         * the value of mid will reach '0' or 'arr.length-1' only if the
+         * array(with distinct element) is sorted and not rotated or the array
+         * length is 1)
+         */
+
+        if (arr.length == 1 || arr[0] < arr[arr.length - 1]) {
+            return arr.length - 1;
+        }
+
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Check if mid is the partition point
+            if (arr[mid] > arr[mid + 1]) {
+                return mid;
+            }
+
+            // Decide which half to continue the search in
+            if (arr[low] <= arr[mid]) {
+                // Left half is sorted, so the rotation point must be in the right half
+                low = mid + 1;
+            } else {
+                // Right half is sorted, so the rotation point must be in the left half
+                high = mid - 1;
+            }
+        }
+
+        // This return statement is never reached
+        return -1;
+    }
+}
+
+
+//Optimal Approach
+
+
+class Solution {
+    public int findMin(int[] arr) {
+        if (arr.length == 1 || arr[0] < arr[arr.length - 1]) {
+            return arr[0];
+        }
+
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Check if mid is the partition point
+            if (arr[mid] > arr[mid + 1]) {
+                return arr[mid + 1];
+            }
+
+            // Decide which half to continue the search in
+            if (arr[low] <= arr[mid]) {
+                // Left half is sorted, so the rotation point must be in the right half
+                low = mid + 1;
+            } else {
+                // Right half is sorted, so the rotation point must be in the left half
+                high = mid - 1;
+            }
+        }
+
+        // This return statement is never reached
+        return -1;
+    }
+}
