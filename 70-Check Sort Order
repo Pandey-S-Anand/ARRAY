@@ -65,6 +65,7 @@ class Solution {
             }
         }
 
+
         if (ascending) { // 'descending' flag will be set to 'false' and 'ascending' flag will be set to 'true'
             return SortOrder.ASCENDING;
         } else if (descending) { // 'ascending' flag will be set to 'false' and 'descending' flag will be set to 'true'
