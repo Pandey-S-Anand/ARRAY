@@ -58,7 +58,7 @@ public class Solution {
 
 
 
-// Better Approach
+// Optimal Approach
 
 public class Solution {
     enum SortOrder {
