@@ -28,7 +28,7 @@ class Solution {
     public void rearrange(int arr[], int n){
        int positiveTracker=0;
        
-       for(int i=0;i < n;i++){//'positiveTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array 
+       for(int i=0;i < n;i++){ //'positiveTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array 
          if(arr[i]<0){
             //This leftShiftBy1() method maintains the order of appearence
             leftShiftBy1(arr,positiveTracker,i);
@@ -37,13 +37,7 @@ class Solution {
        }
     }
     
-    public void swap(int[] arr,int i,int j){
-        int temp = arr[i];
-        arr[i] = arr[i-1];
-        arr[i-1] = temp;
-    }
-    
-    public void leftShiftBy1(int[]arr,int start,int end){
+    private void leftShiftBy1(int[]arr,int start,int end){
       int temp=arr[end];
       for(int i=end;i>start;i--){
           arr[i]=arr[i-1];
