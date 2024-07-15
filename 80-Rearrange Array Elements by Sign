@@ -189,7 +189,6 @@ Once we find an out of place element, we find the first element after it with op
 We right rotate the subarray between these two elements (including these two).
 */
 
-
 class Solution {
     public int[] rearrangeArray(int[] arr) {
         int wrongIndex = -1;// No Wrong Index
