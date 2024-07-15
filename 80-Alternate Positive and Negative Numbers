@@ -2,83 +2,181 @@
 
 class Solution {
     void rearrange(int arr[], int n) {
-        List<Integer> positive = new ArrayList<>();
-        List<Integer> negative = new ArrayList<>();
+        List<Integer> positiveList = new ArrayList<>();
+        List<Integer> negativeList = new ArrayList<>();
 
         for (int val : arr) {
             if (val >= 0) {
-                positive.add(val);
+                positiveList.add(val);
             } else {
-                negative.add(val);
+                negativeList.add(val);
             }
         }
 
-        int i = 0, j = 0, k = 0, postiveSize = positive.size(), negativeSize = negative.size();
-
-        while (j < postiveSize && k < negativeSize) {
-            if ((i % 2) == 0) {
-                arr[i++] = positive.get(j++);
-            } else {
-                arr[i++] = negative.get(k++);
-            }
+        if (positiveList.size() == n || negativeList.size() == n) {
+            return;
         }
 
-        while (j < postiveSize) {
-            arr[i++] = positive.get(j++);
+        int arrIndex = 0, posIndex = 0, negIndex = 0;
+
+        while (posIndex < positiveList.size() && negIndex < negativeList.size()) {
+            arr[arrIndex++] = positiveList.get(posIndex++);
+            arr[arrIndex++] = negativeList.get(negIndex++);
         }
 
-        while (k < negativeSize) {
-            arr[i++] = negative.get(k++);
+        while (posIndex < positiveList.size()) {
+            arr[arrIndex++] = positiveList.get(posIndex++);
+        }
+
+        while (negIndex < negativeList.size()) {
+            arr[arrIndex++] = negativeList.get(negIndex++);
         }
     }
 }
 
 
-//ALITER
+//Good Approach(Order of Appearence is Maintained)
 
 class Solution {
     void rearrange(int arr[], int n) {
-        int count = 0;
+        int firstNegativeIndex = segregateMaintainingOrder(arr, n);
 
-        for (int val : arr) {
-            if (val >= 0) {
-                count++;
+        if (firstNegativeIndex == n) {
+            return;
+        }
+
+        int[] result = new int[n];
+        int positiveIndex = 0, negativeIndex = firstNegativeIndex, resultIndex = 0;
+
+        while (positiveIndex < firstNegativeIndex && negativeIndex < n) {
+            result[resultIndex++] = arr[positiveIndex++];
+            result[resultIndex++] = arr[negativeIndex++];
+        }
+
+        while (positiveIndex < firstNegativeIndex) {
+            result[resultIndex++] = arr[positiveIndex++];
+        }
+
+        while (negativeIndex < n) {
+            result[resultIndex++] = arr[negativeIndex++];
+        }
+
+        System.arraycopy(result, 0, arr, 0, n);
+    }
+
+    private int segregateMaintainingOrder(int arr[], int n) {
+        int negativeTracker = 0;
+
+        for (int i = 0; i < n; i++) { // 'negativeTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array
+            if (arr[i] >= 0) {
+                // This leftShiftBy1() method maintains the order of appearence
+                leftShiftBy1(arr, negativeTracker, i);
+                negativeTracker++;
             }
         }
 
-        int[] positive = new int[count];
-        int[] negative = new int[n - count];
-        int j = 0, k = 0;
+        return negativeTracker;
+    }
 
-        for (int val : arr) {
-            if (val >= 0) {
-                positive[j++] = val;
-            } else {
-                negative[k++] = val;
-            }
+    private void leftShiftBy1(int[] arr, int start, int end) {
+        int temp = arr[end];
+        for (int i = end; i > start; i--) {
+            arr[i] = arr[i - 1];
         }
 
-        int i = 0;
-        j = 0;
-        k = 0;
-
-        while (j < count && k < (n - count)) {
-            if ((i % 2) == 0) {
-                arr[i++] = positive[j++];
-            } else {
-                arr[i++] = negative[k++];
-            }
-        }
-
-        if (j < count) {
-            System.arraycopy(positive, j, arr, i, count - j);
-        }
-
-        if (k < (n - count)) {
-            System.arraycopy(negative, k, arr, i, n - count - k);
-        }
+        arr[start] = temp;
     }
 }
+
+
+//Better Approach(Order of Appearence is Maintained)
+
+class Solution {
+    void rearrange(int arr[], int n) {
+        segregateMaintainingOrder(arr, n);
+        int firstNegativeIndex = findFirstNegativeIndex(arr, n);
+
+        if (firstNegativeIndex == n) {
+            return;
+        }
+
+        int[] result = new int[n];
+        int positiveIndex = 0, negativeIndex = firstNegativeIndex, resultIndex = 0;
+
+        while (positiveIndex < firstNegativeIndex && negativeIndex < n) {
+            result[resultIndex++] = arr[positiveIndex++];
+            result[resultIndex++] = arr[negativeIndex++];
+        }
+
+        while (positiveIndex < firstNegativeIndex) {
+            result[resultIndex++] = arr[positiveIndex++];
+        }
+
+        while (negativeIndex < n) {
+            result[resultIndex++] = arr[negativeIndex++];
+        }
+
+        System.arraycopy(result, 0, arr, 0, n);
+    }
+
+    private void segregateMaintainingOrder(int[] arr, int n) {
+        mergeSort(arr, 0, n - 1);
+    }
+
+    private void mergeSort(int[] arr, int lb, int ub) {
+        if (lb < ub) {
+            int mid = lb + (ub - lb) / 2;
+            mergeSort(arr, lb, mid);
+            mergeSort(arr, mid + 1, ub);
+            modifiedMerge(arr, lb, mid, ub);
+        }
+    }
+
+    private void modifiedMerge(int[] arr, int lb, int mid, int ub) {
+        int leftSize = (mid - lb + 1), rightSize = (ub - mid);
+        int[] left = new int[leftSize];
+        int[] right = new int[rightSize];
+
+        for (int i = 0; i < leftSize; i++) {
+            left[i] = arr[lb + i];
+        }
+
+        for (int i = 0; i < rightSize; i++) {
+            right[i] = arr[mid + 1 + i];
+        }
+
+        int posIndex = 0, negIndex = 0, arrIndex = lb;
+        // copy positive elements of left sublist
+        while (posIndex < leftSize && left[posIndex] >= 0) {
+            arr[arrIndex++] = left[posIndex++];
+        }
+
+        // copy positive elements of right sublist
+        while (negIndex < rightSize && right[negIndex] >= 0) {
+            arr[arrIndex++] = right[negIndex++];
+        }
+
+        // Copy negative elements of left sublist
+        while (posIndex < leftSize) {
+            arr[arrIndex++] = left[posIndex++];
+        }
+
+        // Copy negative elements of right sublist
+        while (negIndex < rightSize) {
+            arr[arrIndex++] = right[negIndex++];
+        }
+    }
+
+    private int findFirstNegativeIndex(int[] arr, int n) {
+        for (int i = 0; i < n; i++) {
+            if (arr[i] < 0) {
+                return i;
+            }
+        }
+        return n; // Return n if no negative number is found
+    }
+}
+
 
 // Optimal Approach (Order of Appearence is Maintained)
 
@@ -89,7 +187,6 @@ An element is out of place if it is positive and at odd index (0 based index), o
 Once we find an out of place element, we find the first element after it with opposite sign. 
 We right rotate the subarray between these two elements (including these two).
 */
-
 
 
 class Solution {
@@ -116,46 +213,12 @@ class Solution {
         }
     }
 
-    public void rightRotate(int[] arr, int wrongIndex, int index) {
+    private void rightRotate(int[] arr, int wrongIndex, int index) {
         int temp = arr[index];
         for (int i = index; i > wrongIndex; i--) {
             arr[i] = arr[i - 1];
         }
 
         arr[wrongIndex] = temp;
-    }
-}
-
-
-
-// Alternate Approach (Order of Appearence is not Maintained)
-
-class Solution {
-    void rearrange(int arr[], int n) {
-        int i = 1, j = segregate(arr, n);
-
-        while (i < j && j < n) {
-            swap(arr, i, j);
-            i += 2;
-            j++;
-        }
-    }
-
-    public int segregate(int[] arr, int n) {
-        int negativeTracker = 0;
-        for (int i = 0; i < n; i++) {
-            if (arr[i] >= 0) {
-                swap(arr, i, negativeTracker);
-                negativeTracker++;
-            }
-        }
-
-        return negativeTracker;
-    }
-
-    public void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
     }
 }
