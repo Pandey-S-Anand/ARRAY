@@ -180,7 +180,7 @@ class Solution {
 }
 
 
-// Optimal Approach (Order of Appearence is Maintained)
+// Optimal Approach(Space Optimised) (Order of Appearence is Maintained)
 /*
 in rearranged array Positive elements are found at Even index(0,2,4,6,8..) and Negative Elements are found at odd index(1,3,5,7,9...)
 The idea is to process array from left to right. While processing, find the first out of place element in the remaining unprocessed array.
@@ -222,5 +222,27 @@ class Solution {
         }
 
         arr[wrongIndex] = temp;
+    }
+}
+
+
+//Optimal Approach (Time Optimised) (Order of Appearence is Maintained)
+
+class Solution {
+    public int[] rearrangeArray(int[] arr) {
+        int[] result = new int[arr.length];
+        int posIndex = 0, negIndex = 1;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > 0) {
+                result[posIndex] = arr[i];
+                posIndex += 2;
+            } else {
+                result[negIndex] = arr[i];
+                negIndex += 2;
+            }
+        }
+
+        return result;
     }
 }
