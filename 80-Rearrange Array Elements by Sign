@@ -40,36 +40,36 @@ class Solution {
 //Good Approach(Order of Appearence is Maintained)
 
 class Solution {
-    void rearrange(int arr[], int n) {
-        int firstNegativeIndex = segregateMaintainingOrder(arr, n);
+    public int[] rearrangeArray(int arr[]) {
+        int firstNegativeIndex = segregateMaintainingOrder(arr);
 
-        if (firstNegativeIndex == n) {
-            return;
+        if (firstNegativeIndex == arr.length) {
+            return arr;
         }
 
-        int[] result = new int[n];
-        int positiveIndex = 0, negativeIndex = firstNegativeIndex, resultIndex = 0;
+        int[] result = new int[arr.length];
+        int positiveIndex = 0, negativeIndex = firstNegativeIndex, arrIndex = 0;
 
-        while (positiveIndex < firstNegativeIndex && negativeIndex < n) {
-            result[resultIndex++] = arr[positiveIndex++];
-            result[resultIndex++] = arr[negativeIndex++];
+        while (positiveIndex < firstNegativeIndex && negativeIndex < arr.length) {
+            result[arrIndex++] = arr[positiveIndex++];
+            result[arrIndex++] = arr[negativeIndex++];
         }
 
         while (positiveIndex < firstNegativeIndex) {
-            result[resultIndex++] = arr[positiveIndex++];
+            result[arrIndex++] = arr[positiveIndex++];
         }
 
-        while (negativeIndex < n) {
-            result[resultIndex++] = arr[negativeIndex++];
+        while (negativeIndex < arr.length) {
+            result[arrIndex++] = arr[negativeIndex++];
         }
 
-        System.arraycopy(result, 0, arr, 0, n);
+        return result;
     }
 
-    private int segregateMaintainingOrder(int arr[], int n) {
+    private int segregateMaintainingOrder(int arr[]) {
         int negativeTracker = 0;
 
-        for (int i = 0; i < n; i++) { // 'negativeTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array
+        for (int i = 0; i < arr.length; i++) { // 'negativeTracker' is tracking the +ve Elemnent while 'i' is used for iterating over the array
             if (arr[i] >= 0) {
                 // This leftShiftBy1() method maintains the order of appearence
                 leftShiftBy1(arr, negativeTracker, i);
