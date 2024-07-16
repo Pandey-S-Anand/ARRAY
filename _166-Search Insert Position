@@ -17,7 +17,7 @@ class Solution {
         return binarySearch(newArr, target);
     }
 
-    public int binarySearch(int[] arr, int key) {
+    private int binarySearch(int[] arr, int key) {
         int low = 0, high = arr.length - 1;
 
         while (low <= high) {
@@ -57,7 +57,7 @@ class Solution {
         return i + 1;
     }
 
-    public int binarySearch(int[] arr, int key) {
+    private int binarySearch(int[] arr, int key) {
         int low = 0, high = arr.length - 1;
 
         while (low <= high) {
