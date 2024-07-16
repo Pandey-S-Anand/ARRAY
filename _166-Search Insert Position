@@ -106,24 +106,22 @@ class Solution {
 
 class Solution {
     public int searchInsert(int[] arr, int target) {
-        return binarySearch(arr, target);
+        return lowerBound(arr, target);
     }
 
-    private int binarySearch(int[] arr, int key) {
+    private int lowerBound(int[] arr, int x) {
         int low = 0, high = arr.length - 1;
 
         while (low <= high) {
             int mid = low + (high - low) / 2;
 
-            if (arr[mid] == key) {
-                return mid;
-            } else if (key < arr[mid]) {
+            if (arr[mid] >= x) {
                 high = mid - 1;
             } else {
                 low = mid + 1;
             }
         }
-        // target Doesnot Exists in the Array however the correct index of target in the sorted array would be low or high+1
-        return low; // return high+1;
+
+        return low;
     }
 }
