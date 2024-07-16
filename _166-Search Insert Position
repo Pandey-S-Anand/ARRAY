@@ -78,6 +78,66 @@ class Solution {
 
 //Optimal Approach
 
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        return lowerBound(arr, target);
+    }
+
+    private int lowerBound(int[] arr, int x) {
+        int low = 0, high = arr.length - 1, lowerBound = arr.length;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == x) {
+                return mid;
+            }
+
+            if (arr[mid] > x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
+
+
+//Aliter
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        return lowerBound(arr, target);
+    }
+
+    private int lowerBound(int[] arr, int x) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == x) {
+                return mid;
+            }
+
+            if (arr[mid] > x) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return low;
+    }
+}
+
+
+//Aliter
+
 class Solution {
     public int searchInsert(int[] arr, int target) {
         return lowerBound(arr, target);
@@ -116,6 +176,35 @@ class Solution {
             int mid = low + (high - low) / 2;
 
             if (arr[mid] >= x) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return low;
+    }
+}
+
+
+//Aliter
+
+class Solution {
+    public int searchInsert(int[] arr, int target) {
+        return lowerBound(arr, target);
+    }
+
+    private int lowerBound(int[] arr, int x) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == x) {
+                return mid;
+            }
+
+            if (arr[mid] > x) {
                 high = mid - 1;
             } else {
                 low = mid + 1;
