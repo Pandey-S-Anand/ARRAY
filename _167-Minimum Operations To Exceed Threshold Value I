@@ -13,6 +13,7 @@ smaller than 'k' which eventually gves us the minimum number of operations requi
 than 'k' as in 1 operation we can remove only one small element 
 */
 
+//Bruteforce Approach
 
 //Naive Implementation
 
@@ -83,6 +84,29 @@ class Solution {
                 high = mid - 1;
             } else {
                 low = mid + 1;
+            }
+        }
+
+        return operationCount;
+    }
+}
+
+
+/*
+Optimal Approach:
+
+Count the numbers in the array that are less than 'k'. This count represents the number of elements smaller than 'k'. 
+Since each operation allows the removal of only one smaller element, the minimum number of operations required to 
+make all elements in the array greater than or equal to 'k' is equal to the count of numbers in the array that are less than 'k'.
+*/
+
+class Solution {
+    public int minOperations(int[] arr, int k) {
+        int operationCount = 0;
+
+        for (int val : arr) {
+            if (val < k) {
+                operationCount++;
             }
         }
 
