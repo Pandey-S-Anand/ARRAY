@@ -1,4 +1,24 @@
-//Bruteforce Approach
+//Bruteforce Approach (TC: O(n*k))
+
+public class Solution {
+    public static int[] nearlySorted(int[] arr, int n, int k) {
+        for (int i = 1; i < n; i++) {
+            int temp = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && arr[j] > temp) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+
+            arr[j + 1] = temp;
+        }
+
+        return arr;
+    }
+}
+
+//Better Approach (TC: O(nlogn))
 
 public class Solution {
   public static int[] nearlySorted(int[] arr, int n, int k) {
@@ -28,7 +48,7 @@ For i=5, sorted[5] i.e 9 range will be : 2<= i <= 8
 For i=6, sorted[6] i.e 10 range will be : 3<= i <= 9
 */
 
-//Optimal Approach
+//Optimal Approach (O(nlogk))
 
 public class Solution {
     public static int[] nearlySorted(int[] arr, int n, int k) {
