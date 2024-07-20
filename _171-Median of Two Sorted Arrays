@@ -252,7 +252,10 @@ class Solution {
         if (arr1.length > arr2.length) {
             return findMedianSortedArrays(arr2, arr1); // ensuring that binary search happens on the smaller array
         }
-
+        /*
+          'low' is initialized to '0', it allows the binary search to consider scenario where no elements from arr1 are included in the left part.
+          'high' is intialized to 'arr1.length', it allows the binary search to consider scenario where all elements from arr1 are included in the left part.
+        */
         int low = 0, high = arr1.length;
 
         while (low <= high) {
