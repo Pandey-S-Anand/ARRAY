@@ -36,7 +36,7 @@ class Solution {
 
 class Solution {
     public long kthElement(int arr1[], int arr2[], int m, int n, int k) {
-        int[] merged = new int[m + n];
+        int[] merged = new int[k];
         int i = 0, j = 0, index = 0;
 
         while (index <= (k - 1)) {
