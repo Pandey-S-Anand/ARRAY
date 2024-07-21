@@ -103,6 +103,18 @@ class Solution {
         int majorityCandidate1 = -1, majorityCandidate2 = -1, voteCount1 = 0, voteCount2 = 0;
 
         for (int val : arr) {
+            /*
+             * When voteCount1 is zero,it indicates that majorityCandidate1 is no
+             * longer a potential majority candidate and a new candidate should be
+             * considered for majorityCandidate1.However, this new candidate should not
+             * be the same as majorityCandidate2 to maintain distinct candidates. This is
+             * why we use the check 'val != majorityCandidate2'.
+             * Similarly,When voteCount2 is zero,it indicates that majorityCandidate2
+             * is no longer a potential majority candidate and a new candidate should be
+             * considered for majorityCandidate2 However, this new candidate should not
+             * be the same as majorityCandidate1 to maintain distinct candidates.
+             * Thus, we use the check 'val != majorityCandidate1'.
+             */
             if (voteCount1 == 0 && val != majorityCandidate2) {
                 majorityCandidate1 = val;
                 voteCount1 = 1;
