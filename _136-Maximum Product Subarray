@@ -7,7 +7,7 @@ If it exceeds this range, it should be ignored for the purpose of determining th
 
 class Solution {
     public int maxProduct(int[] arr) {
-        int maxSubArrayProduct = Integer.MIN_VALUE;
+        int maxProduct = Integer.MIN_VALUE;
         for (int start = 0; start < arr.length; start++) {
             for (int end = start; end < arr.length; end++) {
                 long subArrayProduct = 1;
@@ -16,12 +16,12 @@ class Solution {
                 }
 
                 if (subArrayProduct >= Integer.MIN_VALUE && subArrayProduct <= Integer.MAX_VALUE) {
-                    maxSubArrayProduct = Math.max(maxSubArrayProduct, (int) subArrayProduct);
+                    maxProduct = Math.max(maxProduct, (int) subArrayProduct);
                 }
             }
         }
 
-        return maxSubArrayProduct;
+        return maxProduct;
     }
 }
 
@@ -31,17 +31,17 @@ class Solution {
 
 class Solution {
     public int maxProduct(int[] arr) {
-        int maxSubArrayProduct = Integer.MIN_VALUE;
+        int maxProduct = Integer.MIN_VALUE;
         for (int start = 0; start < arr.length; start++) {
             long subArrayProduct = 1;
             for (int end = start; end < arr.length; end++) {
                 subArrayProduct *= arr[end];
                 if (subArrayProduct <= Integer.MAX_VALUE && subArrayProduct >= Integer.MIN_VALUE) {
-                    maxSubArrayProduct = Math.max(maxSubArrayProduct, (int) subArrayProduct);
+                    maxProduct = Math.max(maxProduct, (int) subArrayProduct);
                 }
             }
         }
-        return maxSubArrayProduct;
+        return maxProduct;
     }
 }
 
@@ -109,12 +109,12 @@ The above algorithm can also be made to handle 0 as well,by resetting the curren
 class Solution {
     public int maxProduct(int[] arr) {
         long currentProduct = 1;
-        int maximumProduct = Integer.MIN_VALUE;
+        int maxProduct = Integer.MIN_VALUE;
 
         for (int val : arr) {
             currentProduct *= val;
             if (currentProduct >= Integer.MIN_VALUE && currentProduct <= Integer.MAX_VALUE) {
-                maximumProduct = Math.max((int) currentProduct, maximumProduct);
+                maxProduct = Math.max((int) currentProduct, maxProduct);
             }
             /*
              * if currentProduct is 0 implies that current element was 0 so reset the
@@ -131,7 +131,7 @@ class Solution {
             currentProduct *= arr[i];
 
             if (currentProduct >= Integer.MIN_VALUE && currentProduct <= Integer.MAX_VALUE) {
-                maximumProduct = Math.max((int) currentProduct, maximumProduct);
+                maxProduct = Math.max((int) currentProduct, maxProduct);
             }
 
             /*
@@ -143,7 +143,7 @@ class Solution {
             }
         }
 
-        return maximumProduct;
+        return maxProduct;
     }
 }
 
@@ -153,7 +153,7 @@ class Solution {
 class Solution {
     public int maxProduct(int[] arr) {
         long prefixProduct = 1, suffixProduct = 1;
-        int maxProductSubArray = Integer.MIN_VALUE;
+        int maxProduct = Integer.MIN_VALUE;
 
         for (int i = 0; i < arr.length; i++) {
             if (prefixProduct == 0) {
@@ -168,10 +168,10 @@ class Solution {
 
             if (prefixProduct >= Integer.MIN_VALUE && prefixProduct <= Integer.MAX_VALUE
                     && suffixProduct >= Integer.MIN_VALUE && suffixProduct <= Integer.MAX_VALUE) {
-                maxProductSubArray = Math.max(maxProductSubArray, Math.max((int) prefixProduct, (int) suffixProduct));
+                maxProduct = Math.max(maxProduct, Math.max((int) prefixProduct, (int) suffixProduct));
             }
         }
 
-        return maxProductSubArray;
+        return maxProduct;
     }
 }
