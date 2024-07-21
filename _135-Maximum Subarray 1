@@ -1,0 +1,149 @@
+//Bruteforce Approach
+
+public class Solution {
+    public static ArrayList<Integer> maximumsumSubarray(int n, int arr[]) {
+        int maxSum = findMaximumSubarraySum(arr);
+
+        ArrayList<Integer> maxSumSubArray = new ArrayList<>();
+        List<Integer> currentSubArray = new ArrayList<>();
+
+        for (int start = 0; start < arr.length; start++) {
+            for (int end = start; end < arr.length; end++) {
+                int currentSubArraySum = 0;
+                if (!currentSubArray.isEmpty()) {
+                    currentSubArray.clear();
+                }
+                for (int range = start; range <= end; range++) {
+                    currentSubArraySum += arr[range];
+                    currentSubArray.add(arr[range]);
+                }
+
+                if (currentSubArraySum == maxSum) {
+                    if (maxSumSubArray.isEmpty() || currentSubArray.size() > maxSumSubArray.size()) {
+                        if (!maxSumSubArray.isEmpty()) {
+                            maxSumSubArray.clear();
+                        }
+                        maxSumSubArray.addAll(currentSubArray);
+                    }
+                }
+            }
+        }
+
+        return maxSumSubArray;
+    }
+
+    private static int findMaximumSubarraySum(int[] arr) {
+        int maxSum = Integer.MIN_VALUE, currentSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            currentSum += arr[i];
+            maxSum = Math.max(currentSum, maxSum);
+
+            if (currentSum < 0) {
+                currentSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
+}
+
+
+//Better Approach
+
+public class Solution {
+    public static ArrayList<Integer> maximumsumSubarray(int n, int arr[]) {
+        int maxSum = findMaximumSubarraySum(arr);
+
+        ArrayList<Integer> maxSumSubArray = new ArrayList<>();
+        List<Integer> currentSubArray = new ArrayList<>();
+        int currentSubArraySum = 0;
+
+        for (int start = 0; start < arr.length; start++) {
+            if (!currentSubArray.isEmpty()) {
+                currentSubArray.clear();
+            }
+            currentSubArraySum = 0;
+            for (int end = start; end < arr.length; end++) {
+                currentSubArraySum += arr[end];
+                currentSubArray.add(arr[end]);
+
+                if (currentSubArraySum == maxSum) {
+                    if (maxSumSubArray.isEmpty() || currentSubArray.size() > maxSumSubArray.size()) {
+                        if (!maxSumSubArray.isEmpty()) {
+                            maxSumSubArray.clear();
+                        }
+                        maxSumSubArray.addAll(currentSubArray);
+                    }
+                }
+            }
+        }
+
+        return maxSumSubArray;
+    }
+
+    private static int findMaximumSubarraySum(int[] arr) {
+        int maxSum = Integer.MIN_VALUE, currentSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            currentSum += arr[i];
+            maxSum = Math.max(currentSum, maxSum);
+
+            if (currentSum < 0) {
+                currentSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
+}
+
+
+
+//Optimal Approach
+
+public class Solution {
+    public static ArrayList<Integer> maximumsumSubarray(int n, int arr[]) {
+        int maxSum = findMaximumSubarraySum(arr);
+
+        int currentSum = 0;
+        List<Integer> currentSubArray = new ArrayList<>();
+        ArrayList<Integer> maxSumSubArray = new ArrayList<>();
+
+        for (int i = 0; i < arr.length; i++) {
+            currentSum += arr[i];
+            currentSubArray.add(arr[i]);
+
+            if (currentSum == maxSum) {
+                if (maxSumSubArray.isEmpty() || currentSubArray.size() > maxSumSubArray.size()) {
+                    if (!maxSumSubArray.isEmpty()) {
+                        maxSumSubArray.clear();
+                    }
+                    maxSumSubArray.addAll(currentSubArray);
+                }
+            }
+
+            if (currentSum < 0) {
+                currentSum = 0;
+                currentSubArray.clear();
+            }
+        }
+
+        return maxSumSubArray;
+    }
+
+    private static int findMaximumSubarraySum(int[] arr) {
+        int maxSum = Integer.MIN_VALUE, currentSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            currentSum += arr[i];
+            maxSum = Math.max(currentSum, maxSum);
+
+            if (currentSum < 0) {
+                currentSum = 0;
+            }
+        }
+
+        return maxSum;
+    }
+}
