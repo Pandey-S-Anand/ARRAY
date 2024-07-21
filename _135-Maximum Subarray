@@ -8,15 +8,14 @@ class Solution {
                 int subArraySum = 0;
                 for (int range = start; range <= end; range++) {
                     subArraySum += arr[range];
-                    maxSumSubArray = Math.max(maxSumSubArray, subArraySum);
                 }
+                maxSumSubArray = Math.max(maxSumSubArray, subArraySum);
             }
         }
 
         return maxSumSubArray;
     }
 }
-
 
 
 //Better Approach
