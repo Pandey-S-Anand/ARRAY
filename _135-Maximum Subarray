@@ -2,18 +2,18 @@
 
 class Solution {
     public int maxSubArray(int[] arr) {
-        int maxSumSubArray = Integer.MIN_VALUE;
+        int maxSum = Integer.MIN_VALUE;
         for (int start = 0; start < arr.length; start++) {
             for (int end = start; end < arr.length; end++) {
                 int subArraySum = 0;
                 for (int range = start; range <= end; range++) {
                     subArraySum += arr[range];
                 }
-                maxSumSubArray = Math.max(maxSumSubArray, subArraySum);
+                maxSum = Math.max(maxSum, subArraySum);
             }
         }
 
-        return maxSumSubArray;
+        return maxSum;
     }
 }
 
@@ -22,16 +22,16 @@ class Solution {
 
 class Solution {
     public int maxSubArray(int[] arr) {
-        int maxSumSubArray = Integer.MIN_VALUE;
+        int maxSum = Integer.MIN_VALUE;
         for (int start = 0; start < arr.length; start++) {
             int subArraySum = 0;
             for (int end = start; end < arr.length; end++) {
                 subArraySum += arr[end];
-                maxSumSubArray = Math.max(maxSumSubArray, subArraySum);
+                maxSum = Math.max(maxSum, subArraySum);
             }
         }
 
-        return maxSumSubArray;
+        return maxSum;
     }
 }
 
@@ -40,16 +40,16 @@ class Solution {
 
 class Solution {
     public int maxSubArray(int[] arr) {
-        int currentSum = 0, maximumSum = Integer.MIN_VALUE;
+        int currentSum = 0, maxSum = Integer.MIN_VALUE;
         for (int val : arr) {
             currentSum += val;
-            maximumSum = Math.max(currentSum, maximumSum);
+            maxSum = Math.max(currentSum, maxSum);
 
             if (currentSum < 0) {
                 currentSum = 0;
             }
         }
 
-        return maximumSum;
+        return maxSum;
     }
 }
