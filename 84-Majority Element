@@ -25,6 +25,7 @@ class Solution {
 class Solution {
     public int majorityElement(int[] arr) {
         Arrays.sort(arr);
+        //Since the array is guaranteed to contain the majority element, so it will definitely occupy the middle index i.e N / 2.
         return arr[arr.length / 2];
     }
 }
