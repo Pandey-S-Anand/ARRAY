@@ -47,7 +47,7 @@ class Solution {
 
         for (int i = index; i < arr.length; i++) {
             swap(arr, index, i);
-            findAllPermutation(arr, index + 1, permutations);
+            findPermutations(arr, index + 1, permutations);
             swap(arr, index, i);
         }
     }
