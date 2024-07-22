@@ -68,7 +68,7 @@ class Solution {
         return Math.max(Math.max(maxSubarraySumInLeft, maxSubarraySumInRight), overlappingMaxSubarraySum);
     }
 
-    private static int findOverlappingMaxSubarraySum(int[] arr, int low, int mid, int high) {
+    private int findOverlappingMaxSubarraySum(int[] arr, int low, int mid, int high) {
         int leftMaxSum = Integer.MIN_VALUE, rightMaxSum = Integer.MIN_VALUE, sum = 0;
 
         // Find max subarray sum that ends in the left half starting from 'mid'
