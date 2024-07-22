@@ -18,7 +18,7 @@ class Solution {
 }
 
 
-//Better Approach
+//Good Approach
 
 class Solution {
     public int maxSubArray(int[] arr) {
@@ -32,6 +32,65 @@ class Solution {
         }
 
         return maxSum;
+    }
+}
+
+
+//Better Approach
+/*
+There are 3 possible cases :
+1 : Maximum sum subarray will lie in left half.
+2:  Maximum sum subarray will lie in right half.
+3:  Maximum sum subarray will span across both the halves.
+*/
+
+class Solution {
+    public int maxSubArray(int[] arr) {
+        return findMaxSubarraySum(arr, 0, arr.length - 1);
+    }
+
+    private int findMaxSubarraySum(int[] arr, int low, int high) {
+        // Base case: only one element
+        if (low == high) {
+            return arr[low];
+        }
+
+        int mid = low + (high - low) / 2;
+
+        // Recursively find max subarray sum in left and right halves
+        int maxSubarraySumInLeft = findMaxSubarraySum(arr, low, mid);
+        int maxSubarraySumInRight = findMaxSubarraySum(arr, mid + 1, high);
+
+        // Find overlapping max subarray sum
+        int overlappingMaxSubarraySum = findOverlappingMaxSubarraySum(arr, low, mid, high);
+
+        // Return the maximum of the three values
+        return Math.max(Math.max(maxSubarraySumInLeft, maxSubarraySumInRight), overlappingMaxSubarraySum);
+    }
+
+    private static int findOverlappingMaxSubarraySum(int[] arr, int low, int mid, int high) {
+        int leftMaxSum = Integer.MIN_VALUE, rightMaxSum = Integer.MIN_VALUE, sum = 0;
+
+        // Find max subarray sum that ends in the left half starting from 'mid'
+        for (int i = mid; i >= low; i--) {
+            sum += arr[i];
+            if (sum > leftMaxSum) {
+                leftMaxSum = sum;
+            }
+        }
+
+        sum = 0;
+
+        // Find max subarray sum that start from 'mid'+1 and ends in right half
+        for (int i = mid + 1; i <= high; i++) {
+            sum += arr[i];
+            if (sum > rightMaxSum) {
+                rightMaxSum = sum;
+            }
+        }
+
+        // Return the sum of both halves (overlapping max subarray sum)
+        return leftMaxSum + rightMaxSum;
     }
 }
 
