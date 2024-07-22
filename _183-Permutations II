@@ -177,6 +177,14 @@ class Solution {
 
 //Optimal Approach
 
+/*
+Purpose of sorting :
+Sorting is used to bring duplicate elements together, so adjacent duplicates can be easily identified and skipped during permutation generation.
+
+Why sorting and then skipping won't work here ?
+
+Because we are manipulating the input array itself to form the permutation which involves swapping. If you sort the array and then swap elements, the order of elements is modified,the array is no longer in its sorted order, which invalidates the duplicate-checking logic (arr[i] == arr[i - 1]) that assumes adjacent duplicates.
+*/
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
         List<List<Integer>> uniquePermutations = new ArrayList<>();
