@@ -1,0 +1,60 @@
+// Method 1
+
+class Solution {
+    public List<List<Integer>> permute(int[] arr) {
+        List<List<Integer>> permutations = new ArrayList<>();
+        findPermutations(arr, new ArrayList<>(), permutations, new boolean[arr.length]);
+        return permutations;
+    }
+
+    private void findPermutations(int[] arr, List<Integer> permutation, List<List<Integer>> permutations,boolean[] visited) {
+        if (permutation.size() == arr.length) {
+            permutations.add(new ArrayList<>(permutation));
+            return;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                permutation.add(arr[i]);
+                findPermutations(arr, permutation, permutations, visited);
+                permutation.remove(permutation.size() - 1);
+                visited[i] = false;
+            }
+        }
+    }
+}
+
+
+//Method 2
+
+class Solution {
+    public List<List<Integer>> permute(int[] arr) {
+        List<List<Integer>> permutations = new ArrayList<>();
+        findPermutations(arr, 0, permutations);
+        return permutations;
+    }
+
+    private void findPermutations(int[] arr, int index, List<List<Integer>> permutations) {
+        if (index == arr.length) {
+            List<Integer> permutation = new ArrayList<>();
+            for (int num : arr) {
+                permutation.add(num);
+            }
+            permutations.add(permutation);
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            swap(arr, index, i);
+            findAllPermutation(arr, index + 1, permutations);
+            swap(arr, index, i);
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
