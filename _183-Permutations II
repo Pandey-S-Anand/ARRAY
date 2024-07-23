@@ -1,4 +1,4 @@
-//Bruteforce Approach
+//Method 1
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -28,7 +28,7 @@ class Solution {
 }
 
 
-//Improved Approach 
+//Method 2
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -56,7 +56,7 @@ class Solution {
 }
 
 
-//Good Approach
+//Method 3
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -101,7 +101,42 @@ class Solution {
 }
 
 
-//Better Approach
+//Method 4
+
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] arr) {
+        List<List<Integer>> uniquePermutations = new ArrayList<>();
+        findUniquePermutations(arr, new ArrayList<>(), uniquePermutations, new boolean[arr.length]);
+        return uniquePermutations;
+    }
+
+    private void findUniquePermutations(int[] arr, List<Integer> permutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
+        if (permutation.size() == arr.length) {
+            uniquePermutations.add(new ArrayList<>(permutation));
+            return;
+        }
+        // To keep track of elements used at the current level of recursion
+        Set<Integer> used = new HashSet<>();
+
+        for (int i = 0; i < arr.length; i++) {
+            if (used.contains(arr[i])) {
+                continue;  // Skip duplicates
+            }
+
+            if (!visited[i]) {
+                used.add(arr[i]);
+                visited[i] = true;
+                permutation.add(arr[i]);
+                findUniquePermutations(arr, permutation, uniquePermutations, visited);
+                permutation.remove(permutation.size() - 1);
+                visited[i] = false;
+            }
+        }
+    }
+}
+
+
+// Method 5
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -140,7 +175,7 @@ class Solution {
 
 
 
-//Further Optimised Approach
+//Method 6
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -175,7 +210,7 @@ class Solution {
 
 
 
-//Optimal Approach
+//Method 7
 
 /*
 Purpose of sorting :
@@ -185,6 +220,7 @@ Why sorting and then skipping won't work here ?
 
 Because we are manipulating the input array itself to form the permutation which involves swapping. If you sort the array and then swap elements, the order of elements is modified,the array is no longer in its sorted order, which invalidates the duplicate-checking logic (arr[i] == arr[i - 1]) that assumes adjacent duplicates.
 */
+
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
         List<List<Integer>> uniquePermutations = new ArrayList<>();
@@ -201,11 +237,16 @@ class Solution {
             uniquePermutations.add(permutation);
             return;
         }
+        
+        // To keep track of elements used at the current level of recursion
+        Set<Integer> used = new HashSet<>();
 
         for (int i = index; i < arr.length; i++) {
-            if (shouldSkip(arr, index, i)) {
+            if (used.contains(arr[i])) {
                 continue; // Skip duplicates
             }
+
+            used.add(arr[i]);
             swap(arr, index, i);
             findUniquePermutations(arr, index + 1, uniquePermutations);
             swap(arr, index, i);
@@ -217,13 +258,5 @@ class Solution {
         arr[i] = arr[j];
         arr[j] = temp;
     }
-
-    private boolean shouldSkip(int[] arr, int startIndex, int currentIndex) {
-        for (int i = startIndex; i < currentIndex; i++) {
-            if (arr[i] == arr[currentIndex]) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
+
