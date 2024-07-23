@@ -205,36 +205,33 @@ class Solution {
 
 class Solution {
     public void nextPermutation(int[] arr) {
-        int bp=-1;
-
-        for(int i=arr.length-2;i>=0;i--)
-            if(arr[i]<arr[i+1])
-            {
-                bp=i;
+        int breakPoint = -1;
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] < arr[i + 1]) {
+                breakPoint = i;
                 break;
             }
-  
-        if(bp==-1)
-          Arrays.sort(arr);
-        else
-        {
-            int idx=-1;
-            for(int i=arr.length-1;i>=(bp+1);i--)
-                if(arr[i]>arr[bp])
-                {
-                  idx=i;
-                  break;
-                }
-
-            swap(arr,bp,idx);
-            Arrays.sort(arr,bp+1,arr.length);
         }
+
+        if (breakPoint == -1) {
+            Arrays.sort(arr);
+            return;
+        }
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] > arr[breakPoint]) {
+                swap(arr, breakPoint, i);
+                break;
+            }
+        }
+
+        Arrays.sort(arr, breakPoint + 1, arr.length);
     }
-    void swap(int[] arr,int i,int j)
-    {
-        int temp=arr[i];
-        arr[i]=arr[j];
-        arr[j]=temp;
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
 
@@ -243,53 +240,43 @@ class Solution {
 
 class Solution {
     public void nextPermutation(int[] arr) {
-        int bp=-1;
-
-        for(int i=arr.length-2;i>=0;i--)
-            if(arr[i]<arr[i+1])
-            {
-                bp=i;
+        int breakPoint = -1;
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] < arr[i + 1]) {
+                breakPoint = i;
                 break;
             }
-  
-        if(bp==-1)
-          reverse(arr,0);
-        else
-        {
-            int idx=-1;
-            for(int i=arr.length-1;i>=(bp+1);i--)
-                if(arr[i]>arr[bp])
-                {
-                  idx=i;
-                  break;
-                }
+        }
 
-            swap(arr,bp,idx);
-            reverse(arr,bp+1);
+        if (breakPoint == -1) {
+            reverse(arr, 0, arr.length - 1);
+            return;
+        }
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] > arr[breakPoint]) {
+                swap(arr, breakPoint, i);
+                break;
+            }
+        }
+
+        reverse(arr, breakPoint + 1, arr.length - 1);
+    }
+
+    private void reverse(int[] arr, int start, int end) {
+        while (start < end) {
+            swap(arr, start, end);
+            start++;
+            end--;
         }
     }
 
-    
-    void swap(int[] arr,int i,int j)
-    {
-        int temp=arr[i];
-        arr[i]=arr[j];
-        arr[j]=temp;
-    }
-
-    void reverse(int[] arr,int start)
-    {
-        int i=start;
-        int j=arr.length-1;
-        while(i<j)
-        {
-          swap(arr,i,j);
-          i++;
-          j--;
-        }
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
-
 
 /*
 
@@ -379,22 +366,28 @@ Approach to solve the problem :
 
 The steps are the following:
 
-1: Find the break-point, i: Break-point means the first index i from the back of the given array where arr[i] becomes smaller than arr[i+1].
-For example, if the given array is {2,1,5,4,3,0,0}, the break-point will be index 1(0-based indexing). Here from the back of the array, index 1 is the first index where arr[1] i.e. 1 is smaller than arr[i+1] i.e. 5.
+1: Find the break-point, break-point means the first index i from the back of the given array where arr[i] becomes smaller than arr[i+1].
+For example, if the given array is {2,1,5,4,3,0,0}, the break-point will be index 1(0-based indexing), traversing from the back, index 1 is the first index where arr[1] (i.e. 1) is smaller than arr[i+1] (i.e. 5).
 
 2:
-If a break-point does not exist i.e.if the array is sorted in decreasing order, the given permutation is the last one in the sorted order of all possible permutations. So, the next permutation must be the first i.e. the permutation in increasing order.
-since the array is sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array.(Note : Reversing the array is the effecient way to sort an array in descending order into ascending order)
+If a break-point does not exist i.e.if the array is sorted in decreasing order, the given permutation is the last one in the sorted order of all possible permutations. 
+So, the next permutation will be the first permutation in the sorted order Note that first permutation in the sorted order of all possible permutations is in increasing order.
+
+Optimisation Tip:
+since the array is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array.
+(Note : Reversing the array is the effecient way to sort an array in descending order into ascending order)
 
 3:
 If a break-point exists:
 (Note: In every permutation after breakpoint(index) the sequence is sorted in descending order)
-Find the smallest number in the right half of the breakpoint(bp) (index) 
-(i.e.Right half range: (bp+1) to (n-1)) and swap it with arr[bp].
+Find the smallest number in the right half of the breakpoint which is greater than arr[breakPoint] 
+and swap it with arr[breakPoint].
 
-Now sort the right half(sequence) of the breakpoint(index) in ascending order.
-(i.e.Right half range: (bp+1) to (n-1)) 
+Note : Even after swapping the right half of the break point is still sorted in descending order because.
 
-Since the right half(sequence) of the breakpoint is already sorted in descending order so an effecient method to sort it in ascending order is to reverse the entire right half and finally, return the array.
+Now sort the right half of the breakpoint in ascending order.
+(Note: Right half range: (breakpoint+1) to (arr.length-1)) 
 
+since the right half of the breakpoint is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array and finally, return the array.
+(Note : Reversing the array is the effecient way to sort an array in descending order into ascending order)
 */
