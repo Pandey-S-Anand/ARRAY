@@ -363,7 +363,7 @@ Approach to solve the problem :
 
 The steps are the following:
 
-1: Find the break-point, break-point means the first index i from the back of the given array where arr[i] becomes smaller than arr[i+1].
+1: Find the break-point, break-point means the first index 'i' from the back of the given array where arr[i] becomes smaller than arr[i+1].
 For example, if the given array is {2,1,5,4,3,0,0}, the break-point will be index 1(0-based indexing), traversing from the back, index 1 is the first index where arr[1] (i.e. 1) is smaller than arr[i+1] (i.e. 5).
 
 2:
