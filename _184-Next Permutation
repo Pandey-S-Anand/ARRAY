@@ -80,11 +80,16 @@ class Solution {
             uniquePermutations.add(permutation);
             return;
         }
+        
+        // To keep track of elements used at the current level of recursion
+        Set<Integer> used = new HashSet<>();
 
         for (int i = index; i < arr.length; i++) {
-            if (shouldSkip(arr, index, i)) {
+            if (used.contains(arr[i])) {
                 continue; // Skip duplicates
             }
+
+            used.add(arr[i]);
             swap(arr, index, i);
             findUniquePermutations(arr, index + 1, uniquePermutations);
             swap(arr, index, i);
@@ -95,15 +100,6 @@ class Solution {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
-    }
-
-    private boolean shouldSkip(int[] arr, int startIndex, int currentIndex) {
-        for (int i = startIndex; i < currentIndex; i++) {
-            if (arr[i] == arr[currentIndex]) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private List<Integer> convertArrayToList(int[] arr) {
@@ -120,6 +116,7 @@ class Solution {
         }
     }
 }
+
 
 
 //Improved Approach
@@ -374,7 +371,7 @@ If a break-point does not exist i.e.if the array is sorted in decreasing order, 
 So, the next permutation will be the first permutation in the sorted order Note that first permutation in the sorted order of all possible permutations is in increasing order.
 
 Optimisation Tip:
-since the array is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array.
+Since the array is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array.
 (Note : Reversing the array is the effecient way to sort an array in descending order into ascending order)
 
 3:
@@ -388,6 +385,7 @@ Note : Even after swapping the right half of the break point is still sorted in 
 Now sort the right half of the breakpoint in ascending order.
 (Note: Right half range: (breakpoint+1) to (arr.length-1)) 
 
-since the right half of the breakpoint is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array and finally, return the array.
+Optimisation Tip:
+Since the right half of the breakpoint is already sorted in descending order and an array sorted in descending order can be sorted into ascending order either by using Arrays.sort() or by reversing the array and finally, return the array.
 (Note : Reversing the array is the effecient way to sort an array in descending order into ascending order)
 */
