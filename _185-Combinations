@@ -1,0 +1,6 @@
+/*
+If given an array of size 'n' and a value 'k', and asked to find all possible combinations of size 
+'k', we need to determine all possible ways to choose 'k' elements from the 'n' elements. Here, the order does not matter. 
+Thus, if two containers contain the same elements in different orders, they form only one combination.
+*/
+
