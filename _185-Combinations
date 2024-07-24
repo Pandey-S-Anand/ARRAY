@@ -4,6 +4,205 @@ If given an array of size 'n' and a value 'k', and asked to find all possible co
 Thus, if two containers contain the same elements in different orders, they form only one combination.
 */
 
+//Iterative Approach
+
+//Method 1
+
+//Naive Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        return generateSizeKSubsets(arr, k);
+    }
+
+    public List<List<Integer>> generateSizeKSubsets(int[] arr, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        List<List<Integer>> subsets = new ArrayList<>();
+        subsets.add(new ArrayList<>());
+        
+        for (int val : arr) {
+            int size = subsets.size();
+            for (int i = 0; i < size; i++) {
+                List<Integer> subset = new ArrayList<>(subsets.get(i));
+                subset.add(val);
+                subsets.add(subset);
+                if (subset.size() == k) {
+                    sizeKSubsets.add(subset);
+                }
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        return generateSizeKSubsets(n, k);
+    }
+
+    private List<List<Integer>> generateSizeKSubsets(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        List<List<Integer>> subsets = new ArrayList<>();
+        subsets.add(new ArrayList<>());
+
+        for (int num = 1; num <= n; num++) {
+            int size = subsets.size();
+            for (int i = 0; i < size; i++) {
+                List<Integer> subset = new ArrayList<>(subsets.get(i));
+                subset.add(num);
+                subsets.add(subset);
+                if (subset.size() == k) {
+                    sizeKSubsets.add(subset);
+                }
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Method 2
+
+//Naive Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        return generateSizeKSubsets(arr, k);
+    }
+
+    private List<List<Integer>> generateSizeKSubsets(int[] arr, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        List<List<Integer>> subsets = new ArrayList<>();
+        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+
+        for (int num = 0; num < totalSubsets; num++) {
+            List<Integer> subset = new ArrayList<>();
+            for (int i = 0; i < arr.length; i++) {
+                if ((num & (1 << i)) != 0) {
+                    subset.add(arr[i]);
+                }
+            }
+            subsets.add(subset);
+            if (subset.size() == k) {
+                sizeKSubsets.add(subset);
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        return generateSizeKSubsets(n, k);
+    }
+
+    private List<List<Integer>> generateSizeKSubsets(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        List<List<Integer>> subsets = new ArrayList<>();
+        int totalSubsets = 1 << n; // x << y = x * 2^n
+
+        for (int num = 0; num < totalSubsets; num++) {
+            List<Integer> subset = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                if ((num & (1 << i)) != 0) {
+                    subset.add(i + 1);
+                }
+            }
+            subsets.add(subset);
+            if (subset.size() == k) {
+                sizeKSubsets.add(subset);
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Method 3
+
+//Naive Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        return generateSizeKSubsets(arr, k);
+    }
+
+    private List<List<Integer>> generateSizeKSubsets(int[] arr, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+
+        for (int num = 0; num < totalSubsets; num++) {
+            if (Integer.bitCount(num) == k) {
+                List<Integer> subset = new ArrayList<>();
+                for (int i = 0; i < arr.length; i++) {
+                    if ((num & (1 << i)) != 0) {
+                        subset.add(arr[i]);
+                    }
+                }
+                sizeKSubsets.add(subset);
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        return generateSizeKSubsets(n, k);
+    }
+
+    private List<List<Integer>> generateSizeKSubsets(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        int totalSubsets = 1 << n; // x << y = x * 2^n
+
+        for (int num = 0; num < totalSubsets; num++) {
+            if (Integer.bitCount(num) == k) {
+                List<Integer> subset = new ArrayList<>();
+                for (int i = 0; i < n; i++) {
+                    if ((num & (1 << i)) != 0) {
+                        subset.add(i + 1);
+                    }
+                }
+                sizeKSubsets.add(subset);
+            }
+        }
+
+        return sizeKSubsets;
+    }
+}
+
+
+//Recursive Approach
+
+//Method 1
+
+//Naive Implementation
 
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
@@ -12,14 +211,71 @@ class Solution {
         for (int i = 0; i < n; i++) {
             arr[i] = i + 1;
         }
-        generateSubsets(arr, 0,new ArrayList<>(), sizeKSubsets, k);
+        generateSubsetsOfSizeK(arr, 0, new ArrayList<>(), sizeKSubsets, k);
         return sizeKSubsets;
     }
 
-    private void generateSubsets(int[] arr, int index, List<Integer>sizeKSubset, List<List<Integer>> sizeKSubsets, int k) {
-        // Add combination to the list if it has k elements
-        if (sizeKSubset.size() == k) {
-            sizeKSubsets.add(new ArrayList<>(sizeKSubset));
+    private void generateSubsetsOfSizeK(int[] arr, int index, List<Integer> subset, List<List<Integer>> sizeKSubsets, int k) {
+        if (index == arr.length) {
+            if (subset.size() == k) {
+                sizeKSubsets.add(new ArrayList<>(subset));
+            }
+            return;
+        }
+
+        subset.add(arr[index]);
+        generateSubsetsOfSizeK(arr, index + 1, subset, sizeKSubsets, k);
+
+        subset.remove(subset.size() - 1);
+        generateSubsetsOfSizeK(arr, index + 1, subset, sizeKSubsets, k);
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        generateSubsetsOfSizeK(n, 1, new ArrayList<>(), sizeKSubsets, k);
+        return sizeKSubsets;
+    }
+
+    private void generateSubsetsOfSizeK(int num, int currentNumber, List<Integer> subset, List<List<Integer>> sizeKSubsets, int k) {
+        if (currentNumber > num) {
+            if (subset.size() == k) {
+                sizeKSubsets.add(new ArrayList<>(subset));
+            }
+            return;
+        }
+
+        subset.add(currentNumber);
+        generateSubsetsOfSizeK(num, currentNumber + 1, subset, sizeKSubsets, k);
+
+        subset.remove(subset.size() - 1);
+        generateSubsetsOfSizeK(num, currentNumber + 1, subset, sizeKSubsets, k);
+    }
+}
+
+
+//Method 2
+
+//Naive Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        generateSubsetsOfSizeK(arr, 0, new ArrayList<>(), sizeKSubsets, k);
+        return sizeKSubsets;
+    }
+
+    private void generateSubsetsOfSizeK(int[] arr, int index, List<Integer> subset, List<List<Integer>> sizeKSubsets, int k) {
+        if (subset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(subset));
             return;
         }
 
@@ -27,12 +283,39 @@ class Solution {
             return;
         }
 
-        // Include the current element in the combination
-        sizeKSubset.add(arr[index]);
-        generateSubsets(arr, index + 1, sizeKSubset, sizeKSubsets, k);
+        subset.add(arr[index]);
+        generateSubsetsOfSizeK(arr, index + 1, subset, sizeKSubsets, k);
 
-        // Exclude the current element from the combination
-        sizeKSubset.remove(sizeKSubset.size() - 1);
-        generateSubsets(arr, index + 1, sizeKSubset, sizeKSubsets, k);
+        subset.remove(subset.size() - 1);
+        generateSubsetsOfSizeK(arr, index + 1, subset, sizeKSubsets, k);
+    }
+}
+
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        generateSubsetsOfSizeK(n, 1, new ArrayList<>(), sizeKSubsets, k);
+        return sizeKSubsets;
+    }
+
+    private void generateSubsetsOfSizeK(int n, int currentNumber, List<Integer> subset, List<List<Integer>> sizeKSubsets, int k) {
+        if (subset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(subset));
+            return;
+        }
+
+        if (currentNumber > n) {
+            return;
+        }
+
+        subset.add(currentNumber);
+        generateSubsetsOfSizeK(n, currentNumber + 1, subset, sizeKSubsets, k);
+
+        subset.remove(subset.size() - 1);
+        generateSubsetsOfSizeK(n, currentNumber + 1, subset, sizeKSubsets, k);
     }
 }
