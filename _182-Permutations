@@ -1,3 +1,9 @@
+/*
+ If given an array of size 'n' and asked to find all its permutations, we need to determine all possible ways of arranging the 
+'n' elements in the array. Here, the order matters. Thus, if two containers contain the same elements in different orders, 
+they form two distinct permutations.
+*/
+
 // Method 1
 
 class Solution {
