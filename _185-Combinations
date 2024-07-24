@@ -4,3 +4,35 @@ If given an array of size 'n' and a value 'k', and asked to find all possible co
 Thus, if two containers contain the same elements in different orders, they form only one combination.
 */
 
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = i + 1;
+        }
+        generateSubsets(arr, 0,new ArrayList<>(), sizeKSubsets, k);
+        return sizeKSubsets;
+    }
+
+    private void generateSubsets(int[] arr, int index, List<Integer>sizeKSubset, List<List<Integer>> sizeKSubsets, int k) {
+        // Add combination to the list if it has k elements
+        if (sizeKSubset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(sizeKSubset));
+            return;
+        }
+
+        if (index == arr.length) {
+            return;
+        }
+
+        // Include the current element in the combination
+        sizeKSubset.add(arr[index]);
+        generateSubsets(arr, index + 1, sizeKSubset, sizeKSubsets, k);
+
+        // Exclude the current element from the combination
+        sizeKSubset.remove(sizeKSubset.size() - 1);
+        generateSubsets(arr, index + 1, sizeKSubset, sizeKSubsets, k);
+    }
+}
