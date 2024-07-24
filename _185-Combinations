@@ -293,7 +293,7 @@ class Solution {
 
 
 
-//Optimal Implementation
+//Better Implementation
 
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
@@ -309,6 +309,36 @@ class Solution {
         }
 
         if (currentNumber > n) {
+            return;
+        }
+
+        subset.add(currentNumber);
+        generateSubsetsOfSizeK(n, currentNumber + 1, subset, sizeKSubsets, k);
+
+        subset.remove(subset.size() - 1);
+        generateSubsetsOfSizeK(n, currentNumber + 1, subset, sizeKSubsets, k);
+    }
+}
+
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        generateSubsetsOfSizeK(n, 1, new ArrayList<>(), sizeKSubsets, k);
+        return sizeKSubsets;
+    }
+
+    private void generateSubsetsOfSizeK(int n, int currentNumber, List<Integer> subset, List<List<Integer>> sizeKSubsets, int k) {
+        if (subset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(subset));
+            return;
+        }
+
+        // Early termination condition: if not enough elements are left to complete the subset of size 'k'
+        if (subset.size() + (n - currentNumber + 1) < k) {
             return;
         }
 
