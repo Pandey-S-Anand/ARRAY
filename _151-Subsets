@@ -93,17 +93,17 @@ class Solution {
         for (int val : arr) {
             int size = subsets.size();
             for (int i = 0; i < size; i++) {
-                // Create a new subset from the existing subsets by adding the current number to
-                // it
-                List<Integer> subset = new ArrayList<>(subsets.get(i));
-                subset.add(val);
-                subsets.add(subset);
+                // Create a new subset from the existing subsets by adding the current number to it
+                List<Integer> currentSubset = new ArrayList<>(subsets.get(i));
+                currentSubset.add(val);
+                subsets.add(currentSubset);
             }
         }
 
         return subsets;
     }
 }
+
 
 // Method 2 : Bit Manipulation
 
@@ -154,13 +154,13 @@ class Solution {
 class Solution {
     public List<List<Integer>> subsets(int[] arr) {
         List<List<Integer>> subsets = new ArrayList<>();
+        List<Integer> currentSubset = new ArrayList<>();
 
         // Total number of subsets is 2^n
         int totalSubsets = 1 << arr.length; // x << y = x * 2^n
 
         // Generate all subsets
         for (int num = 0; num < totalSubsets; num++) {
-            List<Integer> subset = new ArrayList<>();
             String binaryWithoutLeadingZeroes = Integer.toBinaryString(num);// to get binary representation without leading zeroes
             /*
              * Check each bit in binary representation of number(starting from right to
@@ -170,36 +170,40 @@ class Solution {
             int length = binaryWithoutLeadingZeroes.length();
             for (int i = length - 1; i >= 0; i--) {
                 if (binaryWithoutLeadingZeroes.charAt(i) == '1') {
-                    subset.add(arr[length - i - 1]);
+                    currentSubset.add(arr[length - i - 1]);
                 }
             }
-            subsets.add(subset);
+            subsets.add(new ArrayList<>(currentSubset));
+            currentSubset.clear();
         }
 
         return subsets;
     }
 }
+
 
 // Optimal Implementation
 
 class Solution {
     public List<List<Integer>> subsets(int[] arr) {
         List<List<Integer>> subsets = new ArrayList<>();
+        List<Integer> currentSubset = new ArrayList<>();
         int totalSubsets = 1 << arr.length; // x << y = x * 2^n
 
         for (int num = 0; num < totalSubsets; num++) {
-            List<Integer> subset = new ArrayList<>();
             for (int i = 0; i < arr.length; i++) {
                 if ((num & (1 << i)) != 0) {
-                    subset.add(arr[i]);
+                    currentSubset.add(arr[i]);
                 }
             }
-            subsets.add(subset);
+            subsets.add(new ArrayList<>(currentSubset));
+            currentSubset.clear();
         }
 
         return subsets;
     }
 }
+
 
 // Using Backtracking
 /*
@@ -274,34 +278,32 @@ Ex : arr[]={1, 2, 3, 4}
 class Solution {
     public List<List<Integer>> subsets(int[] arr) {
         List<List<Integer>> subsets = new ArrayList<>();
-        List<Integer> subset = new ArrayList<>();
-
-        subset(arr, 0, subset, subsets);
+        generateSubsets(arr, 0, new ArrayList<>(), subsets);
         return subsets;
     }
 
-    private void subset(int[] arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
+    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> subsets) {
         /*
          * When index equals arr.length, it means we have processed all elements of the
          * array for the current subset. Thus, we add the current subset to subsets.
          */
         if (index == arr.length) {
-            subsets.add(new ArrayList<>(subset)); // Adds a copy of subset (to prevent reference issues) to subsets.
-        } else {
-            // current element (arr[index]) is added to the subset
-            subset.add(arr[index]);
-            // explore the path where the current element is included
-            subset(arr, index + 1, subset, subsets);
-            /*
-             * Backtracking :After exploring the path where the current element is included,
-             * the element is removed from the subset. It reverts the state of subset to
-             * what it was before the current element was added, allowing the exploration
-             * of the path where the current element is excluded.
-             */
-            subset.remove(subset.size() - 1);
-            // explore the path where the current element is excluded
-            subset(arr, index + 1, subset, subsets);
+            subsets.add(new ArrayList<>(currentSubset)); // Adds a copy of subset (to prevent reference issues) to subsets.
+            return;
         }
+        // current element (arr[index]) is added to the subset
+        currentSubset.add(arr[index]);
+        // explore the path where the current element is included
+        generateSubsets(arr, index + 1, currentSubset, subsets);
+        /*
+         * Backtracking :After exploring the path where the current element is included,
+         * the element is removed from the subset. It reverts the state of subset to
+         * what it was before the current element was added, allowing the exploration
+         * of the path where the current element is excluded.
+         */
+        currentSubset.remove(currentSubset.size() - 1);
+        // explore the path where the current element is excluded
+        generateSubsets(arr, index + 1, currentSubset, subsets);
     }
 }
 
@@ -310,33 +312,31 @@ class Solution {
 class Solution {
     public List<List<Integer>> subsets(int[] arr) {
         List<List<Integer>> subsets = new ArrayList<>();
-        List<Integer> subset = new ArrayList<>();
-
-        subset(arr, 0, subset, subsets);
+        generateSubsets(arr, 0, new ArrayList<>(), subsets);
         return subsets;
     }
 
-    private void subset(int[] arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
+    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> subsets) {
         /*
          * When index equals arr.length, it means we have processed all elements of the
          * array for the current subset. Thus, we add the current subset to subsets.
          */
         if (index == arr.length) {
-            subsets.add(new ArrayList<>(subset)); // Adds a copy of subset (to prevent reference issues) to subsets.
-        } else {
-            // explore the path where the current element is excluded
-            subset(arr, index + 1, subset, subsets);
-            // current element (arr[index]) is added to the subset
-            subset.add(arr[index]);
-            // explore the path where the current element is included
-            subset(arr, index + 1, subset, subsets);
-            /*
-             * Backtracking :After exploring the path where the current element is included,
-             * the element is removed from the subset. It reverts the state of subset to
-             * what it was before the current element was added
-             */
-            subset.remove(subset.size() - 1);
+            subsets.add(new ArrayList<>(currentSubset)); // Adds a copy of subset (to prevent reference issues) to subsets.
+            return;
         }
+        // explore the path where the current element is excluded
+        generateSubsets(arr, index + 1, currentSubset, subsets);
+        // current element (arr[index]) is added to the subset
+        currentSubset.add(arr[index]);
+        // explore the path where the current element is included
+        generateSubsets(arr, index + 1, currentSubset, subsets);
+        /*
+         * Backtracking :After exploring the path where the current element is included,
+         * the element is removed from the subset. It reverts the state of subset to
+         * what it was before the current element was added
+         */
+        currentSubset.remove(currentSubset.size() - 1);
     }
 }
 
@@ -351,14 +351,13 @@ class Solution {
        return subsets;
     }
 
-    private void generateSubsets(int[] arr, int index, List<Integer> subset, List<List<Integer>> subsets) {
-        subsets.add(new ArrayList<>(subset));
+    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> subsets) {
+        subsets.add(new ArrayList<>(currentSubset));
 
         for (int i = index; i < arr.length; i++) {
-            subset.add(arr[i]);
-            generateSubsets(arr, i + 1, subset, subsets);
-            subset.remove(subset.size() - 1);
+            currentSubset.add(arr[i]);
+            generateSubsets(arr, i + 1, currentSubset, subsets);
+            currentSubset.remove(currentSubset.size() - 1);
         }
     }
 }
-
