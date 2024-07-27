@@ -21,8 +21,8 @@ class Solution {
             return;
         }
         /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
+         * Early Termination (target < 0): Since the array contains only positive integers, once the target 
+         * becomes negative during the recursive exploration, it will always remain negative for
          * that path. Hence, further exploration of that path won't yield a valid
          * combination.
          */
@@ -54,12 +54,7 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(targetSumSubset));
             return;
         }
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -92,12 +87,7 @@ class Solution {
             }
             return;
         }
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+        
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -126,12 +116,7 @@ class Solution {
            targetSumUniqueSubsets.add(new ArrayList<>(targetSumSubset));
            return;
         }
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -164,12 +149,7 @@ class Solution {
             }
             return;
         }
-         /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0) {
             return;
         }
@@ -198,12 +178,7 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0) {
             return;
         }
@@ -234,12 +209,7 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0) {
             return;
         }
@@ -276,12 +246,7 @@ class Solution {
             targetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-         /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
+
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -315,12 +280,6 @@ class Solution {
             return;
         }
 
-        /*
-         * Since the array contains only positive integers, once the target becomes
-         * negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid
-         * combination.
-         */
         if (target < 0) {
             return;
         }
