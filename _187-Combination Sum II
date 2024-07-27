@@ -20,7 +20,12 @@ class Solution {
             }
             return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -49,7 +54,12 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(targetSumSubset));
             return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -82,7 +92,12 @@ class Solution {
             }
             return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -111,7 +126,12 @@ class Solution {
            targetSumUniqueSubsets.add(new ArrayList<>(targetSumSubset));
            return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -144,7 +164,12 @@ class Solution {
             }
             return;
         }
-
+         /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0) {
             return;
         }
@@ -173,7 +198,12 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0) {
             return;
         }
@@ -204,7 +234,12 @@ class Solution {
             targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0) {
             return;
         }
@@ -226,7 +261,7 @@ class Solution {
 }
 
 
-//Better Implementation
+//Good Implementation
 
 class Solution {
     public List<List<Integer>> combinationSum2(int[] arr, int target) {
@@ -241,7 +276,12 @@ class Solution {
             targetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-
+         /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
         if (target < 0 || index == arr.length) {
             return;
         }
@@ -255,6 +295,46 @@ class Solution {
         }
 
         findUniqueSubsetsWithTargetSum(arr, index + 1, target, currentSubset, targetSumSubsets);
+    }
+}
+
+
+//Better Implementation
+
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] arr, int target) {
+        Arrays.sort(arr);
+        List<List<Integer>> targetSumUniqueSubsets = new ArrayList<>();
+        findUniqueSubsetsWithTargetSum(arr, 0, target, new ArrayList<>(), targetSumUniqueSubsets);
+        return targetSumUniqueSubsets;
+    }
+
+    private void findUniqueSubsetsWithTargetSum(int[] arr, int index, int target, List<Integer> currentSubset, List<List<Integer>> targetSumUniqueSubsets) {
+        if (target == 0) {
+            targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        /*
+         * Since the array contains only positive integers, once the target becomes
+         * negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid
+         * combination.
+         */
+        if (target < 0) {
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            // Skip duplicates
+            if (i > index && arr[i] == arr[i - 1]) {
+                continue;
+            }
+
+            currentSubset.add(arr[i]);
+            findUniqueSubsetsWithTargetSum(arr, i + 1, target - arr[i], currentSubset, targetSumUniqueSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
     }
 }
 
@@ -275,14 +355,19 @@ class Solution {
             return;
         }
 
-        if (target < 0) {
-            return;
-        }
-
         for (int i = index; i < arr.length; i++) {
             // Skip duplicates
             if (i > index && arr[i] == arr[i - 1]) {
                 continue;
+            }
+
+            /*
+             * Early Termination: Since the array is sorted and contains only positive
+             * integers, if the current element is greater than the remaining target,
+             * further elements will also be greater and can be skipped.
+             */
+            if (arr[i] > target) {
+                break;
             }
 
             currentSubset.add(arr[i]);
