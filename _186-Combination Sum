@@ -1,0 +1,111 @@
+//Recursive Approach
+
+//Method 1
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        List<List<Integer>> kSumcombinations = new ArrayList<>();
+        findCombinationsWithSumk(arr, 0, target, new ArrayList<>(), kSumcombinations);
+        return kSumcombinations;
+    }
+
+    private void findCombinationsWithSumk(int[] arr, int index, int k, List<Integer> currentCombination, List<List<Integer>> kSumcombinations) {
+        if (k == 0) {
+            kSumcombinations.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        if (k < 0 || index == arr.length) {
+            return;
+        }
+
+        currentCombination.add(arr[index]);
+        findCombinationsWithSumk(arr, index, k - arr[index], currentCombination, kSumcombinations);
+        currentCombination.remove(currentCombination.size() - 1);
+        findCombinationsWithSumk(arr, index + 1, k, currentCombination, kSumcombinations);
+    }
+}
+
+//Aliter
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        List<List<Integer>> kSumcombinations = new ArrayList<>();
+        findCombinationsWithSumk(arr, 0, target, new ArrayList<>(),0, kSumcombinations);
+        return kSumcombinations;
+    }
+
+    private void findCombinationsWithSumk(int[] arr, int index, int k, List<Integer> currentCombination, int currentSum, List<List<Integer>> kSumcombinations) {
+        if (currentSum == k) {
+            kSumcombinations.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        if (currentSum > k || index == arr.length) {
+            return;
+        }
+
+        currentCombination.add(arr[index]);
+        currentSum+=arr[index];
+        findCombinationsWithSumk(arr, index, k, currentCombination,currentSum, kSumcombinations);
+        currentCombination.remove(currentCombination.size() - 1);
+        currentSum-=arr[index];
+        findCombinationsWithSumk(arr, index + 1, k, currentCombination,currentSum, kSumcombinations);
+    }
+}
+
+
+//Method 2
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        List<List<Integer>> kSumcombinations = new ArrayList<>();
+        findCombinationsWithSumk(arr, 0, target, new ArrayList<>(), kSumcombinations);
+        return kSumcombinations;
+    }
+
+    private void findCombinationsWithSumk(int[] arr, int index, int k, List<Integer> currentCombination, List<List<Integer>> kSumcombinations) {
+        if (k == 0) {
+            kSumcombinations.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        if (k < 0) {
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            currentCombination.add(arr[i]);
+            findCombinationsWithSumk(arr, i, k - arr[i], currentCombination, kSumcombinations);
+            currentCombination.remove(currentCombination.size() - 1);
+        }
+    }
+}
+
+
+//Aliter
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        List<List<Integer>> kSumcombinations = new ArrayList<>();
+        findCombinationsWithSumk(arr, 0, target, new ArrayList<>(), 0, kSumcombinations);
+        return kSumcombinations;
+    }
+
+    private void findCombinationsWithSumk(int[] arr, int index, int k, List<Integer> currentCombination, int currentSum, List<List<Integer>>kSumcombinations) {
+        if (currentSum == k) {
+            kSumcombinations.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        if (currentSum > k) {
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            currentCombination.add(arr[i]);
+            findCombinationsWithSumk(arr, i, k - arr[i], currentCombination, currentSum, kSumcombinations);
+            currentCombination.remove(currentCombination.size() - 1);
+        }
+    }
+}
