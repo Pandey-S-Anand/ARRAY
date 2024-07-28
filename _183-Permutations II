@@ -1,5 +1,7 @@
 //Method 1
 
+//Naive Implementation
+
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
         List<List<Integer>> uniquePermutations = new ArrayList<>();
@@ -7,10 +9,10 @@ class Solution {
         return uniquePermutations;
     }
 
-    private void findUniquePermutations(int[] arr, List<Integer> permutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
-        if (permutation.size() == arr.length) {
-            if(!uniquePermutations.contains(permutation)){
-                uniquePermutations.add(new ArrayList<>(permutation));
+    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
+        if (currentPermutation.size() == arr.length) {
+            if (!uniquePermutations.contains(currentPermutation)) {
+                uniquePermutations.add(new ArrayList<>(currentPermutation));
             }
             return;
         }
@@ -18,9 +20,9 @@ class Solution {
         for (int i = 0; i < arr.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                permutation.add(arr[i]);
-                findUniquePermutations(arr, permutation, uniquePermutations, visited);
-                permutation.remove(permutation.size() - 1);
+                currentPermutation.add(arr[i]);
+                findUniquePermutations(arr, currentPermutation, uniquePermutations, visited);
+                currentPermutation.remove(currentPermutation.size() - 1);
                 visited[i] = false;
             }
         }
@@ -28,7 +30,7 @@ class Solution {
 }
 
 
-//Method 2
+//Improved Implementation
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -37,18 +39,20 @@ class Solution {
         return new ArrayList<>(uniquePermutations);
     }
 
-    private void findUniquePermutations(int[] arr, List<Integer> permutation, Set<List<Integer>> uniquePermutations,boolean[] visited) {
-        if (permutation.size() == arr.length) {
-            uniquePermutations.add(new ArrayList<>(permutation));
+    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, Set<List<Integer>> uniquePermutations, boolean[] visited) {
+        if (currentPermutation.size() == arr.length) {
+            if (!uniquePermutations.contains(currentPermutation)) {
+                uniquePermutations.add(new ArrayList<>(currentPermutation));
+            }
             return;
         }
 
         for (int i = 0; i < arr.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                permutation.add(arr[i]);
-                findUniquePermutations(arr, permutation, uniquePermutations, visited);
-                permutation.remove(permutation.size() - 1);
+                currentPermutation.add(arr[i]);
+                findUniquePermutations(arr, currentPermutation, uniquePermutations, visited);
+                currentPermutation.remove(currentPermutation.size() - 1);
                 visited[i] = false;
             }
         }
@@ -56,7 +60,8 @@ class Solution {
 }
 
 
-//Method 3
+
+//Better Implementation
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -66,9 +71,9 @@ class Solution {
         return uniquePermutations;
     }
 
-    private void findUniquePermutations(int[] arr, List<Integer> permutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
-        if (permutation.size() == arr.length) {
-            uniquePermutations.add(new ArrayList<>(permutation));
+    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
+        if (currentPermutation.size() == arr.length) {
+            uniquePermutations.add(new ArrayList<>(currentPermutation));
             return;
         }
 
@@ -91,9 +96,9 @@ class Solution {
             }
             if (!visited[i]) {
                 visited[i] = true;
-                permutation.add(arr[i]);
-                findUniquePermutations(arr, permutation, uniquePermutations, visited);
-                permutation.remove(permutation.size() - 1);
+                currentPermutation.add(arr[i]);
+                findUniquePermutations(arr, currentPermutation, uniquePermutations, visited);
+                currentPermutation.remove(currentPermutation.size() - 1);
                 visited[i] = false;
             }
         }
@@ -101,7 +106,7 @@ class Solution {
 }
 
 
-//Method 4
+//Optimal Implementation
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -110,11 +115,12 @@ class Solution {
         return uniquePermutations;
     }
 
-    private void findUniquePermutations(int[] arr, List<Integer> permutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
-        if (permutation.size() == arr.length) {
-            uniquePermutations.add(new ArrayList<>(permutation));
+    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, List<List<Integer>> uniquePermutations, boolean[] visited) {
+        if (currentPermutation.size() == arr.length) {
+            uniquePermutations.add(new ArrayList<>(currentPermutation));
             return;
         }
+
         // To keep track of elements used at the current level of recursion
         Set<Integer> used = new HashSet<>();
 
@@ -126,9 +132,9 @@ class Solution {
             if (!visited[i]) {
                 used.add(arr[i]);
                 visited[i] = true;
-                permutation.add(arr[i]);
-                findUniquePermutations(arr, permutation, uniquePermutations, visited);
-                permutation.remove(permutation.size() - 1);
+                currentPermutation.add(arr[i]);
+                findUniquePermutations(arr, currentPermutation, uniquePermutations, visited);
+                currentPermutation.remove(currentPermutation.size() - 1);
                 visited[i] = false;
             }
         }
@@ -136,7 +142,9 @@ class Solution {
 }
 
 
-// Method 5
+// Method 2
+
+//Naive Implementation
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -147,13 +155,13 @@ class Solution {
 
     private void findUniquePermutations(int[] arr, int index, List<List<Integer>> uniquePermutations) {
         if (index == arr.length) {
-            List<Integer> permutation = new ArrayList<>();
+            List<Integer> currentPermutation = new ArrayList<>();
             for (int num : arr) {
-                permutation.add(num);
+                currentPermutation.add(num);
             }
 
-            if (!uniquePermutations.contains(permutation)) {
-                uniquePermutations.add(permutation);
+            if (!uniquePermutations.contains(currentPermutation)) {
+                uniquePermutations.add(currentPermutation);
             }
 
             return;
@@ -174,8 +182,7 @@ class Solution {
 }
 
 
-
-//Method 6
+//Better Implementation
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -186,11 +193,12 @@ class Solution {
 
     private void findUniquePermutations(int[] arr, int index, Set<List<Integer>> uniquePermutations) {
         if (index == arr.length) {
-            List<Integer> permutation = new ArrayList<>();
+            List<Integer> currentPermutation = new ArrayList<>();
             for (int num : arr) {
-                permutation.add(num);
+                currentPermutation.add(num);
             }
-            uniquePermutations.add(permutation);
+            uniquePermutations.add(currentPermutation);
+
             return;
         }
 
@@ -210,7 +218,7 @@ class Solution {
 
 
 
-//Method 7
+//Optimal Implementation
 
 /*
 Purpose of sorting :
@@ -230,14 +238,14 @@ class Solution {
 
     private void findUniquePermutations(int[] arr, int index, List<List<Integer>> uniquePermutations) {
         if (index == arr.length) {
-            List<Integer> permutation = new ArrayList<>();
+            List<Integer> currentPermutation = new ArrayList<>();
             for (int num : arr) {
-                permutation.add(num);
+                currentPermutation.add(num);
             }
-            uniquePermutations.add(permutation);
+            uniquePermutations.add(currentPermutation);
             return;
         }
-        
+
         // To keep track of elements used at the current level of recursion
         Set<Integer> used = new HashSet<>();
 
