@@ -936,9 +936,9 @@ class Solution {
         return sizeKTargetSumSubsets;
     }
 
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKTargetSumSubsets) {
         if (currentSubset.size() == k && target == 0) {
-            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
@@ -948,7 +948,7 @@ class Solution {
 
         for (int num = currentNumber; num <= 9; num++) {
             currentSubset.add(num);
-            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKTargetSumSubsets);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
@@ -964,9 +964,9 @@ class Solution {
         return sizeKTargetSumSubsets;
     }
 
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKTargetSumSubsets) {
         if (currentSubset.size() == k && target == 0) {
-            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
@@ -976,7 +976,7 @@ class Solution {
 
         for (int num = currentNumber; num <= 9; num++) {
             currentSubset.add(num);
-            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKTargetSumSubsets);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
@@ -992,9 +992,9 @@ class Solution {
         return sizeKTargetSumSubsets;
     }
 
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKTargetSumSubsets) {
         if (currentSubset.size() == k && target == 0) {
-            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
@@ -1007,7 +1007,7 @@ class Solution {
                 break;
             }
             currentSubset.add(num);
-            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKTargetSumSubsets);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
