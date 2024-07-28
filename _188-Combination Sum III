@@ -207,8 +207,7 @@ class Solution {
         }
 
         currentSubset.add(currentNumber);
-        generateSizeKTargetSumSubsets(currentNumber + 1, k, target - currentNumber, currentSubset,
-                sizeKTargetSumSubsets);
+        generateSizeKTargetSumSubsets(currentNumber + 1, k, target - currentNumber, currentSubset, sizeKTargetSumSubsets);
         currentSubset.remove(currentSubset.size() - 1);
         generateSizeKTargetSumSubsets(currentNumber + 1, k, target, currentSubset, sizeKTargetSumSubsets);
     }
@@ -272,3 +271,270 @@ class Solution {
 
 //Method 2
 
+//Naive Implementation
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9}, 0, new ArrayList<>(), subsets);
+        findKSizeSubsets(subsets, k);
+        findTargetSumSubsets(subsets, n);
+        return subsets;
+    }
+
+    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> subsets) {
+        subsets.add(new ArrayList<>(currentSubset));
+
+        for (int i = index; i < arr.length; i++) {
+            currentSubset.add(arr[i]);
+            generateSubsets(arr, i + 1, currentSubset, subsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+
+    private void findKSizeSubsets(List<List<Integer>> subsets, int k) {
+        Iterator<List<Integer>> iterator = subsets.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().size() != k) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void findTargetSumSubsets(List<List<Integer>> kSizeSubsets, int target) {
+        Iterator<List<Integer>> iterator = kSizeSubsets.iterator();
+
+        while (iterator.hasNext()) {
+            if (findSubsetSum(iterator.next()) != target) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
+        for (int val : subset) {
+            subsetSum += val;
+        }
+
+        return subsetSum;
+    }
+}
+
+
+//Improved Solution
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(1, new ArrayList<>(), subsets);
+        findKSizeTargetSumSubsets(subsets, k, n);
+        return subsets;
+    }
+
+    private void generateSubsets(int currentNumber, List<Integer> currentSubset, List<List<Integer>> subsets) {
+        subsets.add(new ArrayList<>(currentSubset));
+
+        for (int num = currentNumber; num <= 9; num++) {
+            currentSubset.add(num);
+            generateSubsets(num + 1, currentSubset, subsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+
+    private void findKSizeTargetSumSubsets(List<List<Integer>> subsets, int k, int target) {
+        Iterator<List<Integer>> iterator = subsets.iterator();
+        while (iterator.hasNext()) {
+            List<Integer>currentSubset=iterator.next();
+            if (currentSubset.size() != k || (currentSubset.size() == k && findSubsetSum(currentSubset) != target)){
+                iterator.remove();
+            }
+        }
+    }
+
+    private int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
+        for (int val : subset) {
+            subsetSum += val;
+        }
+
+        return subsetSum;
+    }
+}
+
+
+//Good Implemenation
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        generateSizeKSubsets(1, k, new ArrayList<>(), sizeKSubsets);
+        findTargetSumSubsets(sizeKSubsets, n);
+        return sizeKSubsets;
+    }
+
+    private void generateSizeKSubsets(int currentNumber, int k, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+        if (currentSubset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        for (int num = currentNumber; num <= 9; num++) {
+            currentSubset.add(num);
+            generateSizeKSubsets(num + 1, k, currentSubset, sizeKSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+
+    private void findTargetSumSubsets(List<List<Integer>> subsets, int target) {
+        Iterator<List<Integer>> iterator = subsets.iterator();
+        while (iterator.hasNext()) {
+            if (findSubsetSum(iterator.next()) != target) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
+        for (int val : subset) {
+            subsetSum += val;
+        }
+
+        return subsetSum;
+    }
+}
+
+
+//Better Implementation
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> sizeKSubsets = new ArrayList<>();
+        generateSizeKSubsets(1, k, new ArrayList<>(), sizeKSubsets);
+        findTargetSumSubsets(sizeKSubsets, n);
+        return sizeKSubsets;
+    }
+
+    private void generateSizeKSubsets(int currentNumber, int k, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+        if (currentSubset.size() == k) {
+            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        if (currentSubset.size() > k) {
+            return;
+        }
+
+        for (int num = currentNumber; num <= 9; num++) {
+            currentSubset.add(num);
+            generateSizeKSubsets(num + 1, k, currentSubset, sizeKSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+
+    private void findTargetSumSubsets(List<List<Integer>> subsets, int target) {
+        Iterator<List<Integer>> iterator = subsets.iterator();
+        while (iterator.hasNext()) {
+            if (findSubsetSum(iterator.next()) != target) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
+        for (int val : subset) {
+            subsetSum += val;
+        }
+
+        return subsetSum;
+    }
+}
+
+
+//Best Implementation
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> sizeKTargetSumSubsets = new ArrayList<>();
+        generateSizeKTargetSumSubsets(1, k, n, new ArrayList<>(), sizeKTargetSumSubsets);
+        return sizeKTargetSumSubsets;
+    }
+
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+        if (currentSubset.size() == k && target == 0) {
+            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        if (currentSubset.size() > k) {
+            return;
+        }
+
+        for (int num = currentNumber; num <= 9; num++) {
+            currentSubset.add(num);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
+
+
+//Further Optimised
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> sizeKTargetSumSubsets = new ArrayList<>();
+        generateSizeKTargetSumSubsets(1, k, n, new ArrayList<>(), sizeKTargetSumSubsets);
+        return sizeKTargetSumSubsets;
+    }
+
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+        if (currentSubset.size() == k && target == 0) {
+            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        if (currentSubset.size() > k || target < 0) {
+            return;
+        }
+
+        for (int num = currentNumber; num <= 9; num++) {
+            currentSubset.add(num);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> sizeKTargetSumSubsets = new ArrayList<>();
+        generateSizeKTargetSumSubsets(1, k, n, new ArrayList<>(), sizeKTargetSumSubsets);
+        return sizeKTargetSumSubsets;
+    }
+
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int target, List<Integer> currentSubset, List<List<Integer>> sizeKSubsets) {
+        if (currentSubset.size() == k && target == 0) {
+            sizeKSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        if (currentSubset.size() > k) {
+            return;
+        }
+
+        for (int num = currentNumber; num <= 9; num++) {
+            if (num > target) {
+                break;
+            }
+            currentSubset.add(num);
+            generateSizeKTargetSumSubsets(num + 1, k, target - num, currentSubset, sizeKSubsets);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
