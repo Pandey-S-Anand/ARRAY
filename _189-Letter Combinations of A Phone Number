@@ -1,6 +1,6 @@
 //Iterative Approach
 
-//Method 1
+//Bruteforce Approach
 
 class Solution {
     private static final Map<Character, String> KEYPAD_MAPPING = Map.of(
@@ -24,8 +24,8 @@ class Solution {
         for (char digit : digits.toCharArray()) {
             String letters = KEYPAD_MAPPING.get(digit);
             List<String> newCombinations = new ArrayList<>();
-            for (char letter : letters.toCharArray()) {
-                for (String combination : combinations) {
+            for (String combination : combinations) {
+                for (char letter : letters.toCharArray()) {
                     newCombinations.add(new StringBuilder().append(combination).append(letter).toString());
                 }
             }
@@ -37,7 +37,7 @@ class Solution {
 }
 
 
-//Method 2
+//Better Approach
 
 class Solution {
     private static final Map<Character, String> KEYPAD_MAPPING = Map.of(
@@ -61,8 +61,8 @@ class Solution {
         for (char digit : digits.toCharArray()) {
             String letters = KEYPAD_MAPPING.get(digit);
             int currentSize = combinations.size();
-            for (char letter : letters.toCharArray()) {
-                for (int i = 0; i < currentSize; i++) {
+            for (int i = 0; i < currentSize; i++) {
+                for (char letter : letters.toCharArray()) {
                     combinations.add(new StringBuilder().append(combinations.get(i)).append(letter).toString());
                 }
             }
@@ -70,6 +70,48 @@ class Solution {
         }
 
         return combinations;
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    private static final Map<Character, String> KEYPAD_MAPPING = Map.of(
+            '2', "abc",
+            '3', "def",
+            '4', "ghi",
+            '5', "jkl",
+            '6', "mno",
+            '7', "pqrs",
+            '8', "tuv",
+            '9', "wxyz");
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.isEmpty()) {
+            return new ArrayList<>();
+        }
+        /*
+         * If using an ArrayList, removing elements from the front involves shifting all
+         * subsequent elements, leading to O(n) complexity for each removal operation.
+         * In a LinkedList (implementation of a Queue interface), Dequeue (remove
+         * operation from both front and rear) operations are O(1).
+         */
+        Queue<String> combinations = new LinkedList<>();
+        combinations.add("");
+
+        for (char digit : digits.toCharArray()) {
+            String letters = KEYPAD_MAPPING.get(digit);
+            int currentSize = combinations.size();
+            for (int i = 0; i < currentSize; i++) {
+                String combination = combinations.poll();
+                for (char letter : letters.toCharArray()) {
+                    combinations.add(new StringBuilder().append(combination).append(letter).toString());
+                }
+            }
+        }
+
+        return new ArrayList<>(combinations);
     }
 }
 
