@@ -37,7 +37,7 @@ class Solution {
 }
 
 
-//Aliter
+//Method 2
 
 class Solution {
     private static final Map<Character, String> KEYPAD_MAPPING = Map.of(
