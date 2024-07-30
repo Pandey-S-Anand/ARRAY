@@ -141,3 +141,26 @@ public class Solution {
 
 //Method 2
 
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        return isTargetSumSubsetPresent(arr, 0, n, targetSum);
+    }
+
+    private static boolean isTargetSumSubsetPresent(int[] arr, int index, int n, int targetSum) {
+        if (targetSum == 0) {
+            return true;
+        }
+
+        if (targetSum < 0) {
+            return false;
+        }
+        
+        for (int i = index; i < n; i++) {
+            if(isTargetSumSubsetPresent(arr, i + 1,n, targetSum - arr[i])){
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
