@@ -1,0 +1,143 @@
+//Iterative Approach
+
+//Method 1
+
+//Naive Implementation
+
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        List<Integer> subsetSums = new ArrayList<>();
+        subsetSums.add(0); // Start with the empty subset
+
+        for (int num : arr) {
+            int currentSize = subsetSums.size();
+            for (int i = 0; i < currentSize; i++) {
+                int newSubsetSum = num + subsetSums.get(i);
+                if (newSubsetSum == targetSum) {
+                    return true;
+                }
+                subsetSums.add(newSubsetSum);
+            }
+        }
+
+        return false;
+    }
+}
+
+
+//Better Implementation
+
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        List<Integer> subsetSums = new ArrayList<>();
+        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
+
+        for (int num : arr) {
+            int currentSize = subsetSums.size();
+            for (int i = 0; i < currentSize; i++) {
+                int newSubsetSum = num + subsetSums.get(i);
+                if (newSubsetSum == targetSum) {
+                    return true;
+                }
+                if (newSubsetSum < targetSum) {
+                    subsetSums.add(newSubsetSum);
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+
+//Optimal Implementation
+
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        List<Integer> subsetSums = new ArrayList<>();
+        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
+
+        for (int num : arr) {
+            int currentSize = subsetSums.size();
+            for (int i = 0; i < currentSize; i++) {
+                int newSubsetSum = num + subsetSums.get(i);
+                if (newSubsetSum == targetSum) {
+                    return true;
+                }
+                if (!subsetSums.contains(newSubsetSum) && newSubsetSum < targetSum) {
+                    subsetSums.add(newSubsetSum);
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+
+//Method 2
+
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+
+        for (int num = 0; num < totalSubsets; num++) {
+            int newSubsetSum = 0;
+            for (int i = 0; i < n; i++) {
+                if ((num & (1 << i)) != 0) {
+                    newSubsetSum += arr[i];
+
+                    if (newSubsetSum > targetSum) {
+                        break;
+                    }
+                }
+            }
+
+            if (newSubsetSum == targetSum) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+
+//Recursive Approach
+
+//Method 1
+
+public class Solution {
+    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+        return isTargetSumSubsetPresent(arr, 0, n, targetSum);
+    }
+
+    private static boolean isTargetSumSubsetPresent(int[] arr, int index, int n, int targetSum) {
+        // Base case: if targetSum is reduced to 0, we have found a subset with the desired sum
+        if (targetSum == 0) {
+            return true;
+        }
+
+        /* Base case (index == n): if we have considered all elements and still unable to find target sum subset
+         * Early Termination (target < 0): Since the array contains only positive integers, once the target 
+         * becomes negative during the recursive exploration, it will always remain negative for
+         * that path. Hence, further exploration of that path won't yield a valid combination.
+         */
+        if (index == n || targetSum < 0) {
+            return false;
+        }
+
+        // Include the current element and check if it leads to the target sum
+        boolean include = isTargetSumSubsetPresent(arr, index + 1, n, targetSum - arr[index]);
+
+        // Exclude the current element and check if it leads to the target sum
+        boolean exclude = isTargetSumSubsetPresent(arr, index + 1, n, targetSum);
+
+        // Return true if either including or excluding the current element yields the target sum
+        return include || exclude;
+    }
+}
+
+
+//Method 2
+
