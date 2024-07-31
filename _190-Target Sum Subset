@@ -5,17 +5,18 @@
 //Naive Implementation
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
         List<Integer> subsetSums = new ArrayList<>();
-        subsetSums.add(0); // Start with the empty subset
+        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
 
         for (int num : arr) {
             int currentSize = subsetSums.size();
             for (int i = 0; i < currentSize; i++) {
                 int newSubsetSum = num + subsetSums.get(i);
-                if (newSubsetSum == targetSum) {
+                if (newSubsetSum == k) {
                     return true;
                 }
+
                 subsetSums.add(newSubsetSum);
             }
         }
@@ -28,7 +29,7 @@ public class Solution {
 //Better Implementation
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
         List<Integer> subsetSums = new ArrayList<>();
         subsetSums.add(0); // Start with the empty subset sum (i.e 0)
 
@@ -36,10 +37,10 @@ public class Solution {
             int currentSize = subsetSums.size();
             for (int i = 0; i < currentSize; i++) {
                 int newSubsetSum = num + subsetSums.get(i);
-                if (newSubsetSum == targetSum) {
+                if (newSubsetSum == k) {
                     return true;
                 }
-                if (newSubsetSum < targetSum) {
+                if (newSubsetSum < k) {
                     subsetSums.add(newSubsetSum);
                 }
             }
@@ -48,12 +49,13 @@ public class Solution {
         return false;
     }
 }
+
 
 
 //Optimal Implementation
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
         List<Integer> subsetSums = new ArrayList<>();
         subsetSums.add(0); // Start with the empty subset sum (i.e 0)
 
@@ -61,10 +63,10 @@ public class Solution {
             int currentSize = subsetSums.size();
             for (int i = 0; i < currentSize; i++) {
                 int newSubsetSum = num + subsetSums.get(i);
-                if (newSubsetSum == targetSum) {
+                if (newSubsetSum == k) {
                     return true;
                 }
-                if (!subsetSums.contains(newSubsetSum) && newSubsetSum < targetSum) {
+                if (!subsetSums.contains(newSubsetSum) && newSubsetSum < k) {
                     subsetSums.add(newSubsetSum);
                 }
             }
@@ -75,11 +77,12 @@ public class Solution {
 }
 
 
+
 //Method 2
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
-        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        int totalSubsets = 1 << n; // x << y = x * 2^n
 
         for (int num = 0; num < totalSubsets; num++) {
             int newSubsetSum = 0;
@@ -87,13 +90,13 @@ public class Solution {
                 if ((num & (1 << i)) != 0) {
                     newSubsetSum += arr[i];
 
-                    if (newSubsetSum > targetSum) {
+                    if (newSubsetSum > k) {
                         break;
                     }
                 }
             }
 
-            if (newSubsetSum == targetSum) {
+            if (newSubsetSum == k) {
                 return true;
             }
         }
@@ -103,13 +106,50 @@ public class Solution {
 }
 
 
+//Method 3
+
+//Naive Implementation
+
+public class Solution {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        boolean[][] dp = new boolean[n + 1][k + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= k; j++) {
+                if (i == 0 && j == 0) {
+                    dp[i][j] = true;
+                } else if (i == 0) {
+                    dp[i][j] = false;
+                } else if (j == 0) {
+                    dp[i][j] = true;
+                } else {
+                    if (j >= arr[i - 1]) {
+                        dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
+                    } else {
+                        dp[i][j] = dp[i - 1][j];
+                    }
+                }
+            }
+        }
+
+        return dp[n][k];
+    }
+}
+
+
+//Optimal Approach
+
+
+
+
+
 //Recursive Approach
 
 //Method 1
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
-        return isTargetSumSubsetPresent(arr, 0, n, targetSum);
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        return isTargetSumSubsetPresent(arr, 0, n, k);
     }
 
     private static boolean isTargetSumSubsetPresent(int[] arr, int index, int n, int targetSum) {
@@ -118,10 +158,13 @@ public class Solution {
             return true;
         }
 
-        /* Base case (index == n): if we have considered all elements and still unable to find target sum subset
-         * Early Termination (target < 0): Since the array contains only positive integers, once the target 
-         * becomes negative during the recursive exploration, it will always remain negative for
-         * that path. Hence, further exploration of that path won't yield a valid combination.
+        /*
+         * Base case (index == n): if we have considered all elements and still unable
+         * to find target sum subset
+         * Early Termination (target < 0): Since the array contains only positive
+         * integers, once the target becomes negative during the recursive exploration, 
+         * it will always remain negative for that path. Hence, further exploration of 
+         * that path won't yield a valid combination.
          */
         if (index == n || targetSum < 0) {
             return false;
@@ -142,8 +185,8 @@ public class Solution {
 //Method 2
 
 public class Solution {
-    public static boolean isSubsetPresent(int n, int targetSum, int[] arr) {
-        return isTargetSumSubsetPresent(arr, 0, n, targetSum);
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        return isTargetSumSubsetPresent(arr, 0, n, k);
     }
 
     private static boolean isTargetSumSubsetPresent(int[] arr, int index, int n, int targetSum) {
@@ -154,9 +197,9 @@ public class Solution {
         if (targetSum < 0) {
             return false;
         }
-        
+
         for (int i = index; i < n; i++) {
-            if(isTargetSumSubsetPresent(arr, i + 1,n, targetSum - arr[i])){
+            if (isTargetSumSubsetPresent(arr, i + 1, n, targetSum - arr[i])) {
                 return true;
             }
         }
