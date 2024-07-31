@@ -112,6 +112,7 @@ public class Solution {
 
 public class Solution {
     public static boolean subsetSumToK(int n, int k, int arr[]) {
+        //dp[i][j] in indicating whether any subset of the subarray arr[0..i-1] sums to j
         boolean[][] dp = new boolean[n + 1][k + 1];
 
         for (int i = 0; i <= n; i++) {
@@ -137,10 +138,64 @@ public class Solution {
 }
 
 
+//Improved Approach
+
+public class Solution {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        // dp[i][j] in indicating whether any subset of the subarray arr[0..i-1] sums to target 'j'
+        boolean[][] dp = new boolean[n + 1][k + 1];
+
+        dp[0][0] = true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= k; j++) {
+                if (j == 0) {
+                    dp[i][j] = true;
+                } else {
+                    if (j >= arr[i - 1]) {
+                        dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
+                    } else {
+                        dp[i][j] = dp[i - 1][j];
+                    }
+                }
+            }
+        }
+
+        return dp[n][k];
+    }
+}
+
+
+
 //Optimal Approach
 
+public class Solution {
+    public static boolean subsetSumToK(int n, int k, int arr[]) {
+        boolean[] previousRow = new boolean[k + 1];
+        boolean[] currentRow = new boolean[k + 1];
 
+        previousRow[0] = true;
 
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= k; j++) {
+                if (j == 0) {
+                    currentRow[j] = true;
+                } else {
+                    if (j >= arr[i - 1]) {
+                        currentRow[j] = previousRow[j] || previousRow[j - arr[i - 1]];
+                    } else {
+                        currentRow[j] = previousRow[j];
+                    }
+                }
+            }
+
+            boolean[] temp = previousRow;
+            previousRow = currentRow;
+            currentRow = temp;
+        }
+
+        return previousRow[k];
+    }
+}
 
 
 //Recursive Approach
