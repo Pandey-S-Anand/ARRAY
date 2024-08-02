@@ -110,16 +110,19 @@ public class Solution {
                      * Count the ways to achieve the target (j) by excluding or including the
                      * current element (arr[i-1]).
                      * If we include the current element, we look at the number of ways to form the
-                     * remaining sum (j - arr[i-1]) using the subsets of the array arr[0...i-1].
+                     * remaining sum (j - arr[i-1]) using the subsets of the array arr[0...i-2].
                      * If we exclude the current element, we simply take the number of ways to
-                     * form the sum 'j' using the subsets of the array arr[0...i-1].
+                     * form the sum 'j' using the subsets of the array arr[0...i-2].
+                     * Note : index 'i' of dp[][] corresponds to index 'i-1' of the array
                      */
                     dp[i][j] = (dp[i - 1][j] + dp[i - 1][j - arr[i - 1]]) % MOD;
                 } else {
                     /*
-                     * Only Choice: Exclude the current element because the current element (arr[i-1])
+                     * Only Choice: Exclude the current element because the current element
+                     * (arr[i-1])
                      * is greater than the current target (j). Including the current element would
-                     * make the current target (j) negative, which is not achievable since the array contains only positive elements.
+                     * make the current target (j) negative, which is not achievable since the array
+                     * contains only positive elements.
                      */
                     dp[i][j] = dp[i - 1][j];
                 }
