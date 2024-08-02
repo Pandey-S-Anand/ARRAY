@@ -118,8 +118,7 @@ public class Solution {
                     dp[i][j] = (dp[i - 1][j] + dp[i - 1][j - arr[i - 1]]) % MOD;
                 } else {
                     /*
-                     * Only Choice: Exclude the current element because the current element
-                     * (arr[i-1])
+                     * Only Choice: Exclude the current element because the current element (arr[i-1])
                      * is greater than the current target (j). Including the current element would
                      * make the current target (j) negative, which is not achievable since the array
                      * contains only positive elements.
