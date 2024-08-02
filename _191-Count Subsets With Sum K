@@ -33,6 +33,7 @@ public class Solution {
 
 public class Solution {
     private static final int MOD = 1000000007;
+
     public static int findWays(int arr[], int k) {
         int targetSumSubsetCount = 0;
         List<Integer> subsetSums = new ArrayList<>();
