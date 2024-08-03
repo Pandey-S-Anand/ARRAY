@@ -167,3 +167,54 @@ public class Solution {
 //Recursive Approach
 
 //Method 1
+
+public class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int findWays(int arr[], int k) {
+      return countSubsetsWithTargetSum(arr,0,k);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index,int targetSum) {
+        if (targetSum == 0) {
+            return 1;
+        }
+
+        if (index == arr.length || targetSum < 0) {
+            return 0;
+        }
+
+        int includeCurrent = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
+        int excludeCurrent = countSubsetsWithTargetSum(arr, index + 1, targetSum);
+
+        return (includeCurrent + excludeCurrent) % MOD;
+    }
+}
+
+
+//Method 2
+
+public class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int findWays(int arr[], int k) {
+      return countSubsetsWithTargetSum(arr,0,k);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index,int targetSum) {
+        if (targetSum == 0) {
+            return 1;
+        }
+
+        if (targetSum < 0) {
+            return 0;
+        }
+        
+        int totalCount=0;
+        for (int i = index; i < arr.length; i++) {
+          totalCount=(totalCount + countSubsetsWithTargetSum(arr, i + 1,targetSum - arr[i]))%MOD;
+        }
+
+        return totalCount;
+    }
+}
