@@ -517,12 +517,53 @@ class Solution {
 
 
 
+/*
+  If you want to print all the target sum subsets or count target sum subsets the 
+  following implementations wont give correct output if the given array contains '0' as element
+  i.e it will only work if the array contains positive elements.
+
+  Ex:
+
+  For Input: 
+  2 1
+  1 0
+
+  Your Code's output is: 
+  1
+
+  It's Correct output is: 
+  2
 
 
+//Implemenataion 1
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public int perfectSum(int[] arr, int n, int targetSum) {
+        return generateSubsetsSum(arr, 0, 0,  targetSum);
+    }
+
+    private int generateSubsetsSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+        if (currentSubsetSum == targetSum) {
+           return 1;
+        }
+
+        if (currentSubsetSum > targetSum) {
+            return 0;
+        }
+        
+        int targetSumSubsetsCount=0;
+        for (int i = index; i < arr.length; i++) {
+            targetSumSubsetsCount = (targetSumSubsetsCount + generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSum))%MOD;
+        }
+        
+        return targetSumSubsetsCount;
+    }
+}
 
 
-
-
+//Implemenataion 2
 
 public class Solution {
     private static final int MOD = 1000000007;
@@ -548,7 +589,8 @@ public class Solution {
 }
 
 
-//Method 2
+//Implemenataion 3
+
 
 public class Solution {
     private static final int MOD = 1000000007;
@@ -566,11 +608,13 @@ public class Solution {
             return 0;
         }
         
-        int totalCount=0;
+        int targetSumSubsetCount = 0;
         for (int i = index; i < arr.length; i++) {
-          totalCount=(totalCount + countSubsetsWithTargetSum(arr, i + 1,targetSum - arr[i]))%MOD;
+          targetSumSubsetCount=(targetSumSubsetCount + countSubsetsWithTargetSum(arr, i + 1,targetSum - arr[i]))%MOD;
         }
 
-        return totalCount;
+        return targetSumSubsetCount;
     }
 }
+
+*/
