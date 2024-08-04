@@ -1,0 +1,98 @@
+//Recursive Approach
+
+//Method 1
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> allCombinations = new ArrayList<>();
+        generateAllCombinations(new char[2 * n], 0, allCombinations);
+
+        Iterator<String> iterator = allCombinations.iterator();
+
+        while (iterator.hasNext()) {
+            String combination = iterator.next();
+            if (!isValidCombination(combination)) {
+                iterator.remove();
+            }
+        }
+
+        return allCombinations;
+    }
+
+    private void generateAllCombinations(char[] currentCombination, int index, List<String> combinations) {
+        if (index == currentCombination.length) { // index == 2 * n
+            combinations.add(new String(currentCombination));
+            return;
+        }
+        currentCombination[index] = '(';
+        generateAllCombinations(currentCombination, index + 1, combinations);
+        currentCombination[index] = ')';
+        generateAllCombinations(currentCombination, index + 1, combinations);
+    }
+
+    private boolean isValidCombination(String combination) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char ch : combination.toCharArray()) {
+            if (ch == '(') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+//Aliter
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> allCombinations = new ArrayList<>();
+        generateAllCombinations(new StringBuilder(), 0, allCombinations, n);
+
+        Iterator<String> iterator = allCombinations.iterator();
+
+        while (iterator.hasNext()) {
+            String combination = iterator.next();
+            if (!isValidCombination(combination)) {
+                iterator.remove();
+            }
+        }
+
+        return allCombinations;
+    }
+
+    private void generateAllCombinations(StringBuilder currentCombination, int index, List<String> combinations, int n) {
+        if (currentCombination.length() == 2 * n) { // index == 2 * n
+            combinations.add(new String(currentCombination));
+            return;
+        }
+        currentCombination.append('(');
+        generateAllCombinations(currentCombination, index + 1, combinations, n);
+        currentCombination.deleteCharAt(currentCombination.length() - 1);
+        currentCombination.append(')');
+        generateAllCombinations(currentCombination, index + 1, combinations, n);
+        currentCombination.deleteCharAt(currentCombination.length() - 1);
+    }
+
+    private boolean isValidCombination(String combination) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char ch : combination.toCharArray()) {
+            if (ch == '(') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                stack.pop();
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
