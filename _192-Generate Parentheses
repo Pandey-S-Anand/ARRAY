@@ -181,6 +181,7 @@ class Solution {
 63 => 111111  => (((((((
 */
 
+
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> validCombinations = new ArrayList<>();
