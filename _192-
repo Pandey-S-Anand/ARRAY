@@ -186,3 +186,62 @@ class Solution {
         return balance == 0;
     }
 }
+
+
+
+//Method 2
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        generateValidCombinations(new char[2 * n], 0, 0, 0, n, validCombinations);
+        return validCombinations;
+    }
+
+    private void generateValidCombinations(char[] currentCombination, int index, int open, int close, int n, List<String> validCombinations) {
+        if (index == currentCombination.length) {
+            validCombinations.add(new String(currentCombination));
+            return;
+        }
+
+        if (open < n) {
+            currentCombination[index] = '(';
+            generateValidCombinations(currentCombination, index + 1, open + 1, close, n, validCombinations);
+        }
+
+        if (close < open) {
+            currentCombination[index] = ')';
+            generateValidCombinations(currentCombination, index + 1, open, close + 1, n, validCombinations);
+        }
+    }
+}
+
+
+//Aliter
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        generateValidCombinations(new StringBuilder(), 0, 0, n, validCombinations);
+        return validCombinations;
+    }
+
+    private void generateValidCombinations(StringBuilder currentCombination, int open, int close, int n, List<String> validCombinations) {
+        if (currentCombination.length() == 2 * n) {
+            validCombinations.add(currentCombination.toString());
+            return;
+        }
+
+        if (open < n) {
+            currentCombination.append('(');
+            generateValidCombinations(currentCombination, open + 1, close, n, validCombinations);
+            currentCombination.deleteCharAt(currentCombination.length() - 1);
+        }
+
+        if (close < open) {
+            currentCombination.append(')');
+            generateValidCombinations(currentCombination, open, close + 1, n, validCombinations);
+            currentCombination.deleteCharAt(currentCombination.length() - 1);
+        }
+    }
+}
