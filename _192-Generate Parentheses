@@ -67,34 +67,37 @@
 63 => 111111  => ))))))
 */
 
+//Intuitive Implementation
+
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> validCombinations = new ArrayList<>();
-        StringBuilder combination = new StringBuilder();
+        StringBuilder currentCombination = new StringBuilder();
         int totalCombinations = 1 << (2 * n); // Total combinations = 2^(2*n)
 
         for (int num = 0; num < totalCombinations; num++) {
             for (int i = 0; i < 2 * n; i++) {
                 if ((num & (1 << i)) != 0) {
-                    combination.append(')');
+                    currentCombination.append(')');
                 } else {
-                    combination.append('(');
+                    currentCombination.append('(');
                 }
             }
-            if (isValidCombination(combination.toString())) {
-                validCombinations.add(combination.toString());
+
+            if (isValidCombination(currentCombination)) {
+                validCombinations.add(currentCombination.toString());
             }
-            combination.setLength(0);
+            currentCombination.setLength(0);
         }
 
         return validCombinations;
     }
 
-    private boolean isValidCombination(String combination) {
+    private boolean isValidCombination(StringBuilder combination) {
         int balance = 0;
 
-        for (char ch : combination.toCharArray()) {
-            if (ch == '(') {
+        for (int i = 0; i < combination.length(); i++) {
+            if (combination.charAt(i) == '(') {
                 balance++;
             } else {
                 balance--;
@@ -108,7 +111,6 @@ class Solution {
         return balance == 0;
     }
 }
-
 
 //Aliter
 
@@ -182,31 +184,32 @@ class Solution {
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> validCombinations = new ArrayList<>();
-        StringBuilder combination = new StringBuilder();
+        StringBuilder currentCombination = new StringBuilder();
         int totalCombinations = 1 << (2 * n); // Total combinations = 2^(2*n)
 
         for (int num = 0; num < totalCombinations; num++) {
             for (int i = 0; i < 2 * n; i++) {
                 if ((num & (1 << i)) != 0) {
-                    combination.append('(');
+                    currentCombination.append('(');
                 } else {
-                    combination.append(')');
+                    currentCombination.append(')');
                 }
             }
-            if (isValidCombination(combination.toString())) {
-                validCombinations.add(combination.toString());
+
+            if (isValidCombination(currentCombination)) {
+                validCombinations.add(currentCombination.toString());
             }
-            combination.setLength(0);
+            currentCombination.setLength(0);
         }
 
         return validCombinations;
     }
 
-    private boolean isValidCombination(String combination) {
+    private boolean isValidCombination(StringBuilder combination) {
         int balance = 0;
 
-        for (char ch : combination.toCharArray()) {
-            if (ch == '(') {
+        for (int i = 0; i < combination.length(); i++) {
+            if (combination.charAt(i) == '(') {
                 balance++;
             } else {
                 balance--;
@@ -220,6 +223,48 @@ class Solution {
         return balance == 0;
     }
 }
+
+
+//Optimal Implementation
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        StringBuilder currentCombination = new StringBuilder();
+        int openCount = 0, closeCount = 0,totalCombinations = 1 << (2 * n);
+
+        for (int num = 0; num < totalCombinations; num++) {
+            for (int i = 0; i < 2 * n; i++) {
+                if ((num & (1 << i)) != 0) {
+                    currentCombination.append(')');
+                    closeCount++;
+                } else {
+                    currentCombination.append('(');
+                    openCount++;
+                }
+
+                if (openCount > n) {
+                    break;
+                }
+
+                if (closeCount > openCount) {
+                    break;
+                }
+            }
+
+            if (openCount == n && closeCount == n) {
+                validCombinations.add(currentCombination.toString());
+            }
+
+            currentCombination.setLength(0);
+            openCount = 0;
+            closeCount = 0;
+        }
+
+        return validCombinations;
+    }
+}
+
 
 
 //Recursive Approach
