@@ -194,24 +194,24 @@ class Solution {
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> validCombinations = new ArrayList<>();
-        generateValidCombinations(new char[2 * n], 0, 0, 0, n, validCombinations);
+        generateValidCombinations(new char[2 * n], 0, 0, 0, validCombinations, n);
         return validCombinations;
     }
 
-    private void generateValidCombinations(char[] currentCombination, int index, int open, int close, int n, List<String> validCombinations) {
+    private void generateValidCombinations(char[] currentCombination, int index, int openUsedSoFar, int closeUsedSoFar, List<String> validCombinations, int n) {
         if (index == currentCombination.length) {
             validCombinations.add(new String(currentCombination));
             return;
         }
 
-        if (open < n) {
+        if (openUsedSoFar < n) {
             currentCombination[index] = '(';
-            generateValidCombinations(currentCombination, index + 1, open + 1, close, n, validCombinations);
+            generateValidCombinations(currentCombination, index + 1, openUsedSoFar + 1, closeUsedSoFar, validCombinations, n);
         }
 
-        if (close < open) {
+        if (closeUsedSoFar < openUsedSoFar) {
             currentCombination[index] = ')';
-            generateValidCombinations(currentCombination, index + 1, open, close + 1, n, validCombinations);
+            generateValidCombinations(currentCombination, index + 1, openUsedSoFar, closeUsedSoFar + 1, validCombinations, n);
         }
     }
 }
@@ -222,25 +222,25 @@ class Solution {
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> validCombinations = new ArrayList<>();
-        generateValidCombinations(new StringBuilder(), 0, 0, n, validCombinations);
+        generateValidCombinations(new StringBuilder(), 0, 0, validCombinations, n);
         return validCombinations;
     }
 
-    private void generateValidCombinations(StringBuilder currentCombination, int open, int close, int n, List<String> validCombinations) {
+    private void generateValidCombinations(StringBuilder currentCombination, int openUsedSoFar, int closeUsedSoFar, List<String> validCombinations, int n) {
         if (currentCombination.length() == 2 * n) {
             validCombinations.add(currentCombination.toString());
             return;
         }
 
-        if (open < n) {
+        if (openUsedSoFar < n) {
             currentCombination.append('(');
-            generateValidCombinations(currentCombination, open + 1, close, n, validCombinations);
+            generateValidCombinations(currentCombination, openUsedSoFar + 1, closeUsedSoFar, validCombinations, n);
             currentCombination.deleteCharAt(currentCombination.length() - 1);
         }
 
-        if (close < open) {
+        if (closeUsedSoFar < openUsedSoFar) {
             currentCombination.append(')');
-            generateValidCombinations(currentCombination, open, close + 1, n, validCombinations);
+            generateValidCombinations(currentCombination, openUsedSoFar, closeUsedSoFar + 1, validCombinations, n);
             currentCombination.deleteCharAt(currentCombination.length() - 1);
         }
     }
