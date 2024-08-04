@@ -2,6 +2,8 @@
 
 //Method 1
 
+//Naive Implementation
+
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> allCombinations = new ArrayList<>();
@@ -31,19 +33,21 @@ class Solution {
     }
 
     private boolean isValidCombination(String combination) {
-        Deque<Character> stack = new ArrayDeque<>();
+        int balance = 0;
 
         for (char ch : combination.toCharArray()) {
             if (ch == '(') {
-                stack.push(ch);
+                balance++;
             } else {
-                if (stack.isEmpty()) {
-                    return false;
-                }
-                stack.pop();
+                balance--;
+            }
+
+            if (balance < 0) {
+                return false;
             }
         }
-        return stack.isEmpty();
+
+        return balance == 0;
     }
 }
 
@@ -80,19 +84,105 @@ class Solution {
     }
 
     private boolean isValidCombination(String combination) {
-        Deque<Character> stack = new ArrayDeque<>();
+        int balance = 0;
 
-        for (char ch : combination.toCharArray()) {
-            if (ch == '(') {
-                stack.push(ch);
+        for (int i = 0; i < combination.length(); i++) {
+            if (combination.charAt(i) == '(') {
+                balance++;
             } else {
-                if (stack.isEmpty()) {
-                    return false;
-                }
-                stack.pop();
+                balance--;
+            }
+
+            if (balance < 0) {
+                return false;
             }
         }
-        return stack.isEmpty();
+
+        return balance == 0;
     }
 }
 
+
+//Optimal Implementation
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        generateAllValidCombinations(new char[2 * n], 0, validCombinations);
+        return validCombinations;
+    }
+
+    private void generateAllValidCombinations(char[] currentCombination, int index, List<String> validCombinations) {
+        if (index == currentCombination.length) { // index == 2 * n
+            if (isValidCombination(currentCombination)) {
+                validCombinations.add(new String(currentCombination));
+            }
+            return;
+        }
+        currentCombination[index] = '(';
+        generateAllValidCombinations(currentCombination, index + 1, validCombinations);
+        currentCombination[index] = ')';
+        generateAllValidCombinations(currentCombination, index + 1, validCombinations);
+    }
+
+    private boolean isValidCombination(char[] combination) {
+        int balance = 0;
+
+        for (char ch : combination) {
+            if (ch == '(') {
+                balance++;
+            } else {
+                balance--;
+            }
+
+            if (balance < 0) {
+                return false;
+            }
+        }
+
+        return balance == 0;
+    }
+}
+
+//Aliter
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        generateAllCombinations(new StringBuilder(), 0, validCombinations, n);
+        return validCombinations;
+    }
+
+    private void generateAllCombinations(StringBuilder currentCombination, int index, List<String> validCombinations, int n) {
+        if (currentCombination.length() == 2 * n) { // index == 2 * n
+            if (isValidCombination(currentCombination)) {
+                validCombinations.add(new String(currentCombination));
+            }
+            return;
+        }
+        currentCombination.append('(');
+        generateAllCombinations(currentCombination, index + 1, validCombinations, n);
+        currentCombination.deleteCharAt(currentCombination.length() - 1);
+        currentCombination.append(')');
+        generateAllCombinations(currentCombination, index + 1, validCombinations, n);
+        currentCombination.deleteCharAt(currentCombination.length() - 1);
+    }
+
+    private boolean isValidCombination(StringBuilder combination) {
+        int balance = 0;
+
+        for (int i = 0; i < combination.length(); i++) {
+            if (combination.charAt(i) == '(') {
+                balance++;
+            } else {
+                balance--;
+            }
+
+            if (balance < 0) {
+                return false;
+            }
+        }
+
+        return balance == 0;
+    }
+}
