@@ -170,40 +170,40 @@ class Solution{
 
 // Naive Implementation
 
-class Solution{
+class Solution {
     private static final int MOD = 1000000007;
 
     public int perfectSum(int[] arr, int n, int targetSum) {
-       List<List<Integer>>subsets=new ArrayList<>();
-       generateSubsets(arr,0,new ArrayList<>(),subsets);
-       int targetSumSubsetCount=0;
-       
-       for(List<Integer>subset:subsets){
-           if(findSubsetSum(subset)==targetSum){
-               targetSumSubsetCount=(targetSumSubsetCount+1)%MOD;
-           }
-       }
-       
-       return targetSumSubsetCount;
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(arr, 0, n, new ArrayList<>(), subsets);
+        int targetSumSubsetCount = 0;
+
+        for (List<Integer> subset : subsets) {
+            if (findSubsetSum(subset) == targetSum) {
+                targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
+            }
+        }
+
+        return targetSumSubsetCount;
     }
-    
-    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> subsets) {
+
+    private void generateSubsets(int[] arr, int index, int n, List<Integer> currentSubset, List<List<Integer>> subsets) {
         subsets.add(new ArrayList<>(currentSubset));
 
-        for (int i = index; i < arr.length; i++) {
+        for (int i = index; i < n; i++) {
             currentSubset.add(arr[i]);
-            generateSubsets(arr, i + 1, currentSubset, subsets);
+            generateSubsets(arr, i + 1, n, currentSubset, subsets);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
-    
-    private int findSubsetSum(List<Integer>subset){
-       int subsetSum=0;
-       for(int num:subset){
-           subsetSum+=num;
-       }
-       
-       return subsetSum;
+
+    private int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
+        for (int num : subset) {
+            subsetSum += num;
+        }
+
+        return subsetSum;
     }
 }
 
@@ -215,7 +215,7 @@ class Solution {
 
     public int perfectSum(int[] arr, int n, int targetSum) {
         List<Integer> subsetsSum = new ArrayList<>();
-        generateSubsetsSum(arr, 0, 0, subsetsSum);
+        generateSubsetsSum(arr, 0, n, 0, subsetsSum);
         int targetSumSubsetCount = 0;
 
         for (int subsetSum : subsetsSum) {
@@ -227,12 +227,12 @@ class Solution {
         return targetSumSubsetCount;
     }
 
-    private void generateSubsetsSum(int[] arr, int index, int currentSubsetSum, List<Integer> subsetsSum) {
+    private void generateSubsetsSum(int[] arr, int index, int n, int currentSubsetSum, List<Integer> subsetsSum) {
         subsetsSum.add(currentSubsetSum);
 
-        for (int i = index; i < arr.length; i++) {
+        for (int i = index; i < n; i++) {
             currentSubsetSum += arr[i];
-            generateSubsetsSum(arr, i + 1, currentSubsetSum, subsetsSum);
+            generateSubsetsSum(arr, i + 1, n, currentSubsetSum, subsetsSum);
             currentSubsetSum -= arr[i];
         }
     }
@@ -246,18 +246,18 @@ class Solution {
 
     public int perfectSum(int[] arr, int n, int targetSum) {
         List<Integer> targetSumSubsets = new ArrayList<>();
-        generateSubsetsSum(arr, 0, 0, targetSumSubsets, targetSum);
+        generateSubsetsSum(arr, 0, n, 0, targetSumSubsets, targetSum);
 
         return targetSumSubsets.size();
     }
 
-    private void generateSubsetsSum(int[] arr, int index, int currentSubsetSum, List<Integer> targetSumSubsets, int targetSum) {
+    private void generateSubsetsSum(int[] arr, int index, int n, int currentSubsetSum, List<Integer> targetSumSubsets, int targetSum) {
         if (currentSubsetSum == targetSum) {
             targetSumSubsets.add(currentSubsetSum);
         }
 
-        for (int i = index; i < arr.length; i++) {
-            generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSumSubsets, targetSum);
+        for (int i = index; i < n; i++) {
+            generateSubsetsSum(arr, i + 1, n, currentSubsetSum + arr[i], targetSumSubsets, targetSum);
         }
     }
 }
@@ -270,12 +270,12 @@ class Solution {
 
     public int perfectSum(int[] arr, int n, int targetSum) {
         List<Integer> targetSumSubsets = new ArrayList<>();
-        generateSubsetsSum(arr, 0, 0, targetSumSubsets, targetSum);
+        generateSubsetsSum(arr, 0, n, 0, targetSumSubsets, targetSum);
 
         return targetSumSubsets.size();
     }
 
-    private void generateSubsetsSum(int[] arr, int index, int currentSubsetSum, List<Integer> targetSumSubsets, int targetSum) {
+    private void generateSubsetsSum(int[] arr, int index, int n, int currentSubsetSum, List<Integer> targetSumSubsets, int targetSum) {
         if (currentSubsetSum == targetSum) {
             targetSumSubsets.add(currentSubsetSum);
         }
@@ -284,11 +284,12 @@ class Solution {
             return;
         }
 
-        for (int i = index; i < arr.length; i++) {
-            generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSumSubsets, targetSum);
+        for (int i = index; i < n; i++) {
+            generateSubsetsSum(arr, i + 1, n, currentSubsetSum + arr[i], targetSumSubsets, targetSum);
         }
     }
 }
+
 
 //Optimal Implementation
 
@@ -297,21 +298,21 @@ class Solution {
     private int targetSumSubsetsCount = 0;
 
     public int perfectSum(int[] arr, int n, int targetSum) {
-        generateSubsetsSum(arr, 0, 0,  targetSum);
+        generateSubsetsSum(arr, 0, n, 0, targetSum);
         return targetSumSubsetsCount;
     }
 
-    private void generateSubsetsSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+    private void generateSubsetsSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
-           targetSumSubsetsCount=(targetSumSubsetsCount+1) %MOD;
+            targetSumSubsetsCount = (targetSumSubsetsCount + 1) % MOD;
         }
 
         if (currentSubsetSum > targetSum) {
             return;
         }
 
-        for (int i = index; i < arr.length; i++) {
-            generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+        for (int i = index; i < n; i++) {
+            generateSubsetsSum(arr, i + 1, n, currentSubsetSum + arr[i], targetSum);
         }
     }
 }
@@ -464,7 +465,7 @@ class Solution {
 
 class Solution {
     private static final int MOD = 1000000007;
-    private int targetSumSubsetCount=0;
+    private int targetSumSubsetCount = 0;
 
     public int perfectSum(int[] arr, int n, int targetSum) {
         countTargetSumSubsets(arr, 0, n, 0, targetSum);
@@ -474,16 +475,16 @@ class Solution {
     private void countTargetSumSubsets(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
         if (index == n) {
             if (currentSubsetSum == targetSum) {
-                targetSumSubsetCount=(targetSumSubsetCount+1)%MOD;
+                targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
             }
             return;
         }
-        
-        if(currentSubsetSum>targetSum){
+
+        if (currentSubsetSum > targetSum) {
             return;
         }
 
-        countTargetSumSubsets(arr, index + 1, n, currentSubsetSum+arr[index],targetSum);
+        countTargetSumSubsets(arr, index + 1, n, currentSubsetSum + arr[index], targetSum);
         countTargetSumSubsets(arr, index + 1, n, currentSubsetSum, targetSum);
     }
 }
@@ -535,7 +536,7 @@ class Solution {
   2
 
 
-//Implemenataion 1
+//Implementation 1
 
 class Solution {
     private static final int MOD = 1000000007;
@@ -563,7 +564,7 @@ class Solution {
 }
 
 
-//Implemenataion 2
+//Implementation 2
 
 public class Solution {
     private static final int MOD = 1000000007;
@@ -589,7 +590,7 @@ public class Solution {
 }
 
 
-//Implemenataion 3
+//Implementation 3
 
 
 public class Solution {
