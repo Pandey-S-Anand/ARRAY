@@ -1,3 +1,48 @@
+//Iterative Approach
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> validCombinations = new ArrayList<>();
+        StringBuilder combination = new StringBuilder();
+        int totalCombinations = 1 << (2 * n); // Total combinations = 2^(2*n)
+
+        for (int num = 0; num < totalCombinations; num++) {
+            for (int j = 0; j < 2 * n; j++) {
+                if ((num & (1 << j)) != 0) {
+                    combination.append(')');
+                } else {
+                    combination.append('(');
+                }
+            }
+            if (isValidCombination(combination.toString())) {
+                validCombinations.add(combination.toString());
+            }
+            combination.setLength(0);
+        }
+
+        return validCombinations;
+    }
+
+    private boolean isValidCombination(String combination) {
+        int balance = 0;
+
+        for (char ch : combination.toCharArray()) {
+            if (ch == '(') {
+                balance++;
+            } else {
+                balance--;
+            }
+
+            if (balance < 0) {
+                return false;
+            }
+        }
+
+        return balance == 0;
+    }
+}
+
+
 //Recursive Approach
 
 //Method 1
