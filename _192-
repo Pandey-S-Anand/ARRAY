@@ -26,6 +26,7 @@ class Solution {
             combinations.add(new String(currentCombination));
             return;
         }
+
         currentCombination[index] = '(';
         generateAllCombinations(currentCombination, index + 1, combinations);
         currentCombination[index] = ')';
@@ -75,6 +76,7 @@ class Solution {
             combinations.add(new String(currentCombination));
             return;
         }
+
         currentCombination.append('(');
         generateAllCombinations(currentCombination, index + 1, combinations, n);
         currentCombination.deleteCharAt(currentCombination.length() - 1);
@@ -119,6 +121,7 @@ class Solution {
             }
             return;
         }
+
         currentCombination[index] = '(';
         generateAllValidCombinations(currentCombination, index + 1, validCombinations);
         currentCombination[index] = ')';
@@ -160,6 +163,7 @@ class Solution {
             }
             return;
         }
+
         currentCombination.append('(');
         generateAllCombinations(currentCombination, index + 1, validCombinations, n);
         currentCombination.deleteCharAt(currentCombination.length() - 1);
