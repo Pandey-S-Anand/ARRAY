@@ -77,6 +77,44 @@ class Solution {
    }
 }
 
+/*
+if you reverse the logic as described below, you will still generate all possible combination of binary strings of length n, 
+but the lexicographical order will not be preserved. 
+
+if ((num & (1 << i)) != 0) {
+    currentBinaryString[n - 1 - i] = '0';
+} else {
+    currentBinaryString[n - 1 - i] = '1';
+}
+
+Example
+Let's illustrate with n = 3:
+
+Normal Logic (Lexicographical Order):
+
+000
+001
+010
+011
+100
+101
+110
+111
+Reversed Logic:
+
+111 (binary 7 in decimal)
+110 (binary 6 in decimal)
+101 (binary 5 in decimal)
+100 (binary 4 in decimal)
+011 (binary 3 in decimal)
+010 (binary 2 in decimal)
+001 (binary 1 in decimal)
+000 (binary 0 in decimal)
+
+As you can see, the reversed logic results in the strings being generated in the reverse order of their numeric values, which is not lexicographical.
+To maintain lexicographical order with reversed approach, you would need to sort the generated binary strings after generating them. 
+*/
+
 
 //Recursive Approach
 
