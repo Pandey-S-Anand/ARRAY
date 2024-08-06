@@ -33,6 +33,49 @@ class Solution {
 
 //Optimal Approach
 
+//Naive Implementation
+
+class Solution {
+    private static final long MOD = 1000000007L;
+
+    long countStrings(int n) {
+        // endWithZero[i] = count of binary substring of length 'i' that ends with 0
+        long[] endWithZero = new long[n + 1];
+        // endWithOne[i] = count of binary substring of length 'i' that ends with 1
+        long[] endWithOne = new long[n + 1];
+
+        // Base case: There is one binary string of length 1 ending with 0 ("0")
+        endWithZero[1] = 1;
+        // Base case: There is one binary string of length 1 ending with 1 ("1")
+        endWithOne[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            /*
+             * A binary string of length i that ends with 0 can be formed by appending 0 to
+             * any binary string of length i-1 that ends with '0' or '1'.
+             */
+            endWithZero[i] = (endWithZero[i - 1] + endWithOne[i - 1]) % MOD;
+            /*
+             * A valid binary string(that donot contain consecutive 1's) of length i that
+             * ends with '1' can only be formed by appending '1' to any binary string of
+             * length i-1 that ends with '0'.
+             */
+            endWithOne[i] = endWithZero[i - 1];
+        }
+        /*
+         * The total number of valid binary strings of length 'n' is the sum of the
+         * numbers of binary strings of length 'n' ending with '0' and ending with '1'
+         * (without consecutive 1's).
+         */
+        return (endWithZero[n] + endWithOne[n]) % MOD;
+    }
+}
+
+
+//Optimal Implementation
+
+
+
 
 
 
