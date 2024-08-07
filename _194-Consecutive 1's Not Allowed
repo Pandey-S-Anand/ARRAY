@@ -73,8 +73,32 @@ class Solution {
 
 
 //Optimal Implementation
+/*
+Intuition :
+In the above implementation we can clearly see that  we are only required to keep track of 'previous end With zero count', 
+'previous End with one count', 'current end with zero count' and 'current end with one count' 
+hence we can make use of 4 variables to denote those state eliminating the need of two 1D array's 
+thus reducing the space complexity of the algorithm can be reduced from O(n) to O(1).
+*/
 
+class Solution {
+    private static final long MOD = 1000000007L;
 
+    long countStrings(int n) {
+        long prevEndWithZeroCount = 1;
+        long prevEndWith1Count = 1;
+
+        for (int i = 2; i <= n; i++) {
+            long currEndWithZeroCount = (prevEndWithZeroCount + prevEndWith1Count) % MOD;
+            long currEndWithOneCount = prevEndWithZeroCount;
+
+            prevEndWithZeroCount = currEndWithZeroCount;
+            prevEndWith1Count = currEndWithOneCount;
+        }
+
+        return (prevEndWithZeroCount + prevEndWith1Count) % MOD;
+    }
+}
 
 
 
