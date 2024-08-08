@@ -5,11 +5,12 @@ Binary Exponentiation :
 
 In order to improve efficiency we will opt for Binary Exponentiation using which we can calculate base^power using O log2(power) multiplications.
 
-Basic Idea is to divide the work using binary representation of exponents
-i.e. is to keep multiplying res with base, if the bit is ON, and keep multiplying base with itself until we get power as 0
+Binary Exponentiation leverages the binary representation of the exponent to reduce the number of multiplications. 
+The idea is to break down the exponentiation process by handling each bit of the exponent individually:
+The idea is to keep multiplying result with base, if the bit is ON, and keep multiplying base with itself until we get exponent as 0
 
 Ex-
-base= 7, power = 11 and result= 1
+base= 7, exponent = 11 and result= 1
 Here, we have to calculate 7^11
 
 Binary of power i.e (11) is (1011)
@@ -48,11 +49,11 @@ class Solution {
         return (int) goodStringCount;
     }
 
-    private long myPow(long base, long power) {
+    private long myPow(long base, long exponent) {
         long result = 1L;
 
         for (int i = 0; i < 64; i++) {
-            if ((power & (1L << i)) != 0) {
+            if ((exponent & (1L << i)) != 0) {
                 result = (result * base) % MOD;
             }
             base = (base * base) % MOD;
@@ -77,15 +78,15 @@ class Solution {
         return (int) goodStringCount;
     }
 
-    private long myPow(long base, long power) {
+    private long myPow(long base, long exponent) {
         long result = 1L;
 
-        while (power != 0) {
-            if ((power & 1L) != 0) {
+        while (exponent != 0) {
+            if ((exponent & 1L) != 0) {
                 result = (result * base) % MOD;
             }
             base = (base * base) % MOD;
-            power = power >> 1;
+            exponent = exponent >> 1;
         }
 
         return result;
@@ -104,6 +105,7 @@ we are having 4 choices (2, 3, 5 or 7)?
 
 Therefore, at each index, we need to select a digit from the set of valid options based on whether the index is even or odd.
 */
+
 
 //Recursive Approach
 
