@@ -1,0 +1,71 @@
+/*
+A digit string is a string consisting of digits 0 through 9 that may contain leading zeros.
+A digit string is good if the digits (0-indexed) at even indices are even (0, 2, 4, 6 or 8) and 
+the digits at odd indices are prime (2, 3, 5 or 7)
+
+We  are asked to generate a 'good digit string' of length 'n', so index range from '0' to 'n-1' ,
+now for every even index we are having 5 choices (0, 2, 4, 6 or 8) and similar for every odd index 
+we are having 4 choices (2, 3, 5 or 7)?
+
+Therefore, at each index, we need to select a digit from the set of valid options based on whether the index is even or odd.
+*/
+
+//Recursive Approach
+
+//Naive Implementation
+
+class Solution {
+    private static final long MOD = 1000000007L;
+    private static final int[] EVEN_DIGITS = { 0, 2, 4, 6, 8 };
+    private static final int[] PRIME_DIGITS = { 2, 3, 5, 7 };
+
+    public int countGoodNumbers(long n) {
+        return (int) countGoodDigitStrings(new StringBuilder(), 0, n);
+    }
+
+    private long countGoodDigitStrings(StringBuilder currentCombination, int index, long n) {
+        if (index == n) {
+            return 1L;
+        }
+
+        long count = 0;
+        int[] validDigits = (index % 2 == 0) ? EVEN_DIGITS : PRIME_DIGITS;
+
+        for (int digit : validDigits) {
+            currentCombination.append(digit);
+            count = (count + countGoodDigitStrings(currentCombination, index + 1, n)) % MOD;
+            currentCombination.setLength(currentCombination.length() - 1);
+        }
+
+        return count;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    private static final long MOD = 1000000007L;
+    private static final int[] EVEN_DIGITS = { 0, 2, 4, 6, 8 };
+    private static final int[] PRIME_DIGITS = { 2, 3, 5, 7 };
+
+    public int countGoodNumbers(long n) {
+        return (int) countGoodDigitStrings(0, n);
+    }
+
+    private long countGoodDigitStrings(int index, long n) {
+        if (index == n) {
+            return 1L;
+        }
+
+        long count = 0;
+
+        int[] validDigits = (index % 2 == 0) ? EVEN_DIGITS : PRIME_DIGITS;
+
+        for (int digit : validDigits) {
+            count = (count + countGoodDigitStrings(index + 1, n)) % MOD;
+        }
+
+        return count;
+    }
+}
