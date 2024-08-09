@@ -1,3 +1,21 @@
+//Iterative Approach
+
+class Solution {
+    static void reverse(Stack<Integer> stack) {
+        List<Integer> reverseStack = new ArrayList<>();
+
+        while (!stack.isEmpty()) {
+            reverseStack.add(stack.pop());
+        }
+
+        for (int num : reverseStack) {
+            stack.push(num);
+        }
+    }
+}
+
+
+
 //Recursive Approach
 
 //Naive Implementation (Using Extra Space)
