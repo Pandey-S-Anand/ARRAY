@@ -72,6 +72,41 @@ class Solution {
             oddIndicesCount = (n / 2L);
         }
 
+        long goodStringCount = myPow(5, evenIndicesCount) * myPow(4, oddIndicesCount) % MOD;
+
+        return (int) goodStringCount;
+    }
+
+    private long myPow(int base, long exponent) {
+        long result = 1L;
+
+        for (int i = 0; i < 64; i++) {
+            if ((exponent & (1L << i)) != 0) {
+                result = (result * (long) Math.pow(base, Math.pow(2L, i))) % MOD;
+            }
+        }
+
+        return result;
+    }
+}
+
+
+//Better Implementation
+
+class Solution {
+    private static final long MOD = 1000000007L;
+
+    public int countGoodNumbers(long n) {
+        long evenIndicesCount = 0L, oddIndicesCount = 0L;
+
+        if (n % 2L == 0) {
+            evenIndicesCount = n / 2L;
+            oddIndicesCount = n / 2L;
+        } else {
+            evenIndicesCount = (n / 2L) + 1;
+            oddIndicesCount = (n / 2L);
+        }
+
         long goodStringCount = myPow(5L, evenIndicesCount) * myPow(4L, oddIndicesCount) % MOD;
 
         return (int) goodStringCount;
