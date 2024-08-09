@@ -1,13 +1,41 @@
 //Iterative Approach
 
 /*
+Independence of Choices: The choices made for even indices are independent of the choices made for odd indices.
+This means that selecting a digit for an even index does not affect the options available for an odd index, and vice versa.
+
+When you have multiple independent events (like choosing digits for even and odd indices), the total number of possible outcomes 
+is the product of the number of choices for each event. This is the core idea behind the multiplication principle in combinatorics, 
+which we apply here to count the number of valid "good" digit strings.
+
+
+Every even index can be filled with one of 5 digits: 0, 2, 4, 6, or 8.
+Every odd index can be filled with one of 4 digits: 2, 3, 5, or 7.
+
+Case 1: When n is Even :
+There are n/2 even indices and n/2 odd indices.
+For n/2 even indices , the total number of valid combinations is 5 ^(n/2)
+For n/2 odd indices, the total number of valid combinations is 4 ^ (n/2)
+
+The total number of good digit strings is the product of the combinations possible for even and odd indices.
+i.e Total Good Strings= 5^n/2 * 4^n/2 
+
+Case 2: When n is Odd :
+There are (n/2 + 1) even indices and n/2 odd indices.
+For (n/2)+1 even indices , the total number of valid combinations is 5 ^((n/2)+1)
+For n/2 odd indices, the total number of valid combinations is 4 ^ (n/2)
+
+The total number of good digit strings is the product of the combinations possible for even and odd indices. 
+i.e Total Good Strings= 5 ^((n/2)+1) * 4^n/2 
+
+
 Binary Exponentiation :
 
-In order to improve efficiency we will opt for Binary Exponentiation using which we can calculate base^power using O log2(power) multiplications.
+In order to improve efficiency we will opt for Binary Exponentiation using which we can calculate base^power 
+using O log2(power) multiplications.
 
 Binary Exponentiation leverages the binary representation of the exponent to reduce the number of multiplications. 
 The idea is to break down the exponentiation process by handling each bit of the exponent individually:
-The idea is to keep multiplying result with base, if the bit is ON, and keep multiplying base with itself until we get exponent as 0
 
 Ex-
 base= 7, exponent = 11 and result= 1
