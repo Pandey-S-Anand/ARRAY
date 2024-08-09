@@ -42,7 +42,7 @@ class Solution {
 }
 
 
-//Without Exta Space
+//Without Extra Space
 
 class Solution {
     static void reverse(Stack<Integer> stack) {
