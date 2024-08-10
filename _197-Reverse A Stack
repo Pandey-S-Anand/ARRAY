@@ -1,7 +1,7 @@
 //Iterative Approach
 
-class Solution {
-    static void reverse(Stack<Integer> stack) {
+public class Solution {
+    public static void reverseStack(Stack<Integer> stack) {
         List<Integer> reverseStack = new ArrayList<>();
 
         while (!stack.isEmpty()) {
@@ -20,8 +20,8 @@ class Solution {
 
 //Naive Implementation (Using Extra Space)
 
-class Solution {
-    static void reverseStack(Stack<Integer> stack) {
+public class Solution {
+    public static void reverseStack(Stack<Integer> stack) {
         if (stack.isEmpty()) {
             return;
         }
@@ -44,8 +44,8 @@ class Solution {
 
 //Without Extra Space
 
-class Solution {
-    static void reverse(Stack<Integer> stack) {
+public class Solution {
+    public static void reverseStack(Stack<Integer> stack) {
         if (stack.isEmpty()) {
             return;
         }
