@@ -2,6 +2,30 @@
 
 //Using Extra Space
 
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> stack) {
+        Stack<Integer> auxStack = new Stack<>();
+
+        while (!stack.isEmpty()) {
+            int temp = stack.pop();
+
+            while (!auxStack.isEmpty() && temp > auxStack.peek()) {
+                stack.push(auxStack.pop());
+            }
+
+            auxStack.push(temp);
+        }
+
+        while (!auxStack.isEmpty()) {
+            stack.push(auxStack.pop());
+        }
+
+        return stack;
+    }
+}
+
+
+
 
 
 //Recursive Approach
