@@ -1,30 +1,62 @@
 //Iterative Approach
 
-public class Solution {
-	public static void sortStack(Stack<Integer> stack) {
-		Stack<Integer> auxStack = new Stack<>();
+//Naive Implementation
+
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> stack) {
+        Stack<Integer> auxStack = new Stack<>();
+        auxStack.push(stack.pop());
 
         while (!stack.isEmpty()) {
-            int temp = stack.pop();
+            int topElement = stack.pop();
 
-            while (!auxStack.isEmpty() && temp > auxStack.peek()) {
+            if (topElement > auxStack.peek()) {
+                auxStack.push(topElement);
+            } else {
+                while (!auxStack.isEmpty() && topElement < auxStack.peek()) {
+                    stack.push(auxStack.pop());
+                }
+                auxStack.push(topElement);
+            }
+        }
+
+        return auxStack;
+    }
+}
+
+
+//Optimal Implementation
+
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> stack) {
+        Stack<Integer> auxStack = new Stack<>();
+
+        while (!stack.isEmpty()) {
+            int topElement = stack.pop();
+
+            while (!auxStack.isEmpty() && topElement < auxStack.peek()) {
                 stack.push(auxStack.pop());
             }
 
-            auxStack.push(temp);
+            auxStack.push(topElement);
         }
 
-        while (!auxStack.isEmpty()) {
-            stack.push(auxStack.pop());
-        }
-	}
+        return auxStack;
+    }
 }
+
 
 
 //Recursive Approach
 
-public class Solution {
-    public static void sortStack(Stack<Integer> stack) {
+
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> stack) {
+        sortStack(stack);
+        return stack;
+    }
+
+    private void sortStack(Stack<Integer> stack) {
         if (stack.isEmpty()) {
             return;
         }
@@ -36,7 +68,7 @@ public class Solution {
         insertInSortedOrder(stack, topElement);
     }
 
-    private static void insertInSortedOrder(Stack<Integer> stack, int element) {
+    private void insertInSortedOrder(Stack<Integer> stack, int element) {
         if (stack.isEmpty() || element > stack.peek()) {
             stack.push(element);
             return;
