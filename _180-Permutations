@@ -11,7 +11,7 @@ When you generate all permutations of an array of size n, you are essentially ar
 
 The formula for permutations is:
 
-nPr = n! / (n - r)!
+nPr = n! / (n - r)! (where n>=r)
 
 Numerator n!: Represents all possible arrangements of 𝑛 items.
 Denominator (n−r)!: Divides out the arrangements of the items not chosen, leaving only those arrangements of the r items.
