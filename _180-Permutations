@@ -7,7 +7,7 @@ nPr= n! / (n−r)!
 
 When discussing permutations of an array, the terms n and r in the context of nPr can be defined as follows:
 
-n: This represents the total number of distinct elements in the array (i.e., the length of the array).
+n: This represents the total number of distinct elements in the array.
 r: This represents the number of elements you want to arrange.
 
 Case 1: Permutations of All Elements
