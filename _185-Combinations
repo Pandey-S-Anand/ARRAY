@@ -1,5 +1,7 @@
 /*
 
+Note 1 :
+
 When you consider subsets of an array of size ’n’, you're including combinations of all possible sizes (0 through n).
 
 For example, for an array with n elements, the subsets can be considered as combinations of size 0 (the empty set), 1 (single elements), 2 (pairs of elements), and so on, up to size n (the full set).
@@ -25,10 +27,33 @@ Combinations of a specific size:
 So every subset of an array can be viewed as a combination of a certain size (which can be 0 up to the total number of elements in the array).
 
 
+Note 2 :
 
-If given an array of size 'n' and a value 'k', and asked to find all possible combinations of size 
-'k', we need to determine all possible ways to choose 'k' elements from the 'n' elements. Here, the order does not matter. 
-Thus, if two containers contain the same elements in different orders, they form only one combination.
+The term nCr refers to the number of combinations of n distinct objects taken r at a time. It is mathematically represented by the formula:
+
+nCr = n! / (r!(n−r)!)
+
+When discussing combinations of an array, the terms n and r in the context of nCr can be defined as follows:
+
+- n: This represents the total number of distinct elements in the array.
+- r: This represents the number of elements you want to select.
+
+Example:
+
+For the array arr[] = {1, 2, 3}:
+
+a: Combinations of one element are:
+- [1], [2], [3]
+
+b: Combinations of two elements are:
+- [1, 2] (or [2, 1]), [1, 3] (or [3, 1]), [2, 3] (or [3, 2])
+
+c: Combinations of three elements are:
+- [1, 2, 3] (or [1, 3, 2] or [2, 3, 1] or [2, 1, 3] or [3, 1, 2] or [3, 2, 1])
+
+Additional Information:
+- Unlike permutations, where the order matters, in combinations, different orders of the same items are counted as the same arrangements. 
+For example, if you select 3 elements from the array {1, 2, 3}, the arrangements [1, 2, 3] or [1, 3, 2] or [2, 3, 1] or [2, 1, 3] or [3, 1, 2] or [3, 2, 1] are considered the same.
 */
 
 //Iterative Approach
