@@ -26,8 +26,8 @@ class Solution {
         return false;
     }
 
-    private static long findSubsetSum(List<Integer> subset) {
-        long subsetSum = 0;
+    private static int findSubsetSum(List<Integer> subset) {
+        int subsetSum = 0;
         for (int val : subset) {
             subsetSum += val;
         }
@@ -56,7 +56,9 @@ class Solution {
                     return true;
                 }
 
-                subsetsSum.add(newSubsetSum);
+                if (newSubsetSum < targetSum) {
+                    subsetsSum.add(newSubsetSum);
+                }
             }
         }
 
@@ -73,7 +75,7 @@ class Solution {
     }
 
     private static boolean hasSubsetWithTargetSum(int[] arr, int n, int targetSum) {
-        long currentSubsetSum = 0L;
+        int currentSubsetSum = 0;
         int totalSubsets = 1 << arr.length; // x << y = x * 2^n
 
         for (int num = 0; num < totalSubsets; num++) {
@@ -85,11 +87,12 @@ class Solution {
                     }
                 }
             }
+
             if (currentSubsetSum == targetSum) {
                 return true;
             }
 
-            currentSubsetSum = 0L;
+            currentSubsetSum = 0;
         }
 
         return false;
@@ -103,10 +106,10 @@ class Solution {
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        return hasSubsetWithTargetSum(arr, 0, n, 0L, targetSum);
+        return hasSubsetWithTargetSum(arr, 0, n, 0, targetSum);
     }
 
-    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, long currentSubsetSum, int targetSum) {
+    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
             return true;
         }
@@ -148,10 +151,10 @@ class Solution {
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        return hasSubsetWithTargetSum(arr, 0, n, 0L, targetSum);
+        return hasSubsetWithTargetSum(arr, 0, n, 0, targetSum);
     }
 
-    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, long currentSubsetSum, int targetSum) {
+    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
             return true;
         }
@@ -272,3 +275,82 @@ class Solution {
 
 //Optimal Approach
 
+//Naive Implementation
+
+class Solution {
+    static Boolean isSubsetSum(int n, int arr[], int targetSum) {
+        boolean[][] dp = new boolean[n + 1][targetSum + 1];
+
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+
+        for (int i = 1; i <= targetSum; i++) {
+            dp[0][i] = false;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= targetSum; j++) {
+                if (j < arr[i - 1]) {
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i - 1][j - arr[i - 1]] || dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[n][targetSum];
+    }
+}
+
+
+//Optimal Implementation 
+
+class Solution {
+    static Boolean isSubsetSum(int n, int arr[], int targetSum) {
+        boolean[][] dp = new boolean[n + 1][targetSum + 1];
+
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= targetSum; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= arr[i - 1]) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]];
+                }
+            }
+        }
+
+        return dp[n][targetSum];
+    }
+}
+
+
+//Aliter (Space optimized)
+
+class Solution {
+    static Boolean isSubsetSum(int n, int arr[], int targetSum) {
+        boolean[] peviousRow = new boolean[targetSum + 1];
+        boolean[] currentRow = new boolean[targetSum + 1];
+
+        peviousRow[0] = true;
+
+        for (int i = 1; i <= n; i++) {
+            currentRow[0] = true;
+            for (int j = 1; j <= targetSum; j++) {
+                currentRow[j] = peviousRow[j];
+                if (j >= arr[i - 1]) {
+                    currentRow[j] = currentRow[j] || peviousRow[j - arr[i - 1]];
+                }
+            }
+
+            boolean[] temp = peviousRow;
+            peviousRow = currentRow;
+            currentRow = temp;
+        }
+
+        return peviousRow[targetSum];
+    }
+}
