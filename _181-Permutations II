@@ -1,9 +1,12 @@
 /*
-Number of distinct permutations of all the elements in an array (including duplicate elements) = n! / (k1! × k2! × … × km!)
+If an array contains duplicate elements and we try to generate the permutations of the array (i.e., permutations of all the elements of the array, where n=r in nPr), then duplicate permutations will be generated. 
+To find the number of distinct permutations of an array containing duplicate elements, we use the following formula:
+
+Number of distinct permutations of an array (containing duplicate elements) = n! / (k1! × k2! × … × km!)
 
 Where:
 
-n is the total number of elements in the array.
+n is the total number of elements in the array i.e (length of the array).
 k1, k2, …, km are the frequencies (counts) of each unique element in the array.
 
 Explanation:
