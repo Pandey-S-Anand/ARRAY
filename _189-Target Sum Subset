@@ -44,6 +44,7 @@ class Solution {
     }
 
     private static boolean hasSubsetWithTargetSum(int[] arr, int n, int targetSum) {
+        // Set to store the sums of all subsets found so far, starting with the empty subset sum of 0
         Set<Integer> subsetsSum = new HashSet<>();
         subsetsSum.add(0);
 
@@ -55,6 +56,10 @@ class Solution {
                 if (newSubsetSum == targetSum) {
                     return true;
                 }
+                /*
+                 * Add the new subset sum to the set if it is less than the target sum
+                 * This helps keep track of all valid subset sums that could potentially match the target.
+                 */
 
                 if (newSubsetSum < targetSum) {
                     subsetsSum.add(newSubsetSum);
@@ -67,6 +72,7 @@ class Solution {
 }
 
 
+
 //Improved Approach
 
 class Solution {
@@ -76,12 +82,17 @@ class Solution {
 
     private static boolean hasSubsetWithTargetSum(int[] arr, int n, int targetSum) {
         int currentSubsetSum = 0;
-        int totalSubsets = 1 << arr.length; // x << y = x * 2^n
+        int totalSubsets = 1 << n; // x << y = x * 2^n
 
         for (int num = 0; num < totalSubsets; num++) {
             for (int i = 0; i < n; i++) {
                 if ((num & (1 << i)) != 0) {
                     currentSubsetSum += arr[i];
+
+                    /*
+                     * If current subset sum exceeds targetSum, no need to continue
+                     * Since the array only contains positive elements, further additions will never give the desired target
+                     */
                     if (currentSubsetSum > targetSum) {
                         break;
                     }
@@ -98,6 +109,7 @@ class Solution {
         return false;
     }
 }
+
 
 
 //Good Approach
@@ -132,14 +144,30 @@ class Solution {
     }
 
     private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, int targetSum) {
+        // Base case: If targetSum is 0, we have found a subset
         if (targetSum == 0) {
             return true;
         }
 
+        /*
+         * Base case (index == n): if we have considered all elements and still unable
+         * to find target sum subset
+         * Early Termination (target < 0): Since the array contains only positive
+         * integers, once the target becomes negative during the recursive exploration, 
+         * it will always remain negative for that path. Hence, further exploration of 
+         * that path won't yield a valid combination. Therefore, once the
+         * targetSum is negative, we can conclude that this subset combination is invalid. 
+         * This check prevents unnecessary recursive calls, improving the efficiency of the
+         * algorithm.
+         */
         if (index == n || targetSum < 0) {
             return false;
         }
-
+        /*
+         * Recursive case:
+         * 1. Include the current element (arr[index]) in the subset and reduce the targetSum
+         * 2. Exclude the current element from the subset and move to the next element
+         */
         return hasSubsetWithTargetSum(arr, index + 1, n, targetSum - arr[index])
                 || hasSubsetWithTargetSum(arr, index + 1, n, targetSum);
     }
@@ -279,12 +307,17 @@ class Solution {
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
+        // dp[i][j] represents whether it is possible to achieve a target sum of j using the subarray [0..i-1]
         boolean[][] dp = new boolean[n + 1][targetSum + 1];
-
+        /*
+         * If the target sum is 0, we can always form that sum with an empty subset
+         * because every array contains an empty subset that sums to 0.
+         */
         for (int i = 0; i <= n; i++) {
             dp[i][0] = true;
         }
 
+        // If the array is empty (n == 0), we cannot form any positive target sum
         for (int i = 1; i <= targetSum; i++) {
             dp[0][i] = false;
         }
@@ -292,14 +325,27 @@ class Solution {
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= targetSum; j++) {
                 if (j < arr[i - 1]) {
+                    /*
+                     * If the current element is greater than the target sum We cannot include this
+                     * element because if we include the current element (arr[i-1]) the 
+                     * current target (j) will become negative hence not acheiveable
+                     * because array contains only positive elements once the target becomes
+                     * negative it will stay negative.
+                     */
                     dp[i][j] = dp[i - 1][j];
                 } else {
+                    /*
+                     * We can either exclude the current element or include it
+                     * Check if we can form the target sum without the current element
+                     * OR if we can form the target sum by including the current element
+                     */
                     dp[i][j] = dp[i - 1][j - arr[i - 1]] || dp[i - 1][j];
                 }
             }
         }
 
-        return dp[n][targetSum];
+        return dp[n][targetSum]; // Return whether we can form the target sum using the first n elements
+
     }
 }
 
@@ -329,6 +375,10 @@ class Solution {
 
 
 //Aliter (Space optimized)
+/*
+Intuition : Only current('i') and previous row('i-1') of martrix (dp[][]) is being used so instead of 'dp[][]'
+we can create 2 1D arrays (boolean[] previousRow and boolean[] currentRow) representing previous and current row 
+*/
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
