@@ -5,31 +5,35 @@
 //Naive Implementation
 
 class Solution {
-    public List<List<Integer>> combinationSum2(int[] arr, int target) {
-        List<List<Integer>> targetSumUniqueSubsets = generateUniqueSubsets(arr);
-        Iterator<List<Integer>> iterator = targetSumUniqueSubsets.iterator();
+    public List<List<Integer>> combinationSum2(int[] arr, int targetSum) {
+        Set<List<Integer>> uniqueSubsets = generateUniqueSubsets(arr);
+        Iterator<List<Integer>> iterator = uniqueSubsets.iterator();
+
         while (iterator.hasNext()) {
-            if (findSubsetSum(iterator.next()) != target) {
+            if (findSubsetSum(iterator.next()) != targetSum) {
                 iterator.remove();
             }
         }
-        return targetSumUniqueSubsets;
+
+        return new ArrayList<>(uniqueSubsets);
     }
 
-    private List<List<Integer>> generateUniqueSubsets(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
+    private Set<List<Integer>> generateUniqueSubsets(int[] arr) {
+        List<List<Integer>> tempList = new ArrayList<>();
+        Set<List<Integer>> uniqueSubsets = new HashSet<>();
         uniqueSubsets.add(new ArrayList<>());
+
         Arrays.sort(arr);
 
         for (int i = 0; i < arr.length; i++) {
-            int size = uniqueSubsets.size();
-            for (int j = 0; j < size; j++) {
-                List<Integer> currentSubset = new ArrayList<>(uniqueSubsets.get(j));
+            for (List<Integer> subset : uniqueSubsets) {
+                List<Integer> currentSubset = new ArrayList<>(subset);
                 currentSubset.add(arr[i]);
-                if (!uniqueSubsets.contains(currentSubset)) {
-                    uniqueSubsets.add(currentSubset);
-                }
+                tempList.add(currentSubset);
             }
+
+            uniqueSubsets.addAll(tempList);
+            tempList.clear();
         }
 
         return uniqueSubsets;
@@ -45,49 +49,10 @@ class Solution {
 }
 
 
-//Better Implementation
-
-class Solution {
-    public List<List<Integer>> combinationSum2(int[] arr, int target) {
-        return findUniqueSubsetsWithTargetSum(arr, target);
-    }
-
-    private List<List<Integer>> findUniqueSubsetsWithTargetSum(int[] arr, int target) {
-        Map<List<Integer>, Integer> uniqueSubsetsAndSumMap = new HashMap<>();
-        List<List<Integer>> targetSumUniqueSubsets = new ArrayList<>();
-        uniqueSubsetsAndSumMap.put(new ArrayList<>(), 0);
-        Arrays.sort(arr);
-
-        for (int i = 0; i < arr.length; i++) {
-            List<Map.Entry<List<Integer>, Integer>>existingSubsetsAndSum = new ArrayList<>(uniqueSubsetsAndSumMap.entrySet());
-
-            for (Map.Entry<List<Integer>, Integer> existingSubsetAndSum : existingSubsetsAndSum) {
-                List<Integer> currentSubset = new ArrayList<>(existingSubsetAndSum.getKey());
-                currentSubset.add(arr[i]);
-                int currentSubsetSum = existingSubsetAndSum.getValue() + arr[i];
-                
-                if (!uniqueSubsetsAndSumMap.containsKey(currentSubset)) {
-                    if (currentSubsetSum == target) {
-                       targetSumUniqueSubsets.add(currentSubset);
-                    }
-                    uniqueSubsetsAndSumMap.put(currentSubset, currentSubsetSum);
-                }
-            }
-        }
-
-        return targetSumUniqueSubsets;
-    }
-}
-
-
 //Optimal Implementation
 
 class Solution {
-    public List<List<Integer>> combinationSum2(int[] arr, int target) {
-        return findUniqueSubsetsWithTargetSum(arr, target);
-    }
-
-    private List<List<Integer>> findUniqueSubsetsWithTargetSum(int[] arr, int target) {
+    public List<List<Integer>> combinationSum2(int[] arr, int targetSum) {
         Map<List<Integer>, Integer> uniqueSubsetsAndSumMap = new HashMap<>();
         List<List<Integer>> targetSumUniqueSubsets = new ArrayList<>();
         uniqueSubsetsAndSumMap.put(new ArrayList<>(), 0);
@@ -97,16 +62,18 @@ class Solution {
             List<Map.Entry<List<Integer>, Integer>> existingSubsetsAndSum = new ArrayList<>(uniqueSubsetsAndSumMap.entrySet());
 
             for (Map.Entry<List<Integer>, Integer> existingSubsetAndSum : existingSubsetsAndSum) {
-                List<Integer> currentSubset = new ArrayList<>(existingSubsetAndSum.getKey());
-                currentSubset.add(arr[i]);
+
                 int currentSubsetSum = existingSubsetAndSum.getValue() + arr[i];
 
-                if (!uniqueSubsetsAndSumMap.containsKey(currentSubset)) {
-                    if (currentSubsetSum == target) {
+                if (currentSubsetSum <= targetSum) {
+                    List<Integer> currentSubset = new ArrayList<>(existingSubsetAndSum.getKey());
+                    currentSubset.add(arr[i]);
+
+                    if (!uniqueSubsetsAndSumMap.containsKey(currentSubset) && currentSubsetSum == targetSum) {
                         targetSumUniqueSubsets.add(currentSubset);
                     }
 
-                    if (currentSubsetSum <= target) {
+                    if (currentSubsetSum <= targetSum) {
                         uniqueSubsetsAndSumMap.put(currentSubset, currentSubsetSum);
                     }
                 }
@@ -119,91 +86,6 @@ class Solution {
 
 
 //Method 2
-
-//Naive Implementation
-
-class Solution {
-    public List<List<Integer>> combinationSum2(int[] arr, int target) {
-        List<List<Integer>> targetSumUniqueSubsets = generateUniqueSubsets(arr);
-        Iterator<List<Integer>> iterator = targetSumUniqueSubsets.iterator();
-        while (iterator.hasNext()) {
-            if (findSubsetSum(iterator.next()) != target) {
-                iterator.remove();
-            }
-        }
-        return targetSumUniqueSubsets;
-    }
-
-    private List<List<Integer>> generateUniqueSubsets(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        List<Integer> currentSubset = new ArrayList<>();
-        int totalSubsets = 1 << arr.length;
-
-        Arrays.sort(arr);
-
-        for (int num = 0; num < totalSubsets; num++) {
-            for (int i = 0; i < arr.length; i++) {
-                if ((num & (1 << i)) != 0) {
-                    currentSubset.add(arr[i]);
-                }
-            }
-
-            if (!uniqueSubsets.contains(currentSubset)) {
-                uniqueSubsets.add(new ArrayList<>(currentSubset));
-            }
-
-            currentSubset.clear();
-        }
-
-        return uniqueSubsets;
-    }
-
-    private int findSubsetSum(List<Integer> subset) {
-        int subsetSum = 0;
-        for (int val : subset) {
-            subsetSum += val;
-        }
-        return subsetSum;
-    }
-}
-
-
-//Better Implementation
-
-class Solution {
-    public List<List<Integer>> combinationSum2(int[] arr, int target) {
-        return findUniqueSubsetsWithTargetSum(arr,target);
-    }
-
-    private List<List<Integer>> findUniqueSubsetsWithTargetSum(int[] arr, int target) {
-        List<List<Integer>> targetSumUniqueSubsets = new ArrayList<>();
-        List<Integer> currentSubset = new ArrayList<>();
-        int currentSubsetSum=0,totalSubsets = 1 << arr.length;
-
-        Arrays.sort(arr);
-
-        for (int num = 0; num < totalSubsets; num++) {
-            for (int i = 0; i < arr.length; i++) {
-                if ((num & (1 << i)) != 0) {
-                    currentSubset.add(arr[i]);
-                    currentSubsetSum+=arr[i];
-                }
-            }
-
-            if (!targetSumUniqueSubsets.contains(currentSubset) && currentSubsetSum==target) {
-                targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
-            }
-
-            currentSubset.clear();
-            currentSubsetSum=0;
-        }
-
-        return targetSumUniqueSubsets;
-    }
-}
-
-
-//Optimal Implementation
 
 class Solution {
     public List<List<Integer>> combinationSum2(int[] arr, int target) {
@@ -225,7 +107,7 @@ class Solution {
                 }
             }
 
-            if (!targetSumUniqueSubsets.contains(currentSubset) && currentSubsetSum == target) {
+            if (currentSubsetSum == target && !targetSumUniqueSubsets.contains(currentSubset)) {
                 targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
             }
 
@@ -236,7 +118,6 @@ class Solution {
         return new ArrayList<>(targetSumUniqueSubsets);
     }
 }
-
 
 
 //Recursive Approach
