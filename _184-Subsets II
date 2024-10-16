@@ -31,30 +31,32 @@ Ex: arr[]= [4,4,4,1,4]
 (On observation : [1, 4] , [4, 1, 4] and  [4, 4, 1, 4] are duplicate subsets)
 */
 
-//Iterative Approach
 
-// Method 1
+//Iterative 
 
-//Intuitive Implementation
+//Method 1
+
+//Naive Implementation 
 
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> subsets = new ArrayList<>();
+        Set<List<Integer>> subsets = new HashSet<>();
         subsets.add(new ArrayList<>());
+        List<List<Integer>> tempList = new ArrayList<>();
 
         for (int i = 0; i < arr.length; i++) {
-            int size = subsets.size();
-            for (int j = 0; j < size; j++) {
-                List<Integer> subset = new ArrayList<>(subsets.get(j));
-                subset.add(arr[i]);
-                Collections.sort(subset);
-                if (!subsets.contains(subset)) {
-                    subsets.add(subset);
-                }
+            for (List<Integer> subset : subsets) {
+                List<Integer> newSubset = new ArrayList<>(subset);
+                newSubset.add(arr[i]);
+
+                Collections.sort(newSubset);
+                tempList.add(newSubset);
             }
+            subsets.addAll(tempList);
+            tempList.clear();
         }
 
-        return subsets;
+        return new ArrayList<>(subsets);
     }
 }
 
@@ -63,34 +65,36 @@ class Solution {
 
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> subsets = new ArrayList<>();
+        Set<List<Integer>> subsets = new HashSet<>();
         subsets.add(new ArrayList<>());
+        List<List<Integer>> tempList = new ArrayList<>();
+
         // If array is sorted,the generated subsets will also be in sorted order
         Arrays.sort(arr);
+
         for (int i = 0; i < arr.length; i++) {
-            int size = subsets.size();
-            for (int j = 0; j < size; j++) {
-                List<Integer> subset = new ArrayList<>(subsets.get(j));
-                subset.add(arr[i]);
-                if (!subsets.contains(subset)) {
-                    subsets.add(subset);
-                }
+            for (List<Integer> subset : subsets) {
+                List<Integer> newSubset = new ArrayList<>(subset);
+                newSubset.add(arr[i]);
+
+                tempList.add(newSubset);
             }
+            subsets.addAll(tempList);
+            tempList.clear();
         }
 
-        return subsets;
+        return new ArrayList<>(subsets);
     }
 }
 
 
-
 //Method 2 (Using Bit Manipulation)
 
-//Intuitive Implementation
+//Naive Implementation 
 
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
+        Set<List<Integer>> uniqueSubsets = new HashSet<>();
         List<Integer> currentSubset = new ArrayList<>();
         int totalSubsets = 1 << arr.length;
 
@@ -101,15 +105,14 @@ class Solution {
                 }
             }
 
-            Collections.sort(currentSubset);
-            if (!uniqueSubsets.contains(currentSubset)) {
-                uniqueSubsets.add(new ArrayList<>(currentSubset));
-            }
+            List<Integer> newSubset = new ArrayList<>(currentSubset);
+            Collections.sort(newSubset);
 
+            uniqueSubsets.add(newSubset);
             currentSubset.clear();
         }
 
-        return uniqueSubsets;
+        return new ArrayList<>(uniqueSubsets);
     }
 }
 
@@ -118,26 +121,23 @@ class Solution {
 
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
+        Set<List<Integer>> uniqueSubsets = new HashSet<>();
         List<Integer> currentSubset = new ArrayList<>();
         int totalSubsets = 1 << arr.length;
         Arrays.sort(arr);
 
         for (int num = 0; num < totalSubsets; num++) {
-            for (int i = 0;i<arr.length;i++) {
-                if ((num & (1<<i))!=0) {
+            for (int i = 0; i < arr.length; i++) {
+                if ((num & (1 << i)) != 0) {
                     currentSubset.add(arr[i]);
                 }
             }
 
-            if (!uniqueSubsets.contains(currentSubset)) {
-                uniqueSubsets.add(new ArrayList<>(currentSubset));
-            }
-
+            uniqueSubsets.add(new ArrayList<>(currentSubset));
             currentSubset.clear();
         }
 
-        return uniqueSubsets;
+        return new ArrayList<>(uniqueSubsets);
     }
 }
 
@@ -149,40 +149,15 @@ class Solution {
 //Intuitive Implementation
 
 class Solution {
+    private Set<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
-        return uniqueSubsets;
-    }
-
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
-        if (index == arr.length) {
-            List<Integer> newSubset = new ArrayList<>(currentSubset);
-            Collections.sort(newSubset);
-            if (!uniqueSubsets.contains(newSubset)) {
-                uniqueSubsets.add(newSubset);
-            }
-            return;
-        }
-
-        currentSubset.add(arr[index]);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
-        currentSubset.remove(currentSubset.size() - 1);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
-    }
-}
-
-
-//Improved Implementation
-
-class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] arr) {
-        Set<List<Integer>> uniqueSubsets = new HashSet<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        uniqueSubsets = new HashSet<>();
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return new ArrayList<>(uniqueSubsets);
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, Set<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         if (index == arr.length) {
             List<Integer> newSubset = new ArrayList<>(currentSubset);
             Collections.sort(newSubset);
@@ -191,60 +166,35 @@ class Solution {
         }
 
         currentSubset.add(arr[index]);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
         currentSubset.remove(currentSubset.size() - 1);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
     }
 }
 
 
-//Better Implementation
+//Optimal Implementation
 
 class Solution {
+    private Set<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
+        uniqueSubsets = new HashSet<>();
         Arrays.sort(arr);
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
-        return uniqueSubsets;
-    }
-
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
-        if (index == arr.length) {
-            List<Integer> newSubset = new ArrayList<>(currentSubset);
-            if (!uniqueSubsets.contains(newSubset)) {
-                uniqueSubsets.add(newSubset);
-            }
-            return;
-        }
-
-        currentSubset.add(arr[index]);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
-        currentSubset.remove(currentSubset.size() - 1);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
-    }
-}
-
-
-//Further Optimised
-
-class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] arr) {
-        Arrays.sort(arr);
-        Set<List<Integer>> uniqueSubsets = new HashSet<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return new ArrayList<>(uniqueSubsets);
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, Set<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         if (index == arr.length) {
             uniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
         currentSubset.add(arr[index]);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
         currentSubset.remove(currentSubset.size() - 1);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
     }
 }
 
@@ -383,26 +333,28 @@ sorted array : {1, 2, 2, 3}
 //Optimal Implementation
 
 class Solution {
+    private List<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
+        uniqueSubsets = new ArrayList<>();
         Arrays.sort(arr);
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return uniqueSubsets;
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         if (index == arr.length) {
             uniqueSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
         currentSubset.add(arr[index]);
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
         currentSubset.remove(currentSubset.size() - 1);
         while (index < arr.length - 1 && arr[index] == arr[index + 1]) {
             index++;
         }
-        generateUniqueSubsets(arr, index + 1, currentSubset, uniqueSubsets);
+        generateUniqueSubsets(arr, index + 1, currentSubset);
     }
 }
 
@@ -412,22 +364,22 @@ class Solution {
 //Intuitive Implementation
 
 class Solution {
+    private Set<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
-        return uniqueSubsets;
+        uniqueSubsets = new HashSet<>();
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
+        return new ArrayList<>(uniqueSubsets);
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         List<Integer> newSubset = new ArrayList<>(currentSubset);
         Collections.sort(newSubset);
-        if (!uniqueSubsets.contains(newSubset)) {
-            uniqueSubsets.add(new ArrayList<>(newSubset));
-        }
+        uniqueSubsets.add(new ArrayList<>(newSubset));
 
         for (int i = index; i < arr.length; i++) {
             currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
+            generateUniqueSubsets(arr, i + 1, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
@@ -437,83 +389,40 @@ class Solution {
 //Improved Implementation
 
 class Solution {
+    private Set<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
-        Set<List<Integer>> uniqueSubsets = new HashSet<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        uniqueSubsets = new HashSet<>();
+        Arrays.sort(arr);
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return new ArrayList<>(uniqueSubsets);
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, Set<List<Integer>> uniqueSubsets) {
-        List<Integer> newSubset = new ArrayList<>(currentSubset);
-        Collections.sort(newSubset);
-        uniqueSubsets.add(new ArrayList<>(newSubset));
-
-        for (int i = index; i < arr.length; i++) {
-            currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-
-//Good Implementation
-
-class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] arr) {
-        Arrays.sort(arr);
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
-        return uniqueSubsets;
-    }
-
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
-        if (!uniqueSubsets.contains(currentSubset)) {
-            uniqueSubsets.add(new ArrayList<>(currentSubset));
-        }
-
-        for (int i = index; i < arr.length; i++) {
-            currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-
-//Better Approach
-
-class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] arr) {
-        Arrays.sort(arr);
-        Set<List<Integer>> uniqueSubsets = new HashSet<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
-        return new ArrayList<>(uniqueSubsets);
-    }
-
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, Set<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         uniqueSubsets.add(new ArrayList<>(currentSubset));
 
         for (int i = index; i < arr.length; i++) {
             currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
+            generateUniqueSubsets(arr, i + 1, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
 }
 
 
-//Further Optimised
+//Better Implementation
 
 class Solution {
+    private List<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
+        uniqueSubsets = new ArrayList<>();
         Arrays.sort(arr);
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return uniqueSubsets;
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         uniqueSubsets.add(new ArrayList<>(currentSubset));
 
         Set<Integer> used = new HashSet<>();
@@ -524,7 +433,7 @@ class Solution {
             }
             used.add(arr[i]);
             currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
+            generateUniqueSubsets(arr, i + 1, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
@@ -534,14 +443,16 @@ class Solution {
 //Optimal Implementation
 
 class Solution {
+    private List<List<Integer>> uniqueSubsets;
+
     public List<List<Integer>> subsetsWithDup(int[] arr) {
+        uniqueSubsets = new ArrayList<>();
         Arrays.sort(arr);
-        List<List<Integer>> uniqueSubsets = new ArrayList<>();
-        generateUniqueSubsets(arr, 0, new ArrayList<>(), uniqueSubsets);
+        generateUniqueSubsets(arr, 0, new ArrayList<>());
         return uniqueSubsets;
     }
 
-    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset, List<List<Integer>> uniqueSubsets) {
+    private void generateUniqueSubsets(int[] arr, int index, List<Integer> currentSubset) {
         uniqueSubsets.add(new ArrayList<>(currentSubset));
 
         for (int i = index; i < arr.length; i++) {
@@ -549,9 +460,8 @@ class Solution {
                 continue;
             }
             currentSubset.add(arr[i]);
-            generateUniqueSubsets(arr, i + 1, currentSubset, uniqueSubsets);
+            generateUniqueSubsets(arr, i + 1, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
 }
-
