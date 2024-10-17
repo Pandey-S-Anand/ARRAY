@@ -202,7 +202,7 @@ class Solution {
             sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
-
+        
         if (currentSubset.size() > k || targetSum < 0) {
             return;
         }
@@ -238,6 +238,11 @@ class Solution {
         }
 
         for (int num = currentNumber; num <= 9; num++) {
+            /*
+             * Since numbers are in increasing order, if the current number exceeds
+             * targetSum, all subsequent numbers will also be larger. No point in exploring
+             * further in this path.
+             */
             if (num > targetSum) {
                 break;
             }
