@@ -118,28 +118,6 @@ class Solution {
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        return hasSubsetWithTargetSum(arr, 0, n, 0, targetSum);
-    }
-
-    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
-        if (currentSubsetSum == targetSum) {
-            return true;
-        }
-
-        if (index == n || currentSubsetSum > targetSum) {
-            return false;
-        }
-
-        return hasSubsetWithTargetSum(arr, index + 1, n, currentSubsetSum + arr[index], targetSum)
-                || hasSubsetWithTargetSum(arr, index + 1, n, currentSubsetSum, targetSum);
-    }
-}
-
-
-//Aliter Implementation 
-
-class Solution {
-    static Boolean isSubsetSum(int n, int arr[], int targetSum) {
         return hasSubsetWithTargetSum(arr, 0, n, targetSum);
     }
 
@@ -175,35 +153,6 @@ class Solution {
 
 
 //Method 2
-
-
-class Solution {
-    static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        return hasSubsetWithTargetSum(arr, 0, n, 0, targetSum);
-    }
-
-    private static boolean hasSubsetWithTargetSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
-        if (currentSubsetSum == targetSum) {
-            return true;
-        }
-
-        if (currentSubsetSum > targetSum) {
-            return false;
-        }
-
-        for (int i = index; i < n; i++) {
-            if(hasSubsetWithTargetSum(arr, i+1,n, currentSubsetSum+arr[i], targetSum)){
-                return true;
-            }
-        }
-        
-        return false;
-    }
-}
-
-
-
-//Aliter Implementation 
 
 class Solution {
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
