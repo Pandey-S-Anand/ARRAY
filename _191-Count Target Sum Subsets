@@ -1,13 +1,9 @@
-//Iterative Approach
+//Bruteforce Approach
 
-//Method 1
-
-//Naive Implementation
-
-class Solution{
+public class Solution {
     private static final int MOD = 1000000007;
 
-    public int perfectSum(int[] arr, int n, int targetSum) {
+    public static int findWays(int arr[], int targetSum) {
         int targetSumSubsetCount = 0;
         List<Integer> subsetSums = new ArrayList<>();
         subsetSums.add(0); // Start with the empty subset sum (i.e 0)
@@ -16,37 +12,11 @@ class Solution{
             int currentSize = subsetSums.size();
             for (int i = 0; i < currentSize; i++) {
                 int newSubsetSum = num + subsetSums.get(i);
+
                 if (newSubsetSum == targetSum) {
                     targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
                 }
 
-                subsetSums.add(newSubsetSum);
-            }
-        }
-
-        return targetSumSubsetCount;
-    }
-}
-
-
-//Optimal Implementation
-
-class Solution{
-    private static final int MOD = 1000000007;
-
-    public int perfectSum(int[] arr, int n, int targetSum) {
-        int targetSumSubsetCount = 0;
-        List<Integer> subsetSums = new ArrayList<>();
-        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
-
-        for (int num : arr) {
-            int currentSize = subsetSums.size();
-            for (int i = 0; i < currentSize; i++) {
-                int newSubsetSum = num + subsetSums.get(i);
-                if (newSubsetSum == targetSum) {
-                    targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
-                }
-                
                 if (newSubsetSum <= targetSum) {
                     subsetSums.add(newSubsetSum);
                 }
@@ -58,17 +28,16 @@ class Solution{
 }
 
 
-//Method 2
+//Improved Approach
 
-class Solution{
+public class Solution {
     private static final int MOD = 1000000007;
 
-    public int perfectSum(int[] arr, int n, int targetSum) {
-        int targetSumSubsetCount = 0, totalSubsets = 1 << n; // x << y = x * 2^n
+    public static int findWays(int arr[], int targetSum) {
+        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << arr.length; // x << y = x * 2^n
 
         for (int num = 0; num < totalSubsets; num++) {
-            int newSubsetSum = 0;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < arr.length; i++) {
                 if ((num & (1 << i)) != 0) {
                     newSubsetSum += arr[i];
 
@@ -81,6 +50,8 @@ class Solution{
             if (newSubsetSum == targetSum) {
                 targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
             }
+
+            newSubsetSum = 0;
         }
 
         return targetSumSubsetCount;
@@ -88,7 +59,73 @@ class Solution{
 }
 
 
-//Method 3
+//Good Approach
+
+public class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int findWays(int arr[], int targetSum) {
+        return countSubsetsWithTargetSum(arr, 0, targetSum);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (targetSum == 0) {
+            return 1;
+        }
+
+        if (index == arr.length || targetSum < 0) {
+            return 0;
+        }
+
+        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+
+        return (include + exclude) % MOD;
+    }
+}
+
+
+//Better Approach
+
+public class Solution {
+    private static int[][] memo;
+    private static final int MOD = 1000000007;
+
+    public static int findWays(int arr[], int targetSum) {
+        memo = new int[arr.length][targetSum + 1];
+        intializeMemo();
+        return countSubsetsWithTargetSum(arr, 0, targetSum);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (targetSum == 0) {
+            return 1;
+        }
+
+        if (index == arr.length || targetSum < 0) {
+            return 0;
+        }
+
+        if (memo[index][targetSum] != -1) {
+            return memo[index][targetSum];
+        }
+
+        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+
+        return memo[index][targetSum] = (include + exclude) % MOD;
+    }
+
+    private static void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+
+//Optimal Approach
 
 //Naive Implementation
 
