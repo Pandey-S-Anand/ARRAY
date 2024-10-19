@@ -319,11 +319,32 @@ class Solution {
         }
 
         for (int i = 1; i <= arr.length; i++) {
+            /*
+             * When attempting to partition an array into two subsets with equal sums, each
+             * element must be assigned to one of the two subsets. If any element in the
+             * array is greater than the defined target sum, it cannot be included in either
+             * subset. This is because including such an element would automatically cause
+             * that subset's sum to exceed the target sum, violating the requirement for
+             * equal sums.
+             * For example,arr[]={15,5} if targetSum = 10 and you have an element x = 15,
+             * adding x to either of the subset will result in a sum greater than 10, thus
+             * making it impossible to partition the array into two equal sum subset
+             */
+            if (arr[i - 1] >= targetSum) {
+                // If the current element is equal to the target sum, we can form the target sum subset with this element
+                return arr[i - 1] == targetSum ? true : false; 
+            }
+
             for (int j = 1; j <= targetSum; j++) {
                 dp[i][j] = dp[i - 1][j];
                 if (j >= arr[i - 1]) {
                     dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]];
                 }
+            }
+
+            // Early exit condition: If we found a subset that matches targetSum, return true
+            if (dp[i][targetSum]) {
+                return true;
             }
         }
 
@@ -352,12 +373,21 @@ class Solution {
         peviousRow[0] = true;
 
         for (int i = 1; i <= arr.length; i++) {
+
+            if (arr[i - 1] >= targetSum) {
+                return arr[i - 1] == targetSum ? true : false;
+            }
+
             currentRow[0] = true;
             for (int j = 1; j <= targetSum; j++) {
                 currentRow[j] = peviousRow[j];
                 if (j >= arr[i - 1]) {
                     currentRow[j] = currentRow[j] || peviousRow[j - arr[i - 1]];
                 }
+            }
+
+            if (currentRow[targetSum]) {
+                return true;
             }
 
             boolean[] temp = peviousRow;
