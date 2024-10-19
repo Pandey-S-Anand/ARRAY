@@ -1,12 +1,29 @@
 //Bruteforce Approach
 
-public class Solution {
+/*
+Important Testcases:
+Ex: 1
+
+arr = {0 ,0, 0, 0}
+targetSum=0
+
+Output  : 16
+
+Ex: 2
+
+arr= {0, 0, 1, 0, 1}
+targetSum=0
+
+Output  : 8
+*/
+
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
-        int targetSumSubsetCount = 0;
+    public int perfectSum(int arr[], int n, int targetSum) {
         List<Integer> subsetSums = new ArrayList<>();
         subsetSums.add(0); // Start with the empty subset sum (i.e 0)
+        int targetSumSubsetCount = targetSum == 0 ? 1 : 0;
 
         for (int num : arr) {
             int currentSize = subsetSums.size();
@@ -30,11 +47,11 @@ public class Solution {
 
 //Improved Approach
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
-        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << arr.length; // x << y = x * 2^n
+    public int perfectSum(int arr[], int n, int targetSum) {
+        int targetSumSubsetCount = targetSum == 0 ? 1 : 0, newSubsetSum = 0, totalSubsets = 1 << arr.length;
 
         for (int num = 0; num < totalSubsets; num++) {
             for (int i = 0; i < arr.length; i++) {
@@ -61,19 +78,19 @@ public class Solution {
 
 //Good Approach
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
+    public static int perfectSum(int arr[], int n, int targetSum) {
         return countSubsetsWithTargetSum(arr, 0, targetSum);
     }
 
     private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (targetSum == 0) {
-            return 1;
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
         }
 
-        if (index == arr.length || targetSum < 0) {
+        if (targetSum < 0) {
             return 0;
         }
 
@@ -87,16 +104,17 @@ public class Solution {
 
 //Aliter
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
-    private static int targetSumSubsetsCount = 0;
+    private static int targetSumSubsetsCount;
 
-    public static int findWays(int arr[], int targetSum) {
-        generateSubsetsSum(arr, 0, 0, targetSum);
+    public static int perfectSum(int arr[], int n, int targetSum) {
+        targetSumSubsetsCount = 0;
+        countSubsetsWithTargetSum(arr, 0, 0, targetSum);
         return targetSumSubsetsCount;
     }
 
-    private static void generateSubsetsSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+    private static void countSubsetsWithTargetSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
             targetSumSubsetsCount = (targetSumSubsetsCount + 1) % MOD;
         }
@@ -106,7 +124,7 @@ public class Solution {
         }
 
         for (int i = index; i < arr.length; i++) {
-            generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+            countSubsetsWithTargetSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
         }
     }
 }
@@ -114,22 +132,22 @@ public class Solution {
 
 //Better Approach
 
-public class Solution {
+class Solution {
     private static int[][] memo;
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
+    public static int perfectSum(int arr[], int n, int targetSum) {
         memo = new int[arr.length][targetSum + 1];
         intializeMemo();
         return countSubsetsWithTargetSum(arr, 0, targetSum);
     }
 
     private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (targetSum == 0) {
-            return 1;
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
         }
 
-        if (index == arr.length || targetSum < 0) {
+        if (targetSum < 0) {
             return 0;
         }
 
@@ -151,22 +169,51 @@ public class Solution {
 }
 
 
+
 //Optimal Approach
 
 //Naive Implementation
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
+    public static int perfectSum(int arr[], int n, int targetSum) {
         // dp[i][j] indicates the count of subsets of the subarray arr[0..i-1] that sum to target 'j'
         int[][] dp = new int[arr.length + 1][targetSum + 1];
-        /*
-         * If the target sum is 0, we can always form that sum with an empty subset
-         * because every array contains an empty subset that sums to 0.
-         */
-        for (int i = 0; i <= arr.length; i++) {
-            dp[i][0] = 1;
+
+        // There is one way to achieve a sum of 0 using an empty array, and that way is by selecting the empty subset.
+        dp[0][0] = 1;
+
+        // Filling the first column of the dp table for target sum = 0
+        for (int i = 1; i <= arr.length; i++) {
+            if (arr[i - 1] == 0) {
+                /*
+                 * When you encounter a zero in your array, you can either include it in your
+                 * subset or not. However, excluding it doesn't help us achieve our goal of
+                 * finding all possible subsets that lead to a sum of zero. Therefore, we will
+                 * always include the zero in our considerations.
+                 * Every time you include a zero, the target sum (which is zero in this case)
+                 * remains zero because 0−0=0. This effectively doubles the number of subsets
+                 * that sum to zero.
+                 * 
+                 * Ex:
+                 * 
+                 * arr[]={0,0}
+                 * 
+                 * dp[0][0] = 1: There is only one subset (the empty subset) that sums to zero
+                 * for a zero-size array.
+                 * dp[1][0] = 2: The empty subset and the first zero.
+                 * dp[2][0] = 4: The empty subset, the first zero, the second zero, and both
+                 * zeros together.
+                 */
+                dp[i][0] = 2 * dp[i - 1][0];
+            } else {
+                /*
+                 * If the current element is non-zero, we can only form the sum 0
+                 * using the previous states, i.e., we carry forward the count
+                 */
+                dp[i][0] = dp[i - 1][0];
+            }
         }
 
         // If the array is empty , we cannot form any positive target sum
@@ -179,10 +226,10 @@ public class Solution {
                 if (j < arr[i - 1]) {
                     /*
                      * If the current element is greater than the target sum We cannot include this
-                     * element because if we include the current element (arr[i-1]) the 
+                     * element because if we include the current element (arr[i-1]) the
                      * current target (j) will become negative hence not acheiveable
-                     * because array contains only positive elements once the target becomes
-                     * negative it will stay negative.
+                     * because array contains only positive(including 0) elements once the 
+                     * target becomes negative it will stay negative.
                      */
                     dp[i][j] = dp[i - 1][j];
                 } else {
@@ -203,14 +250,15 @@ public class Solution {
 
 //Optimal Implementation 
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
+    public static int perfectSum(int arr[], int n, int targetSum) {
         int[][] dp = new int[arr.length + 1][targetSum + 1];
 
-        for (int i = 0; i <= arr.length; i++) {
-            dp[i][0] = 1;
+        dp[0][0] = 1;
+        for (int i = 1; i <= arr.length; i++) {
+            dp[i][0] = arr[i - 1] == 0 ? 2 * dp[i - 1][0] : dp[i - 1][0];
         }
 
         for (int i = 1; i <= arr.length; i++) {
@@ -230,17 +278,17 @@ public class Solution {
 //Aliter (Space optimised implementation)
 
 
-public class Solution {
+class Solution {
     private static final int MOD = 1000000007;
 
-    public static int findWays(int arr[], int targetSum) {
+    public static int perfectSum(int arr[], int n, int targetSum) {
         int[] previousRow = new int[targetSum + 1];
         int[] currentRow = new int[targetSum + 1];
 
         previousRow[0] = 1;
 
         for (int i = 1; i <= arr.length; i++) {
-            currentRow[0] = 1;
+            currentRow[0] = arr[i - 1] == 0 ? 2 * previousRow[0] : previousRow[0];
             for (int j = 1; j <= targetSum; j++) {
                 currentRow[j] = previousRow[j];
                 if (j >= arr[i - 1]) {
@@ -256,106 +304,3 @@ public class Solution {
         return previousRow[targetSum];
     }
 }
-
-
-/*
-  If you want to print all the target sum subsets or count target sum subsets the 
-  following implementations wont give correct output if the given array contains '0' as element
-  i.e it will only work if the array contains positive elements.
-
-  Ex:
-
-  For Input: 
-  2 1
-  1 0
-
-  Your Code's output is: 
-  1
-
-  It's Correct output is: 
-  2
-
-
-//Implementation 1
-
-class Solution {
-    private static final int MOD = 1000000007;
-
-    public int perfectSum(int[] arr, int n, int targetSum) {
-        return generateSubsetsSum(arr, 0, 0,  targetSum);
-    }
-
-    private int generateSubsetsSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
-        if (currentSubsetSum == targetSum) {
-           return 1;
-        }
-
-        if (currentSubsetSum > targetSum) {
-            return 0;
-        }
-        
-        int targetSumSubsetsCount=0;
-        for (int i = index; i < arr.length; i++) {
-            targetSumSubsetsCount = (targetSumSubsetsCount + generateSubsetsSum(arr, i + 1, currentSubsetSum + arr[i], targetSum))%MOD;
-        }
-        
-        return targetSumSubsetsCount;
-    }
-}
-
-
-//Implementation 2
-
-public class Solution {
-    private static final int MOD = 1000000007;
-
-    public static int findWays(int arr[], int k) {
-      return countSubsetsWithTargetSum(arr,0,k);
-    }
-
-    private static int countSubsetsWithTargetSum(int[] arr, int index,int targetSum) {
-        if (targetSum == 0) {
-            return 1;
-        }
-
-        if (index == arr.length || targetSum < 0) {
-            return 0;
-        }
-
-        int includeCurrent = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
-        int excludeCurrent = countSubsetsWithTargetSum(arr, index + 1, targetSum);
-
-        return (includeCurrent + excludeCurrent) % MOD;
-    }
-}
-
-
-//Implementation 3
-
-
-public class Solution {
-    private static final int MOD = 1000000007;
-
-    public static int findWays(int arr[], int k) {
-      return countSubsetsWithTargetSum(arr,0,k);
-    }
-
-    private static int countSubsetsWithTargetSum(int[] arr, int index,int targetSum) {
-        if (targetSum == 0) {
-            return 1;
-        }
-
-        if (targetSum < 0) {
-            return 0;
-        }
-        
-        int targetSumSubsetCount = 0;
-        for (int i = index; i < arr.length; i++) {
-          targetSumSubsetCount=(targetSumSubsetCount + countSubsetsWithTargetSum(arr, i + 1,targetSum - arr[i]))%MOD;
-        }
-
-        return targetSumSubsetCount;
-    }
-}
-
-*/
