@@ -4,16 +4,16 @@
 
 class Solution {
     public int findTargetSumWays(int[] arr, int targetSum) {
-        return countSubsetsWithTargetSum(arr, 0, targetSum);
+        return findTargetSumWays(arr, 0, targetSum);
     }
 
-    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+    private int findTargetSumWays(int[] arr, int index, int targetSum) {
         if (index == arr.length) {
             return targetSum == 0 ? 1 : 0;
         }
 
-        int waysWithPositiveSign = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
-        int waysWithNegativeSign = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index]);
+        int waysWithPositiveSign = findTargetSumWays(arr, index + 1, targetSum - arr[index]);
+        int waysWithNegativeSign = findTargetSumWays(arr, index + 1, targetSum + arr[index]);
 
         return (waysWithPositiveSign + waysWithNegativeSign);
     }
@@ -40,10 +40,10 @@ class Solution {
 
         memo = new int[arr.length][(2 * arrSum) + 1];
         intializeMemo();
-        return countSubsetsWithTargetSum(arr, 0, targetSum, arrSum);
+        return findTargetSumWays(arr, 0, targetSum, arrSum);
     }
 
-    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum, int offset) {
+    private int findTargetSumWays(int[] arr, int index, int targetSum, int offset) {
         /*
          * 
          * Scenarios Where the Condition Applies:
@@ -77,8 +77,8 @@ class Solution {
             return memo[index][targetSum + offset];
         }
 
-        int waysWithPositiveSign = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index], offset);
-        int waysWithNegativeSign = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index], offset);
+        int waysWithPositiveSign = findTargetSumWays(arr, index + 1, targetSum - arr[index], offset);
+        int waysWithNegativeSign = findTargetSumWays(arr, index + 1, targetSum + arr[index], offset);
 
         return memo[index][targetSum + offset] = (waysWithPositiveSign + waysWithNegativeSign);
     }
