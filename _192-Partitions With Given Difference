@@ -1,0 +1,301 @@
+//Bruteforce Approach
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, n, (arrSum - d) / 2);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int n, int targetSum) {
+        List<Integer> subsetSums = new ArrayList<>();
+        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
+        int targetSumSubsetCount = targetSum == 0 ? 1 : 0;
+
+        for (int num : arr) {
+            int currentSize = subsetSums.size();
+            for (int i = 0; i < currentSize; i++) {
+                int newSubsetSum = num + subsetSums.get(i);
+
+                if (newSubsetSum == targetSum) {
+                    targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
+                }
+
+                if (newSubsetSum <= targetSum) {
+                    subsetSums.add(newSubsetSum);
+                }
+            }
+        }
+
+        return targetSumSubsetCount;
+    }
+}
+
+
+//Improved Approach
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, n, (arrSum - d) / 2);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int n, int targetSum) {
+        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << n;
+
+        for (int num = 0; num < totalSubsets; num++) {
+            for (int i = 0; i < n; i++) {
+                if ((num & (1 << i)) != 0) {
+                    newSubsetSum += arr[i];
+
+                    if (newSubsetSum > targetSum) {
+                        break;
+                    }
+                }
+            }
+
+            if (newSubsetSum == targetSum) {
+                targetSumSubsetCount = (targetSumSubsetCount + 1) % MOD;
+            }
+
+            newSubsetSum = 0;
+        }
+
+        return targetSumSubsetCount;
+    }
+}
+
+
+//Good Approach
+
+//Method 1
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+        
+        return countSubsetsWithTargetSum(arr, 0, (arrSum - d) / 2);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        if (targetSum < 0) {
+            return 0;
+        }
+
+        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+
+        return (include + exclude) % MOD;
+    }
+}
+
+
+//Method 2
+
+class Solution {
+    private static final int MOD = 1000000007;
+    private static int targetSumSubsetsCount;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        targetSumSubsetsCount = 0;
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        countSubsetsWithTargetSum(arr, 0, 0, (arrSum - d) / 2);
+
+        return targetSumSubsetsCount;
+    }
+
+    private static void countSubsetsWithTargetSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+        if (currentSubsetSum == targetSum) {
+            targetSumSubsetsCount = (targetSumSubsetsCount + 1) % MOD;
+        }
+
+        if (currentSubsetSum > targetSum) {
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            countSubsetsWithTargetSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+        }
+    }
+}
+
+
+
+//Better Approach
+
+class Solution {
+    private static final int MOD = 1000000007;
+    private static int[][] memo;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        int targetSum = (arrSum - d) / 2;
+        memo = new int[n][targetSum + 1];
+        intializeMemo();
+
+        return countSubsetsWithTargetSum(arr, 0, targetSum);
+    }
+
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        if (targetSum < 0) {
+            return 0;
+        }
+
+        if (memo[index][targetSum] != -1) {
+            return memo[index][targetSum];
+        }
+
+        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+
+        return memo[index][targetSum] = (include + exclude) % MOD;
+    }
+
+    private static void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, n, (arrSum - d) / 2);
+    }
+
+    private static int countSubsetsWithTargetSum(int arr[], int n, int targetSum) {
+        int[][] dp = new int[arr.length + 1][targetSum + 1];
+
+        dp[0][0] = 1;
+        for (int i = 1; i <= arr.length; i++) {
+            dp[i][0] = arr[i - 1] == 0 ? 2 * dp[i - 1][0] % MOD : dp[i - 1][0];
+        }
+
+        for (int i = 1; i <= arr.length; i++) {
+            for (int j = 1; j <= targetSum; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= arr[i - 1]) {
+                    dp[i][j] = (dp[i][j] + dp[i - 1][j - arr[i - 1]]) % MOD;
+                }
+            }
+        }
+
+        return dp[arr.length][targetSum];
+    }
+}
+
+
+//Aliter (space optimised)
+
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public static int countPartitions(int n, int d, int[] arr) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, n, (arrSum - d) / 2);
+    }
+
+    private static int countSubsetsWithTargetSum(int arr[], int n, int targetSum) {
+        int[] previousRow = new int[targetSum + 1];
+        int[] currentRow = new int[targetSum + 1];
+
+        previousRow[0] = 1;
+
+        for (int i = 1; i <= arr.length; i++) {
+            currentRow[0] = arr[i - 1] == 0 ? 2 * previousRow[0] % MOD : previousRow[0];
+            for (int j = 1; j <= targetSum; j++) {
+                currentRow[j] = previousRow[j];
+                if (j >= arr[i - 1]) {
+                    currentRow[j] = (currentRow[j] + previousRow[j - arr[i - 1]]) % MOD;
+                }
+            }
+
+            int[] temp = previousRow;
+            previousRow = currentRow;
+            currentRow = temp;
+        }
+
+        return previousRow[targetSum];
+    }
+}
