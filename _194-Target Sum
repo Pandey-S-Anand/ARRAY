@@ -12,10 +12,10 @@ class Solution {
             return targetSum == 0 ? 1 : 0;
         }
 
-        int includePos = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
-        int includeNeg = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index]);
+        int waysWithPositiveSign = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
+        int waysWithNegativeSign = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index]);
 
-        return (includePos + includeNeg);
+        return (waysWithPositiveSign + waysWithNegativeSign);
     }
 }
 
