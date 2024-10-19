@@ -1,0 +1,94 @@
+//Method 1
+
+//Naive Approach
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countSubsetsWithTargetSum(arr, 0, targetSum);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        int includePos = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
+        int includeNeg = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index]);
+
+        return (includePos + includeNeg);
+    }
+}
+
+
+//Optimal Approach
+
+/*
+The valid range of the target sum can go from -sum(arr) to sum(arr) (since the total sum of all elements in arr (0 <= nums[i] <= 1000)is the maximum sum we can achieve by assigning all positive signs, and -sum(arr) is the minimum sum by assigning all negative signs).
+
+To avoid negative indices in the memo array, we can offset the targetSum by adding sum(arr) to it, so that the new valid range of the target becomes 0 to 2 * sum(arr).
+*/
+
+class Solution {
+    private int[][] memo;
+
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        int arrSum = 0;
+        for (int num : arr) {
+            arrSum += num;
+        }
+
+        memo = new int[arr.length][(2 * arrSum) + 1];
+        intializeMemo();
+        return countSubsetsWithTargetSum(arr, 0, targetSum, arrSum);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum, int offset) {
+        /*
+         * 
+         * Scenarios Where the Condition Applies:
+         * 
+         * Array: nums = [1, 2, 3, 4] // total sum = 10
+         * Valid sum range: [-10, 10]
+         * 1. Initial Negative Target Sum:
+         * 
+         * Target Sum: -6
+         * 
+         * 
+         * However, if we only use '-' signs, the target sum could go out of bounds (e.g., -16).
+         * Therefore, there’s no way to achieve -16.
+         * 
+         * 2. Initial Positive Target Sum:
+         * 
+         * Target Sum: 6
+         * 
+         * If we only use '+' signs, the target sum could exceed the bounds (e.g., 16).
+         * Thus, there’s no way to achieve 16.
+         */
+        if (Math.abs(targetSum) > offset) {
+            return 0;
+        }
+
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        if (memo[index][targetSum + offset] != -1) {
+            return memo[index][targetSum + offset];
+        }
+
+        int waysWithPositiveSign = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index], offset);
+        int waysWithNegativeSign = countSubsetsWithTargetSum(arr, index + 1, targetSum + arr[index], offset);
+
+        return memo[index][targetSum + offset] = (waysWithPositiveSign + waysWithNegativeSign);
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Method 2
+
