@@ -184,11 +184,11 @@ class Solution {
 //Method 1
 
 class Solution {
-    private static int[] memo;
+    private static int[][] memo;
 
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        memo = new int[targetSum + 1];
-        Arrays.fill(memo, -1);
+        memo = new int[n][targetSum + 1];
+        intializeMemo();
         return hasSubsetWithTargetSum(arr, 0, n, targetSum);
     }
 
@@ -201,27 +201,31 @@ class Solution {
             return false;
         }
 
-        if (memo[targetSum] != -1) {
-            return memo[targetSum] == 1;
+        if (memo[index][targetSum] != -1) {
+            return memo[index][targetSum] == 1;
         }
 
-        memo[targetSum] = (hasSubsetWithTargetSum(arr, index + 1, n, targetSum - arr[index])
-                || hasSubsetWithTargetSum(arr, index + 1, n, targetSum)) ? 1 : 0;
+        memo[index][targetSum] = (hasSubsetWithTargetSum(arr, index + 1, n, targetSum - arr[index]) || hasSubsetWithTargetSum(arr, index + 1, n, targetSum)) ? 1 : 0;
 
-        return memo[targetSum] == 1;
+        return memo[index][targetSum] == 1;
+    }
+
+    private static void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
     }
 }
 
 
 //Method 2
 
-
 class Solution {
-    private static int[] memo;
+    private static int[][] memo;
 
     static Boolean isSubsetSum(int n, int arr[], int targetSum) {
-        memo = new int[targetSum + 1];
-        Arrays.fill(memo, -1);
+        memo = new int[n + 1][targetSum + 1];
+        intializeMemo();
         return hasSubsetWithTargetSum(arr, 0, n, targetSum);
     }
 
@@ -234,18 +238,24 @@ class Solution {
             return false;
         }
 
-        if (memo[targetSum] != -1) {
-            return memo[targetSum] == 1;
+        if (memo[index][targetSum] != -1) {
+            return memo[index][targetSum] == 1;
         }
 
         for (int i = index; i < n; i++) {
             if (hasSubsetWithTargetSum(arr, i + 1, n, targetSum - arr[i])) {
-                memo[targetSum] = 1;
+                memo[index][targetSum] = 1;
                 return true;
             }
         }
-        memo[targetSum] = 0;
+        memo[index][targetSum] = 0;
         return false;
+    }
+
+    private static void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
     }
 }
 
@@ -291,6 +301,10 @@ class Solution {
                     dp[i][j] = dp[i - 1][j - arr[i - 1]] || dp[i - 1][j];
                 }
             }
+
+            if (dp[i][targetSum]) {
+                return true; // Early exit condition: If we found a subset that matches targetSum, return true
+            }
         }
 
         return dp[n][targetSum]; // Return whether we can form the target sum using the first n elements
@@ -315,6 +329,10 @@ class Solution {
                 if (j >= arr[i - 1]) {
                     dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]];
                 }
+            }
+
+            if (dp[i][targetSum]) {
+                return true;
             }
         }
 
@@ -343,6 +361,10 @@ class Solution {
                 if (j >= arr[i - 1]) {
                     currentRow[j] = currentRow[j] || peviousRow[j - arr[i - 1]];
                 }
+            }
+
+            if (currentRow[targetSum]) {
+                return true;
             }
 
             boolean[] temp = peviousRow;
