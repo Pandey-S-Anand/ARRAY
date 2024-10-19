@@ -23,7 +23,8 @@ class Solution {
 //Optimal Approach
 
 /*
-The valid range of the target sum can go from -sum(arr) to sum(arr) (since the total sum of all elements in arr (0 <= nums[i] <= 1000)is the maximum sum we can achieve by assigning all positive signs, and -sum(arr) is the minimum sum by assigning all negative signs).
+The valid range of the target sum can go from -sum(arr) to sum(arr) (since the total sum of all elements in arr (0 <= nums[i] <= 1000).
+sum(arr) is the maximum sum we can achieve by assigning all positive signs, and -sum(arr) is the minimum sum by assigning all negative signs).
 
 To avoid negative indices in the memo array, we can offset the targetSum by adding sum(arr) to it, so that the new valid range of the target becomes 0 to 2 * sum(arr).
 */
@@ -92,3 +93,319 @@ class Solution {
 
 //Method 2
 
+//Bruteforce Approach
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int targetSum) {
+        List<Integer> subsetSums = new ArrayList<>();
+        subsetSums.add(0); // Start with the empty subset sum (i.e 0)
+        int targetSumSubsetCount = targetSum == 0 ? 1 : 0;
+
+        for (int num : arr) {
+            int currentSize = subsetSums.size();
+            for (int i = 0; i < currentSize; i++) {
+                int newSubsetSum = num + subsetSums.get(i);
+
+                if (newSubsetSum == targetSum) {
+                    targetSumSubsetCount = (targetSumSubsetCount + 1);
+                }
+
+                if (newSubsetSum <= targetSum) {
+                    subsetSums.add(newSubsetSum);
+                }
+            }
+        }
+
+        return targetSumSubsetCount;
+    }
+}
+
+
+//Improved Approach 
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int targetSum) {
+        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << arr.length;
+
+        for (int num = 0; num < totalSubsets; num++) {
+            for (int i = 0; i < arr.length; i++) {
+                if ((num & (1 << i)) != 0) {
+                    newSubsetSum += arr[i];
+
+                    if (newSubsetSum > targetSum) {
+                        break;
+                    }
+                }
+            }
+
+            if (newSubsetSum == targetSum) {
+                targetSumSubsetCount = (targetSumSubsetCount + 1);
+            }
+
+            newSubsetSum = 0;
+        }
+
+        return targetSumSubsetCount;
+    }
+}
+
+
+//Good Apprroach
+
+//Method 1
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, 0, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        if (targetSum < 0) {
+            return 0;
+        }
+
+        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum);
+
+        return (include + exclude);
+    }
+}
+
+
+//Method 2
+
+class Solution {
+    private int targetSumSubsetsCount;
+
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        targetSumSubsetsCount = 0;
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        countSubsetsWithTargetSum(arr, 0, 0, (arrSum - d) / 2);
+        return targetSumSubsetsCount;
+    }
+
+    private void countSubsetsWithTargetSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+        if (currentSubsetSum == targetSum) {
+            targetSumSubsetsCount = (targetSumSubsetsCount + 1);
+        }
+
+        if (currentSubsetSum > targetSum) {
+            return;
+        }
+
+        for (int i = index; i < arr.length; i++) {
+            countSubsetsWithTargetSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+        }
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        int targetSum = (arrSum - d) / 2;
+        memo = new int[arr.length][targetSum + 1];
+        intializeMemo();
+
+        return countSubsetsWithTargetSum(arr, 0, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
+        if (index == arr.length) {
+            return targetSum == 0 ? 1 : 0;
+        }
+
+        if (targetSum < 0) {
+            return 0;
+        }
+
+        if (memo[index][targetSum] != -1) {
+            return memo[index][targetSum];
+        }
+
+        memo[index][targetSum] = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index])
+                + countSubsetsWithTargetSum(arr, index + 1, targetSum);
+
+        return memo[index][targetSum];
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int arr[], int targetSum) {
+        int[][] dp = new int[arr.length + 1][targetSum + 1];
+
+        dp[0][0] = 1;
+        for (int i = 1; i <= arr.length; i++) {
+            dp[i][0] = arr[i - 1] == 0 ? 2 * dp[i - 1][0] : dp[i - 1][0];
+        }
+
+        for (int i = 1; i <= arr.length; i++) {
+            for (int j = 1; j <= targetSum; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= arr[i - 1]) {
+                    dp[i][j] = (dp[i][j] + dp[i - 1][j - arr[i - 1]]);
+                }
+            }
+        }
+
+        return dp[arr.length][targetSum];
+    }
+}
+
+
+//Aliter (space optimised)
+
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int arr[], int targetSum) {
+        int[] previousRow = new int[targetSum + 1];
+        int[] currentRow = new int[targetSum + 1];
+
+        previousRow[0] = 1;
+
+        for (int i = 1; i <= arr.length; i++) {
+            currentRow[0] = arr[i - 1] == 0 ? 2 * previousRow[0] : previousRow[0];
+            for (int j = 1; j <= targetSum; j++) {
+                currentRow[j] = previousRow[j];
+                if (j >= arr[i - 1]) {
+                    currentRow[j] = (currentRow[j] + previousRow[j - arr[i - 1]]);
+                }
+            }
+
+            int[] temp = previousRow;
+            previousRow = currentRow;
+            currentRow = temp;
+        }
+
+        return previousRow[targetSum];
+    }
+}
