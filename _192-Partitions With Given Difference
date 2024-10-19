@@ -1,5 +1,21 @@
 /*
+Logic : 
 
+We need to partition the given array into two subsets such that the difference between their sums equals a given value 'd'
+Let's denote the sum of the entire array as S
+Let S1 be the sum of the first subset.
+Let S2 be the sum of the second subset.
+
+According to the problem statement, we need to count the instances where the difference between the sums of these two subsets is equal to 'd' i.e S 1​ − S 2 = d
+
+We also know that the total sum of the array can be expressed as:
+S = S1 + S2
+Substituting the expression for S1 into the total sum equation, we get:​
+S= S2+ D + S2 = 2*S2 + d
+Rearranging this equation allows us to isolate S2
+S2=(S1-d)/2 
+
+To solve the problem, we need to count the number of subsets with sum as (S1-d)/2 
 */
 
 //Bruteforce Approach
@@ -14,6 +30,17 @@ class Solution {
             arrSum += val;
         }
 
+        /*
+         * (arrSum - d) < 0:
+         * Ensures that the target sum is not negative, which is unachievable with
+         * non-negative array elements.
+         * 
+         * (arrSum - d) % 2 != 0:
+         * Ensures that the target sum is even. If arrSum - d is not divisible by 2
+         * (i.e., it is odd),
+         * it is impossible to split the array elements into two subsets with integer sums.
+         * 
+         */
         if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
             return 0;
         }
