@@ -1,4 +1,6 @@
 /*
+Logic :
+
 Let the sum of all elements in the array be S. We want to partition the array into two subsets S1 and S2 such that their sums are equal. 
 Thus, S = S1 + S2, and since S1 = S2, we get:
 
