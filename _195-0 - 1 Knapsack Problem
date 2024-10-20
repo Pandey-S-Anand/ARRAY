@@ -10,7 +10,6 @@ class Solution {
          * Base Case 1: If the remaining capacity is 0, we cannot add any more items, so the maximum value obtainable is 0.
          * Base Case 2: If we have considered all items, there are no more items left to add, resulting in a value of 0.
          */
-
         if (remainingCapacity == 0 || index == weights.length) {
             return 0;
         }
@@ -19,8 +18,7 @@ class Solution {
         int exclude = findMaxValue(index + 1, weights, values, remainingCapacity);
 
         int include = Integer.MIN_VALUE;
-        // Check if we can include the current item (only if its weight is less than or
-        // equal to the remaining capacity)
+        // Check if we can include the current item (only if its weight is less than or equal to the remaining capacity)
         if (weights[index] <= remainingCapacity) {
             // If we can include the current item, add its value
             include = values[index] + findMaxValue(index + 1, weights, values, remainingCapacity - weights[index]);
