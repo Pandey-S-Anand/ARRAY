@@ -1,0 +1,193 @@
+//Bruteforce Approach
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int result = coinChange(0, coins, amount);
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
+    private int coinChange(int index, int[] coins, int remainingAmount) {
+        if (remainingAmount == 0) {
+            return 0;
+        }
+
+        if (index == coins.length) {
+            return Integer.MAX_VALUE;
+        }
+
+        int include = Integer.MAX_VALUE;
+        if (coins[index] <= remainingAmount) {
+            include = coinChange(index, coins, remainingAmount - coins[index]);
+            if (include != Integer.MAX_VALUE) {
+                include += 1;
+            }
+        }
+
+        int exclude = coinChange(index + 1, coins, remainingAmount);
+
+        return Math.min(include, exclude);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int coinChange(int[] coins, int amount) {
+        memo = new int[coins.length][amount + 1];
+        intializeMemo();
+        int result = coinChange(0, coins, amount);
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
+    private int coinChange(int index, int[] coins, int remainingAmount) {
+        if (remainingAmount == 0) {
+            return 0;
+        }
+
+        if (index == coins.length) {
+            return Integer.MAX_VALUE;
+        }
+
+        if (memo[index][remainingAmount] != -1) {
+            return memo[index][remainingAmount];
+        }
+
+        int include = Integer.MAX_VALUE;
+        if (coins[index] <= remainingAmount) {
+            include = coinChange(index, coins, remainingAmount - coins[index]);
+            if (include != Integer.MAX_VALUE) {
+                include += 1;
+            }
+        }
+
+        int exclude = coinChange(index + 1, coins, remainingAmount);
+
+        return memo[index][remainingAmount] = Math.min(include, exclude);
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
+//Naive Implementation 
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+
+        for (int i = 0; i <= coins.length; i++) {
+            dp[i][0] = 0;
+        }
+
+        for (int i = 1; i <= amount; i++) {
+            dp[0][i] = Integer.MAX_VALUE;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int exclude = dp[i - 1][j];
+                int include = Integer.MAX_VALUE;
+                if (coins[i - 1] <= j) {
+                    include = dp[i][j - coins[i - 1]];
+                    if (include != Integer.MAX_VALUE) {
+                        include += 1;
+                    }
+                }
+
+                dp[i][j] = Math.min(include, exclude);
+            }
+        }
+
+        return dp[coins.length][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length][amount];
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+
+        for (int i = 1; i <= amount; i++) {
+            dp[0][i] = Integer.MAX_VALUE;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (coins[i - 1] <= j) {
+                    if (dp[i][j - coins[i - 1]] != Integer.MAX_VALUE) {
+                        dp[i][j] = Math.min(dp[i][j], 1 + dp[i][j - coins[i - 1]]);
+                    }
+                }
+            }
+        }
+
+        return dp[coins.length][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length][amount];
+    }
+}
+
+
+//Aliter (Space optimised)
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] prevRow = new int[amount + 1];
+        int[] currRow = new int[amount + 1];
+
+        for (int i = 1; i <= amount; i++) {
+            prevRow[i] = Integer.MAX_VALUE;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                currRow[j] = prevRow[j];
+                if (coins[i - 1] <= j) {
+                    if (currRow[j - coins[i - 1]] != Integer.MAX_VALUE) {
+                        currRow[j] = Math.min(currRow[j], 1 + currRow[j - coins[i - 1]]);
+                    }
+                }
+            }
+            int[] temp = currRow;
+            currRow = prevRow;
+            prevRow = temp;
+        }
+
+        return prevRow[amount] == Integer.MAX_VALUE ? -1 : prevRow[amount];
+    }
+}
+
+
+//Aliter (Further space optimised)
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = Integer.MAX_VALUE;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                if (coins[i - 1] <= j) {
+                    if (dp[j - coins[i - 1]] != Integer.MAX_VALUE) {
+                        dp[j] = Math.min(dp[j], 1 + dp[j - coins[i - 1]]);
+                    }
+                }
+            }
+        }
+
+        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+    }
+}
