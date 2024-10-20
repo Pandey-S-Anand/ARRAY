@@ -51,10 +51,10 @@ class Solution {
     private static final int MOD = 1000000007;
 
     public int perfectSum(int arr[], int n, int targetSum) {
-        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << arr.length;
+        int targetSumSubsetCount = 0, newSubsetSum = 0, totalSubsets = 1 << n;
 
         for (int num = 0; num < totalSubsets; num++) {
-            for (int i = 0; i < arr.length; i++) {
+            for (int i = 0; i < n; i++) {
                 if ((num & (1 << i)) != 0) {
                     newSubsetSum += arr[i];
 
@@ -82,11 +82,11 @@ class Solution {
     private static final int MOD = 1000000007;
 
     public static int perfectSum(int arr[], int n, int targetSum) {
-        return countSubsetsWithTargetSum(arr, 0, targetSum);
+        return countSubsetsWithTargetSum(arr, 0, n, targetSum);
     }
 
-    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (index == arr.length) {
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int n, int targetSum) {
+        if (index == n) {
             return targetSum == 0 ? 1 : 0;
         }
 
@@ -94,8 +94,8 @@ class Solution {
             return 0;
         }
 
-        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
-        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+        int include = countSubsetsWithTargetSum(arr, index + 1, n, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, n, targetSum) % MOD;
 
         return (include + exclude) % MOD;
     }
@@ -110,11 +110,11 @@ class Solution {
 
     public static int perfectSum(int arr[], int n, int targetSum) {
         targetSumSubsetsCount = 0;
-        countSubsetsWithTargetSum(arr, 0, 0, targetSum);
+        countSubsetsWithTargetSum(arr, 0, n, 0, targetSum);
         return targetSumSubsetsCount;
     }
 
-    private static void countSubsetsWithTargetSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
+    private static void countSubsetsWithTargetSum(int[] arr, int index, int n, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
             targetSumSubsetsCount = (targetSumSubsetsCount + 1) % MOD;
         }
@@ -123,8 +123,8 @@ class Solution {
             return;
         }
 
-        for (int i = index; i < arr.length; i++) {
-            countSubsetsWithTargetSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+        for (int i = index; i < n; i++) {
+            countSubsetsWithTargetSum(arr, i + 1, n, currentSubsetSum + arr[i], targetSum);
         }
     }
 }
@@ -137,13 +137,13 @@ class Solution {
     private static final int MOD = 1000000007;
 
     public static int perfectSum(int arr[], int n, int targetSum) {
-        memo = new int[arr.length][targetSum + 1];
+        memo = new int[n][targetSum + 1];
         intializeMemo();
-        return countSubsetsWithTargetSum(arr, 0, targetSum);
+        return countSubsetsWithTargetSum(arr, 0, n, targetSum);
     }
 
-    private static int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (index == arr.length) {
+    private static int countSubsetsWithTargetSum(int[] arr, int index, int n, int targetSum) {
+        if (index == n) {
             return targetSum == 0 ? 1 : 0;
         }
 
@@ -155,8 +155,8 @@ class Solution {
             return memo[index][targetSum];
         }
 
-        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]) % MOD;
-        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum) % MOD;
+        int include = countSubsetsWithTargetSum(arr, index + 1, n, targetSum - arr[index]) % MOD;
+        int exclude = countSubsetsWithTargetSum(arr, index + 1, n, targetSum) % MOD;
 
         return memo[index][targetSum] = (include + exclude) % MOD;
     }
@@ -179,13 +179,13 @@ class Solution {
 
     public static int perfectSum(int arr[], int n, int targetSum) {
         // dp[i][j] indicates the count of subsets of the subarray arr[0..i-1] that sum to target 'j'
-        int[][] dp = new int[arr.length + 1][targetSum + 1];
+        int[][] dp = new int[n + 1][targetSum + 1];
 
         // There is one way to achieve a sum of 0 using an empty array, and that way is by selecting the empty subset.
         dp[0][0] = 1;
 
         // Filling the first column of the dp table for target sum = 0
-        for (int i = 1; i <= arr.length; i++) {
+        for (int i = 1; i <= n; i++) {
             if (arr[i - 1] == 0) {
                 /*
                  * When you encounter a zero in your array, you can either include it in your
@@ -221,7 +221,7 @@ class Solution {
             dp[0][i] = 0;
         }
 
-        for (int i = 1; i <= arr.length; i++) {
+        for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= targetSum; j++) {
                 if (j < arr[i - 1]) {
                     /*
@@ -243,7 +243,7 @@ class Solution {
             }
         }
 
-        return dp[arr.length][targetSum]; // Return count of subsets that can form the target sum using all the elements
+        return dp[n][targetSum]; // Return count of subsets that can form the target sum using all the elements
     }
 }
 
@@ -254,14 +254,14 @@ class Solution {
     private static final int MOD = 1000000007;
 
     public static int perfectSum(int arr[], int n, int targetSum) {
-        int[][] dp = new int[arr.length + 1][targetSum + 1];
+        int[][] dp = new int[n + 1][targetSum + 1];
 
         dp[0][0] = 1;
-        for (int i = 1; i <= arr.length; i++) {
+        for (int i = 1; i <= n; i++) {
             dp[i][0] = arr[i - 1] == 0 ? 2 * dp[i - 1][0] : dp[i - 1][0];
         }
 
-        for (int i = 1; i <= arr.length; i++) {
+        for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= targetSum; j++) {
                 dp[i][j] = dp[i - 1][j];
                 if (j >= arr[i - 1]) {
@@ -270,7 +270,7 @@ class Solution {
             }
         }
 
-        return dp[arr.length][targetSum];
+        return dp[n][targetSum];
     }
 }
 
@@ -287,7 +287,7 @@ class Solution {
 
         previousRow[0] = 1;
 
-        for (int i = 1; i <= arr.length; i++) {
+        for (int i = 1; i <= n; i++) {
             currentRow[0] = arr[i - 1] == 0 ? 2 * previousRow[0] : previousRow[0];
             for (int j = 1; j <= targetSum; j++) {
                 currentRow[j] = previousRow[j];
