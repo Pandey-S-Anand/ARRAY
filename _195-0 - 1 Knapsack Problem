@@ -1,26 +1,32 @@
 //Bruteforce Approach
 
-
-
-//Improved Approach
-
 class Solution {
     static int knapSack(int capacity, int[] weights, int[] values) {
         return findMaxValue(0, weights, values, capacity);
     }
 
     private static int findMaxValue(int index, int[] weights, int[] values, int remainingCapacity) {
+        /*
+         * Base Case 1: If the remaining capacity is 0, we cannot add any more items, so the maximum value obtainable is 0.
+         * Base Case 2: If we have considered all items, there are no more items left to add, resulting in a value of 0.
+         */
+
         if (remainingCapacity == 0 || index == weights.length) {
             return 0;
         }
 
+        // Exclude the current item
         int exclude = findMaxValue(index + 1, weights, values, remainingCapacity);
 
         int include = Integer.MIN_VALUE;
+        // Check if we can include the current item (only if its weight is less than or
+        // equal to the remaining capacity)
         if (weights[index] <= remainingCapacity) {
+            // If we can include the current item, add its value
             include = values[index] + findMaxValue(index + 1, weights, values, remainingCapacity - weights[index]);
         }
 
+        // Return the maximum of including or excluding the current item
         return Math.max(include, exclude);
     }
 }
@@ -72,10 +78,12 @@ class Solution {
     static int knapSack(int capacity, int[] weights, int[] values) {
         int[][] dp = new int[weights.length + 1][capacity + 1];
 
+        //When no items are available to choose from, the maximum obtainable value is 0 for any capacity.
         for (int i = 0; i <= capacity; i++) {
             dp[0][i] = 0;
         }
 
+        //No matter how many items are available, if the capacity is 0, the maximum obtainable value is 0 because no items can be included.
         for (int i = 1; i <= weights.length; i++) {
             dp[i][0] = 0;
         }
