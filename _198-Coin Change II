@@ -6,21 +6,35 @@ class Solution {
     }
 
     private int coinChange(int index, int[] coins, int remainingAmount) {
+        /*
+         * Base case: If the remaining amount to be made is 0,
+         * it means we've found a valid combination of coins
+         */
         if (remainingAmount == 0) {
-            return 1;
+            return 1; // Count this combination
         }
 
+        /*
+         * Base case: If we've exhausted all coins and still have remaining amount,
+         * it means this path does not lead to a valid combination
+         */
         if (index == coins.length) {
-            return 0;
+            return 0; // No valid combination found
         }
 
         int include = 0;
+        // Check if the current coin can be included in the combination
         if (coins[index] <= remainingAmount) {
+            /*
+             * Include the current coin and stay at the same index to allow for
+             * using the coin again (since we have an infinite supply)
+             */
             include = coinChange(index, coins, remainingAmount - coins[index]);
         }
-
+        // Move to the next coin and calculate the combinations excluding the current coin
         int exclude = coinChange(index + 1, coins, remainingAmount);
 
+        // Return the total combinations by adding the combinations including the current coin and excluding it
         return (include + exclude);
     }
 }
@@ -73,12 +87,24 @@ class Solution {
 
 class Solution {
     public int change(int amount, int[] coins) {
+        /*
+         * dp[i][j] represents the number of combinations possible to make up the amount
+         * 'j' using the first 'i' coins from the coins array. i.e coins[0...i-1]
+         */
         int[][] dp = new int[coins.length + 1][amount + 1];
 
+        /*
+         * Base case 1: If the amount is 0, there is exactly one way to achieve that
+         * amount, regardless of the coins available (by choosing not to use any coins
+         * at all).
+         */
         for (int i = 0; i <= coins.length; i++) {
             dp[i][0] = 1;
         }
-
+        /*
+         * Base case 2: If there are no coins (i.e., using 0 coins),
+         * there are no ways to make any positive amount.
+         */
         for (int i = 1; i <= amount; i++) {
             dp[0][i] = 0;
         }
@@ -97,6 +123,7 @@ class Solution {
         return dp[coins.length][amount];
     }
 }
+
 
 //Optimal Implementation 
 
