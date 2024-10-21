@@ -1,0 +1,85 @@
+/*
+You cannot hold multiple stocks at the same time. At the start, you are allowed to buy a stock because you currently do not own any.
+
+On any given day when you have the option to buy, you have two choices:
+
+Buy the stock: If you choose to buy on that day, you will not be able to buy again until you sell the stock you just acquired.
+In this case, you should account for the purchase as a negative value (since profit is calculated as sell price minus buy price).
+Not buy the stock: If you decide not to buy, you still retain the option to purchase the stock on a future day.
+When you cannot buy, it means you already hold a stock. In this situation, you also have two options:
+
+Sell the stock: If you choose to sell on that day, you can then buy a stock again in the future.
+You would add the selling price as a positive value (since profit is calculated as sell price minus buy price).
+Not sell the stock: If you choose not to sell, you cannot buy any other stock until you sell the one you currently hold.
+
+
+When we reach the end of the index, it’s possible that we either never bought any stock or bought a stock but did not sell it. 
+In this case, the maximum profit will be 0, as there are no more days left to make any trades.
+*/
+
+//Bruteforce Approach
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        return calculateMaxProfit(0, prices, true);
+    }
+
+    private int calculateMaxProfit(int currentIndex, int[] prices, boolean canBuy) {
+        if (currentIndex == prices.length) {
+            return 0;
+        }
+
+        if (canBuy) {
+            int buyStock = -prices[currentIndex] + calculateMaxProfit(currentIndex + 1, prices, false);
+            int skipBuy = calculateMaxProfit(currentIndex + 1, prices, true);
+            return Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[currentIndex] + calculateMaxProfit(currentIndex + 1, prices, true);
+        int skipSell = calculateMaxProfit(currentIndex + 1, prices, false);
+        return Math.max(sellStock, skipSell);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int maxProfit(int[] prices) {
+        memo = new int[prices.length][2];
+        initializeMemo();
+        return calculateMaxProfit(0, prices, 1);
+    }
+
+    private int calculateMaxProfit(int index, int[] prices, int canBuy) {
+        if (index == prices.length) {
+            return 0;
+        }
+
+        if (memo[index][canBuy] != -1) {
+            return memo[index][canBuy];
+        }
+
+        if (canBuy == 1) {
+            int buyStock = -prices[index] + calculateMaxProfit(index + 1, prices, 0);
+            int skipBuy = calculateMaxProfit(index + 1, prices, 1);
+            return memo[index][canBuy] = Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[index] + calculateMaxProfit(index + 1, prices, 1);
+        int skipSell = calculateMaxProfit(index + 1, prices, 0);
+        return memo[index][canBuy] = Math.max(sellStock, skipSell);
+    }
+
+    private void initializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
