@@ -6,24 +6,36 @@ class Solution {
     }
 
     private int cutRod(int pieceLength, int[] price, int remainingLength) {
+        // Base case: If no more length is remaining, no revenue can be made
         if (remainingLength == 0) {
             return 0;
         }
 
+        /*
+         * Base case: If we've exhausted all possible piece lengths but still have some
+         * length of rod remaining, return a negative value (Integer.MIN_VALUE) to
+         * indicate that no valid cut can be made to use up the remaining length.
+         */
         if (pieceLength == (price.length + 1)) {
             return Integer.MIN_VALUE;
         }
 
+        // Option 1: Exclude the current piece length and move to the next piece length
         int exclude = cutRod(pieceLength + 1, price, remainingLength);
         int include = Integer.MIN_VALUE;
 
         if (remainingLength >= pieceLength) {
+            /*
+             * Option 2: Include the current piece length if it fits into the remaining rod
+             * length. Recursively attempt to cut the rod again using the same piece length
+             * to maximize the total value.
+             */
             include = cutRod(pieceLength, price, remainingLength - pieceLength);
             if (include != Integer.MIN_VALUE) {
-                include += price[pieceLength - 1];
+                include += price[pieceLength - 1]; // If it's possible to include the current piece, add its value to the total
             }
         }
-
+        // Return the maximum value between including and excluding the current piece length
         return Math.max(include, exclude);
     }
 }
@@ -80,12 +92,23 @@ class Solution {
 
 class Solution {
     public int cutRod(int price[], int n) {
+        /*
+         * dp[i][j] typically represents the maximum revenue that can be obtained by
+         * cutting a rod of length j using the first i piece lengths available (i.e.,
+         * considering piece lengths from 1 to i).
+         */
         int[][] dp = new int[price.length + 1][n + 1];
 
+        // Base case: If the remaining rod length is zero, no revenue can be obtained.
         for (int i = 0; i <= price.length; i++) {
             dp[i][0] = 0;
         }
 
+        /*
+         * Base case: If all possible piece lengths have been considered and there is
+         * still remaining rod length, return a negative value (Integer.MIN_VALUE) to
+         * indicate that no valid cuts can be made to utilize the remaining length.
+         */
         for (int i = 1; i <= n; i++) {
             dp[0][i] = Integer.MIN_VALUE;
         }
