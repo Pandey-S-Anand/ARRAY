@@ -1,0 +1,166 @@
+//Bruteforce Approach
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        return coinChange(0, coins, amount);
+    }
+
+    private int coinChange(int index, int[] coins, int remainingAmount) {
+        if (remainingAmount == 0) {
+            return 1;
+        }
+
+        if (index == coins.length) {
+            return 0;
+        }
+
+        int include = 0;
+        if (coins[index] <= remainingAmount) {
+            include = coinChange(index, coins, remainingAmount - coins[index]);
+        }
+
+        int exclude = coinChange(index + 1, coins, remainingAmount);
+
+        return (include + exclude);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int change(int amount, int[] coins) {
+        memo = new int[coins.length][amount + 1];
+        intializeMemo();
+        return coinChange(0, coins, amount);
+    }
+
+    private int coinChange(int index, int[] coins, int remainingAmount) {
+        if (remainingAmount == 0) {
+            return 1;
+        }
+
+        if (index == coins.length) {
+            return 0;
+        }
+
+        if (memo[index][remainingAmount] != -1) {
+            return memo[index][remainingAmount];
+        }
+
+        int include = 0;
+        if (coins[index] <= remainingAmount) {
+            include = coinChange(index, coins, remainingAmount - coins[index]);
+        }
+
+        int exclude = coinChange(index + 1, coins, remainingAmount);
+
+        return memo[index][remainingAmount] = include + exclude;
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+//Optimal Approach
+
+//Naive Implementation
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+
+        for (int i = 0; i <= coins.length; i++) {
+            dp[i][0] = 1;
+        }
+
+        for (int i = 1; i <= amount; i++) {
+            dp[0][i] = 0;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int exclude = dp[i - 1][j];
+                int include = 0;
+                if (coins[i - 1] <= j) {
+                    include = dp[i][j - coins[i - 1]];
+                }
+                dp[i][j] = include + exclude;
+            }
+        }
+
+        return dp[coins.length][amount];
+    }
+}
+
+//Optimal Implementation 
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+
+        for (int i = 0; i <= coins.length; i++) {
+            dp[i][0] = 1;
+        }
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (coins[i - 1] <= j) {
+                    dp[i][j] += dp[i][j - coins[i - 1]];
+                }
+            }
+        }
+
+        return dp[coins.length][amount];
+    }
+}
+
+
+//Aliter (space optimised)
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] previousRow = new int[amount + 1];
+        int[] currentRow = new int[amount + 1];
+
+        for (int i = 1; i <= coins.length; i++) {
+            currentRow[0] = 1;
+            for (int j = 1; j <= amount; j++) {
+                currentRow[j] = previousRow[j];
+                if (coins[i - 1] <= j) {
+                    currentRow[j] += currentRow[j - coins[i - 1]];
+                }
+            }
+            int[] temp = currentRow;
+            currentRow = previousRow;
+            previousRow = temp;
+        }
+
+        return previousRow[amount];
+    }
+}
+
+//Aliter (further space optimised)
+
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+
+        for (int i = 1; i <= coins.length; i++) {
+            dp[0] = 1;
+            for (int j = 1; j <= amount; j++) {
+                if (coins[i - 1] <= j) {
+                    dp[j] += dp[j - coins[i - 1]];
+                }
+            }
+        }
+
+        return dp[amount];
+    }
+}
