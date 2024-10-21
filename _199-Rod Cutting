@@ -1,0 +1,191 @@
+//Bruteforce Approach
+
+class Solution {
+    public int cutRod(int price[], int n) {
+        return cutRod(1, price, n);
+    }
+
+    private int cutRod(int pieceLength, int[] price, int remainingLength) {
+        if (remainingLength == 0) {
+            return 0;
+        }
+
+        if (pieceLength == (price.length + 1)) {
+            return Integer.MIN_VALUE;
+        }
+
+        int exclude = cutRod(pieceLength + 1, price, remainingLength);
+        int include = Integer.MIN_VALUE;
+
+        if (remainingLength >= pieceLength) {
+            include = cutRod(pieceLength, price, remainingLength - pieceLength);
+            if (include != Integer.MIN_VALUE) {
+                include += price[pieceLength - 1];
+            }
+        }
+
+        return Math.max(include, exclude);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int cutRod(int price[], int n) {
+        memo = new int[price.length + 1][n + 1];
+        intializeMemo();
+        return cutRod(1, price, n);
+    }
+
+    private int cutRod(int pieceLength, int[] price, int remainingLength) {
+        if (remainingLength == 0) {
+            return 0;
+        }
+
+        if (pieceLength > price.length) {
+            return Integer.MIN_VALUE;
+        }
+
+        if (memo[pieceLength][remainingLength] != -1) {
+            return memo[pieceLength][remainingLength];
+        }
+
+        int exclude = cutRod(pieceLength + 1, price, remainingLength);
+        int include = Integer.MIN_VALUE;
+
+        if (remainingLength >= pieceLength) {
+            include = cutRod(pieceLength, price, remainingLength - pieceLength);
+            if (include != Integer.MIN_VALUE) {
+                include += price[pieceLength - 1];
+            }
+        }
+
+        return memo[pieceLength][remainingLength] = Math.max(include, exclude);
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
+//Naive Implementation 
+
+class Solution {
+    public int cutRod(int price[], int n) {
+        int[][] dp = new int[price.length + 1][n + 1];
+
+        for (int i = 0; i <= price.length; i++) {
+            dp[i][0] = 0;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            dp[0][i] = Integer.MIN_VALUE;
+        }
+
+        for (int i = 1; i <= price.length; i++) {
+            for (int j = 1; j <= n; j++) {
+                int exclude = dp[i - 1][j];
+                int include = Integer.MIN_VALUE;
+                if (j >= i) {
+                    include = dp[i][j - i];
+                    if (include != Integer.MIN_VALUE) {
+                        include += price[i - 1];
+                    }
+                }
+
+                dp[i][j] = Math.max(include, exclude);
+            }
+        }
+
+        return dp[price.length][n];
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public int cutRod(int price[], int n) {
+        int[][] dp = new int[price.length + 1][n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            dp[0][i] = Integer.MIN_VALUE;
+        }
+
+        for (int i = 1; i <= price.length; i++) {
+            for (int j = 1; j <= n; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= i) {
+                    if (dp[i][j - i] != Integer.MIN_VALUE) {
+                        dp[i][j] = Math.max(dp[i][j], dp[i][j - i] + price[i - 1]);
+                    }
+                }
+            }
+        }
+
+        return dp[price.length][n];
+    }
+}
+
+
+//Aliter (space optimised)
+
+class Solution {
+    public int cutRod(int price[], int n) {
+        int[] previousRow = new int[n + 1];
+        int[] currentRow = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            previousRow[i] = Integer.MIN_VALUE;
+        }
+
+        for (int i = 1; i <= price.length; i++) {
+            for (int j = 1; j <= n; j++) {
+                currentRow[j] = previousRow[j];
+                if (j >= i) {
+                    if (currentRow[j - i] != Integer.MIN_VALUE) {
+                        currentRow[j] = Math.max(currentRow[j], currentRow[j - i] + price[i - 1]);
+                    }
+                }
+            }
+            int[] temp = currentRow;
+            currentRow = previousRow;
+            previousRow = temp;
+        }
+
+        return previousRow[n];
+    }
+}
+
+
+//Aliter (further space optimised)
+
+class Solution {
+    public int cutRod(int price[], int n) {
+        int[] dp = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            dp[i] = Integer.MIN_VALUE;
+        }
+
+        for (int i = 1; i <= price.length; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (j >= i) {
+                    if (dp[j - i] != Integer.MIN_VALUE) {
+                        dp[j] = Math.max(dp[j], dp[j - i] + price[i - 1]);
+                    }
+                }
+            }
+        }
+
+        return dp[n];
+    }
+}
