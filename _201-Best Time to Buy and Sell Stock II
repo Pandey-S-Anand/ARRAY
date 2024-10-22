@@ -13,8 +13,7 @@ You would add the selling price as a positive value (since profit is calculated 
 Not sell the stock: If you choose not to sell, you cannot buy any other stock until you sell the one you currently hold.
 
 
-When we reach the end of the index, it’s possible that we either never bought any stock or bought a stock but did not sell it. 
-In this case, the maximum profit will be 0, as there are no more days left to make any trades.
+When we reach the end of the index, In this case, the maximum profit will be 0, as there are no more days left to make any trades.
 */
 
 //Bruteforce Approach
