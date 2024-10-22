@@ -6,7 +6,8 @@ On any given day when you have the option to buy, you have two choices:
 Buy the stock: If you choose to buy on that day, you will not be able to buy again until you sell the stock you just acquired.
 In this case, you should account for the purchase as a negative value (since profit is calculated as sell price minus buy price).
 Not buy the stock: If you decide not to buy, you still retain the option to purchase the stock on a future day.
-When you cannot buy, it means you already hold a stock. In this situation, you also have two options:
+
+On any given day when you donot have the option to buy the stock(it means you already hold a stock.), In this situation, you also have two options:
 
 Sell the stock: If you choose to sell on that day, you can then buy a stock again in the future.
 You would add the selling price as a positive value (since profit is calculated as sell price minus buy price).
