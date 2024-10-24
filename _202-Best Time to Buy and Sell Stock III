@@ -1,0 +1,68 @@
+//Bruteforce Approach
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        return calculateMaxProfit(0, prices, 1, 2);
+    }
+
+    private int calculateMaxProfit(int index, int[] prices, int canBuy, int transactionCount) {
+        if (transactionCount == 0 || index == prices.length) {
+            return 0;
+        }
+
+        if (canBuy == 1) {
+            int buyStock = -prices[index] + calculateMaxProfit(index + 1, prices, 0, transactionCount);
+            int skipBuy = calculateMaxProfit(index + 1, prices, 1, transactionCount);
+            return Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[index] + calculateMaxProfit(index + 1, prices, 1, transactionCount - 1);
+        int skipSell = calculateMaxProfit(index + 1, prices, 0, transactionCount);
+        return Math.max(sellStock, skipSell);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][][] memo;
+
+    public int maxProfit(int[] prices) {
+        memo = new int[prices.length][2][3];
+        intializeMemo();
+        return calculateMaxProfit(0, prices, 1, 2);
+    }
+
+    private int calculateMaxProfit(int index, int[] prices, int canBuy, int transactionCount) {
+        if (transactionCount == 0 || index == prices.length) {
+            return 0;
+        }
+
+        if (memo[index][canBuy][transactionCount] != -1) {
+            return memo[index][canBuy][transactionCount];
+        }
+
+        if (canBuy == 1) {
+            int buyStock = -prices[index] + calculateMaxProfit(index + 1, prices, 0, transactionCount);
+            int skipBuy = calculateMaxProfit(index + 1, prices, 1, transactionCount);
+            return memo[index][canBuy][transactionCount] = Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[index] + calculateMaxProfit(index + 1, prices, 1, transactionCount - 1);
+        int skipSell = calculateMaxProfit(index + 1, prices, 0, transactionCount);
+        return memo[index][canBuy][transactionCount] = Math.max(sellStock, skipSell);
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            for (int j = 0; j < memo[0].length; j++) {
+                Arrays.fill(memo[i][j], -1);
+            }
+        }
+    }
+}
+
+
+//Optimal Approach 
+
