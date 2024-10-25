@@ -23,7 +23,7 @@ class Solution {
 }
 
 
-//Better Approach
+//Good Approach
 
 class Solution {
     private int[][][] memo;
@@ -64,7 +64,7 @@ class Solution {
 }
 
 
-//Optimal Approach 
+//Better Approach 
 
 //Naive Implementation 
 
@@ -246,3 +246,6 @@ class Solution {
         return currentRow[2];
     }
 }
+
+//Optimal Approach
+
