@@ -150,7 +150,6 @@ class Solution {
     }
 }
 
-
 //Aliter (space optimised : 3D to 2 2D array)
 
 class Solution {
@@ -181,7 +180,6 @@ class Solution {
         return previousDayProfit[0][2];
     }
 }
-
 
 //Aliter (space optimised : 2 2D array to 1 2D array)
 
