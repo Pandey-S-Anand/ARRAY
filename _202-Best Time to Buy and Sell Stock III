@@ -66,3 +66,183 @@ class Solution {
 
 //Optimal Approach 
 
+//Naive Implementation 
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        /*
+         * dp[day][canBuy][txnCount] represents the maximum profit achievable on a given day with specific conditions:
+         *
+         * - day: The current day (1-based index; for example, day = 1 corresponds to prices[day - 1], the price on the first trading day).
+         * - canBuy: A flag indicating if a stock can be bought (1 if you are allowed to buy, 0 if you are allowed to sell).
+         * - txnCount: The number of transactions completed so far (up to 2 transactions are allowed, with txnCount values of 0, 1, or 2).
+         */
+        int[][][] dp = new int[prices.length + 1][2][3];
+
+        /*
+         * Although buying is technically allowed, buying stock on day 0 is impossible
+         * since trading hasn't started. Consequently, profit remains 0 regardless
+         * of the number of transactions allowed.
+         */
+        dp[0][0][0] = dp[0][0][1] = dp[0][0][2] = 0;
+        /*
+         * Although selling is technically allowed, it's an invalid state here because
+         * we can't sell stock we don’t possess. Since trading hasn't started on day 0,
+         * we set these values to Integer.MIN_VALUE to indicate they are impossible
+         * states.
+         */
+        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = Integer.MIN_VALUE;
+
+        for (int day = 1; day <= prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                for (int txnCount = 0; txnCount <= 2; txnCount++) {
+                    int profit;
+                    if (canBuy == 1) {
+                        int skipBuy = dp[day - 1][1][txnCount];
+                        int buyStock = 0;
+                        if (dp[day - 1][0][txnCount] != Integer.MIN_VALUE) {
+                            buyStock = dp[day - 1][0][txnCount] - prices[day - 1];
+                        }
+                        profit = Math.max(skipBuy, buyStock);
+                    } else {
+                        int skipSell = dp[day - 1][0][txnCount];
+                        int sellStock = 0;
+                        if (txnCount > 0) {
+                            sellStock = dp[day - 1][1][txnCount - 1] + prices[day - 1];
+                        }
+                        profit = Math.max(skipSell, sellStock);
+                    }
+
+                    dp[day][canBuy][txnCount] = profit;
+                }
+            }
+        }
+        // Result: Maximum profit on the last day, with all stocks sold and a maximum of 2 transactions completed.
+        return dp[prices.length][0][2]; 
+    }
+}
+
+
+//Optimal Implementation 
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int[][][] dp = new int[prices.length + 1][2][3];
+
+        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = Integer.MIN_VALUE;
+
+        for (int day = 1; day <= prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                for (int txnCount = 0; txnCount <= 2; txnCount++) {
+                    if (canBuy == 1) {
+                        dp[day][canBuy][txnCount] = dp[day - 1][1][txnCount];
+                        if (dp[day - 1][0][txnCount] != Integer.MIN_VALUE) {
+                            dp[day][canBuy][txnCount] = Math.max(dp[day][canBuy][txnCount], dp[day - 1][0][txnCount] - prices[day - 1]);
+                        }
+                    } else {
+                        dp[day][canBuy][txnCount] = dp[day - 1][0][txnCount];
+                        if (txnCount > 0) {
+                            dp[day][canBuy][txnCount] = Math.max(dp[day][canBuy][txnCount], dp[day - 1][1][txnCount - 1] + prices[day - 1]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return dp[prices.length][0][2];
+    }
+}
+
+
+//Aliter (space optimised : 3D to 2 2D array)
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int[][] previousRow = new int[2][3];
+        int[][] currentRow = new int[2][3];
+
+        previousRow[1][0] = previousRow[1][1] = previousRow[1][2] = Integer.MIN_VALUE;
+
+        for (int day = 1; day <= prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                for (int txnCount = 0; txnCount <= 2; txnCount++) {
+                    if (canBuy == 1) {
+                        currentRow[canBuy][txnCount] = previousRow[1][txnCount];
+                        if (previousRow[0][txnCount] != Integer.MIN_VALUE) {
+                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[0][txnCount] - prices[day - 1]);
+                        }
+                    } else {
+                        currentRow[canBuy][txnCount] = previousRow[0][txnCount];
+                        if (txnCount > 0) {
+                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[1][txnCount - 1] + prices[day - 1]);
+                        }
+                    }
+                }
+            }
+            int[][] temp = currentRow;
+            currentRow = previousRow;
+            previousRow = temp;
+        }
+
+        return previousRow[0][2];
+    }
+}
+
+
+//Aliter (space optimised : 2 2D array to 1 2D array)
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int[][] dp = new int[2][3]; 
+
+        dp[1][0] = dp[1][1] = dp[1][2] = Integer.MIN_VALUE;
+
+        for (int day = 1; day <= prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                for (int txnCount = 0; txnCount <= 2; txnCount++) {
+                    if (canBuy == 1) {
+                        if (dp[0][txnCount] != Integer.MIN_VALUE) {
+                            dp[1][txnCount] = Math.max(dp[1][txnCount], dp[0][txnCount] - prices[day - 1]);
+                        }
+                    } else {
+                        if (txnCount > 0) {
+                            dp[0][txnCount] = Math.max(dp[0][txnCount], dp[1][txnCount - 1] + prices[day - 1]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return dp[0][2];
+    }
+}
+
+
+//Aliter (space optimised : 2D array to 2 1D array)
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int[] previousRow = new int[3];
+        int[] currentRow = new int[3];
+
+        previousRow[0] = previousRow[1] = previousRow[2] = Integer.MIN_VALUE;
+
+        for (int day = 1; day <= prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                for (int txnCount = 0; txnCount <= 2; txnCount++) {
+                    if (canBuy == 1) {
+                        if (currentRow[txnCount] != Integer.MIN_VALUE) {
+                            previousRow[txnCount] = Math.max(previousRow[txnCount], currentRow[txnCount] - prices[day - 1]);
+                        }
+                    } else {
+                        if (txnCount > 0) {
+                            currentRow[txnCount] = Math.max(currentRow[txnCount], previousRow[txnCount - 1] + prices[day - 1]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return currentRow[2];
+    }
+}
