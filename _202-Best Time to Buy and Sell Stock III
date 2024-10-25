@@ -73,41 +73,36 @@ class Solution {
         /*
          * dp[day][canBuy][txnCount] represents the maximum profit achievable on a given day with specific conditions:
          *
-         * - day: The current day (1-based index; for example, day = 1 corresponds to prices[day - 1], the price on the first trading day).
+         * - day: The current day (0-based index; for example, day = 0 corresponds to prices[0], the price on the first trading day).
          * - canBuy: A flag indicating if a stock can be bought (1 if you are allowed to buy, 0 if you are allowed to sell).
          * - txnCount: The number of transactions completed so far (up to 2 transactions are allowed, with txnCount values of 0, 1, or 2).
          */
-        int[][][] dp = new int[prices.length + 1][2][3];
+        int[][][] dp = new int[prices.length][2][3];
 
         /*
-         * Although selling is technically allowed, we can't sell stock we don't possess. 
-         * because on day 0, trading hasn't started yet, so profit remains 0, regardless of the number of transactions allowed.
-        */
-
-        dp[0][0][0] = dp[0][0][1] = dp[0][0][2] = 0;
-        /*
-         * Although buying is technically allowed, it's an invalid state here because
-         * because on day 0, trading hasn't started yet,so we set these values to Integer.MIN_VALUE
-         * to indicate they are impossible states.
+         * On the first trading day, we have the option to buy the stock as we dont hold any stock
+         * If we choose to skip buying on the first day, our profit will remain zero,
+         * regardless of the number of transactions.
+         * However, if we choose to buy the stock, we incur the cost of purchasing it,
+         * which results in a negative profit, since profit is calculated as: profit = selling price - buying price.
          */
-        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = Integer.MIN_VALUE;
+        dp[0][0][0] = dp[0][0][1] = dp[0][0][2] = 0;
 
-        for (int day = 1; day <= prices.length; day++) {
+        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = -prices[0];
+
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     int profit;
                     if (canBuy == 1) {
                         int skipBuy = dp[day - 1][1][txnCount];
-                        int buyStock = 0;
-                        if (dp[day - 1][0][txnCount] != Integer.MIN_VALUE) {
-                            buyStock = dp[day - 1][0][txnCount] - prices[day - 1];
-                        }
+                        int buyStock = dp[day - 1][0][txnCount] - prices[day];
                         profit = Math.max(skipBuy, buyStock);
                     } else {
                         int skipSell = dp[day - 1][0][txnCount];
                         int sellStock = 0;
                         if (txnCount > 0) {
-                            sellStock = dp[day - 1][1][txnCount - 1] + prices[day - 1];
+                            sellStock = dp[day - 1][1][txnCount - 1] + prices[day];
                         }
                         profit = Math.max(skipSell, sellStock);
                     }
@@ -117,7 +112,7 @@ class Solution {
             }
         }
         // Result: Maximum profit on the last day, with all stocks sold and a maximum of 2 transactions completed.
-        return dp[prices.length][0][2]; 
+        return dp[prices.length - 1][0][2];
     }
 }
 
@@ -126,29 +121,26 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int[][][] dp = new int[prices.length + 1][2][3];
+        int[][][] dp = new int[prices.length][2][3];
 
-        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = Integer.MIN_VALUE;
+        dp[0][1][0] = dp[0][1][1] = dp[0][1][2] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     if (canBuy == 1) {
-                        dp[day][canBuy][txnCount] = dp[day - 1][1][txnCount];
-                        if (dp[day - 1][0][txnCount] != Integer.MIN_VALUE) {
-                            dp[day][canBuy][txnCount] = Math.max(dp[day][canBuy][txnCount], dp[day - 1][0][txnCount] - prices[day - 1]);
-                        }
+                        dp[day][canBuy][txnCount] = Math.max(dp[day - 1][1][txnCount], dp[day - 1][0][txnCount] - prices[day]);
                     } else {
                         dp[day][canBuy][txnCount] = dp[day - 1][0][txnCount];
                         if (txnCount > 0) {
-                            dp[day][canBuy][txnCount] = Math.max(dp[day][canBuy][txnCount], dp[day - 1][1][txnCount - 1] + prices[day - 1]);
+                            dp[day][canBuy][txnCount] = Math.max(dp[day][canBuy][txnCount], dp[day - 1][1][txnCount - 1] + prices[day]);
                         }
                     }
                 }
             }
         }
 
-        return dp[prices.length][0][2];
+        return dp[prices.length - 1][0][2];
     }
 }
 
@@ -160,20 +152,17 @@ class Solution {
         int[][] previousRow = new int[2][3];
         int[][] currentRow = new int[2][3];
 
-        previousRow[1][0] = previousRow[1][1] = previousRow[1][2] = Integer.MIN_VALUE;
+        previousRow[1][0] = previousRow[1][1] = previousRow[1][2] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     if (canBuy == 1) {
-                        currentRow[canBuy][txnCount] = previousRow[1][txnCount];
-                        if (previousRow[0][txnCount] != Integer.MIN_VALUE) {
-                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[0][txnCount] - prices[day - 1]);
-                        }
+                        currentRow[canBuy][txnCount] = Math.max(previousRow[1][txnCount], previousRow[0][txnCount] - prices[day]);
                     } else {
                         currentRow[canBuy][txnCount] = previousRow[0][txnCount];
                         if (txnCount > 0) {
-                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[1][txnCount - 1] + prices[day - 1]);
+                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[1][txnCount - 1] + prices[day]);
                         }
                     }
                 }
@@ -192,20 +181,18 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int[][] dp = new int[2][3]; 
+        int[][] dp = new int[2][3];
 
-        dp[1][0] = dp[1][1] = dp[1][2] = Integer.MIN_VALUE;
+        dp[1][0] = dp[1][1] = dp[1][2] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     if (canBuy == 1) {
-                        if (dp[0][txnCount] != Integer.MIN_VALUE) {
-                            dp[1][txnCount] = Math.max(dp[1][txnCount], dp[0][txnCount] - prices[day - 1]);
-                        }
+                        dp[1][txnCount] = Math.max(dp[1][txnCount], dp[0][txnCount] - prices[day]);
                     } else {
                         if (txnCount > 0) {
-                            dp[0][txnCount] = Math.max(dp[0][txnCount], dp[1][txnCount - 1] + prices[day - 1]);
+                            dp[0][txnCount] = Math.max(dp[0][txnCount], dp[1][txnCount - 1] + prices[day]);
                         }
                     }
                 }
@@ -224,18 +211,16 @@ class Solution {
         int[] previousRow = new int[3];
         int[] currentRow = new int[3];
 
-        previousRow[0] = previousRow[1] = previousRow[2] = Integer.MIN_VALUE;
+        previousRow[0] = previousRow[1] = previousRow[2] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     if (canBuy == 1) {
-                        if (currentRow[txnCount] != Integer.MIN_VALUE) {
-                            previousRow[txnCount] = Math.max(previousRow[txnCount], currentRow[txnCount] - prices[day - 1]);
-                        }
+                        previousRow[txnCount] = Math.max(previousRow[txnCount], currentRow[txnCount] - prices[day]);
                     } else {
                         if (txnCount > 0) {
-                            currentRow[txnCount] = Math.max(currentRow[txnCount], previousRow[txnCount - 1] + prices[day - 1]);
+                            currentRow[txnCount] = Math.max(currentRow[txnCount], previousRow[txnCount - 1] + prices[day]);
                         }
                     }
                 }
