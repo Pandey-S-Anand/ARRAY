@@ -87,43 +87,38 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int[][] dp = new int[prices.length + 1][2];
         /*
-         * dp[0][0]: Represents the profit on "day 0" if you do not buy the stock.
-         * Since no transactions have been made, profit is 0.
+         * dp[day][canBuy] represents the maximum profit achievable on a specific day under certain conditions:
+         * 
+         * - If canBuy = 1, it means you are allowed to buy stock on that day. In this case, you have two options:
+         *   1. Buy the stock, which incurs a cost equal to the stock's price.
+         *   2. Skip buying the stock, maintaining your current profit.
+         * 
+         * - If canBuy = 0, it means you are not allowed to buy stock on that day (i.e., you can only sell the stock). In this scenario, you also have two options:
+         *   1. Sell the stock, which will increase your profit by the current stock price.
+         *   2. Skip selling the stock, which means your profit remains the same as the  previous day.
          */
+        int[][] dp = new int[prices.length][2];
+
+        /*
+         * On the first trading day, we have the option to buy the stock as we dont hold
+         * any stock . If we choose to skip buying on the first day, our profit will remain zero,
+         * However, if we choose to buy the stock, we incur the cost of purchasing it,
+         * which results in a negative profit, since profit is calculated as: profit = selling price - buying price.
+         */
+
         dp[0][0] = 0;
+        dp[0][1] = -prices[0];
 
-        /*
-         * dp[0][1]: Represents the profit on "day 0" if you buy the stock.
-         * However, buying stock on "day 0" is impossible since trading hasn't started,
-         * so we initialize this to Integer.MIN_VALUE to indicate an invalid state.
-         */
-        dp[0][1] = Integer.MIN_VALUE;
-
-        /*
-         * In the context of the problem:
-         * 
-         * - If canBuy = 1, it means you are allowed to buy stock on that day. In this
-         *   case, you have two options:
-         * 1. Buy the stock, which incurs a cost equal to the stock's price.
-         * 2. Skip buying the stock, maintaining your current profit.
-         * 
-         * - If canBuy = 0, it means you are not allowed to buy stock on that day (i.e.,
-         *.   you can only sell the stock). In this scenario, you also have two options:
-         * 1. Sell the stock, which will increase your profit by the current stock price.
-         * 2. Skip selling the stock, which means your profit remains the same as the  previous day.
-         */
-
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 int profit = 0;
                 if (canBuy == 1) {
-                    int buyStock = -prices[day - 1] + dp[day - 1][0];
+                    int buyStock = -prices[day] + dp[day - 1][0];
                     int skipBuy = dp[day - 1][1];
                     profit = Math.max(buyStock, skipBuy);
                 } else {
-                    int sellStock = prices[day - 1] + dp[day - 1][1];
+                    int sellStock = prices[day] + dp[day - 1][1];
                     int skipSell = dp[day - 1][0];
                     profit = Math.max(sellStock, skipSell);
                 }
@@ -131,7 +126,7 @@ class Solution {
             }
         }
         /*
-         * The final return statement, dp[prices.length][0], indicates the maximum
+         * The final return statement, dp[prices.length - 1][0], indicates the maximum
          * profit achievable on the last day when you do not hold any stock, meaning you
          * have sold any stock you owned. This is important because if you still hold
          * stock at the end of the last day, you cannot engage in any further
@@ -141,7 +136,7 @@ class Solution {
          * trading days.
          */
 
-        return dp[prices.length][0];
+        return dp[prices.length - 1][0];
     }
 }
 
@@ -150,24 +145,25 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int[][] dp = new int[prices.length + 1][2];
+        int[][] dp = new int[prices.length][2];
 
         dp[0][0] = 0;
-        dp[0][1] = Integer.MIN_VALUE;
+        dp[0][1] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 if (canBuy == 1) {
-                    dp[day][canBuy] = Math.max(-prices[day - 1] + dp[day - 1][0], dp[day - 1][1]);
+                    dp[day][canBuy] = Math.max(-prices[day] + dp[day - 1][0], dp[day - 1][1]);
                 } else {
-                    dp[day][canBuy] = Math.max(prices[day - 1] + dp[day - 1][1], dp[day - 1][0]);
+                    dp[day][canBuy] = Math.max(prices[day] + dp[day - 1][1], dp[day - 1][0]);
                 }
             }
         }
 
-        return dp[prices.length][0];
+        return dp[prices.length - 1][0];
     }
 }
+
 
 //Aliter (space optimised)
 
@@ -177,14 +173,14 @@ class Solution {
         int[] currentDay = new int[2];
 
         previousDay[0] = 0;
-        previousDay[1] = Integer.MIN_VALUE;
+        previousDay[1] = -prices[0];
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 if (canBuy == 1) {
-                    currentDay[canBuy] = Math.max(-prices[day - 1] + previousDay[0], previousDay[1]);
+                    currentDay[canBuy] = Math.max(-prices[day] + previousDay[0], previousDay[1]);
                 } else {
-                    currentDay[canBuy] = Math.max(prices[day - 1] + previousDay[1], previousDay[0]);
+                    currentDay[canBuy] = Math.max(prices[day] + previousDay[1], previousDay[0]);
                 }
             }
             int[] temp = currentDay;
@@ -201,14 +197,14 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int prevDayCanBuy = Integer.MIN_VALUE, prevDayCanNotBuy = 0, currDayCanBuy = 0, currDayCanNotBuy = 0;
+        int prevDayCanBuy = -prices[0], prevDayCanNotBuy = 0, currDayCanBuy = 0, currDayCanNotBuy = 0;
 
-        for (int day = 1; day <= prices.length; day++) {
+        for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 if (canBuy == 1) {
-                    currDayCanBuy = Math.max(-prices[day - 1] + prevDayCanNotBuy, prevDayCanBuy);
+                    currDayCanBuy = Math.max(-prices[day] + prevDayCanNotBuy, prevDayCanBuy);
                 } else {
-                    currDayCanNotBuy = Math.max(prices[day - 1] + prevDayCanBuy, prevDayCanNotBuy);
+                    currDayCanNotBuy = Math.max(prices[day] + prevDayCanBuy, prevDayCanNotBuy);
                 }
             }
             prevDayCanBuy = currDayCanBuy;
