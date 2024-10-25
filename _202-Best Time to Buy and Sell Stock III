@@ -70,13 +70,19 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        /*
-         * dp[day][canBuy][txnCount] represents the maximum profit achievable on a given day with specific conditions:
-         *
-         * - day: The current day (0-based index; for example, day = 0 corresponds to prices[0], the price on the first trading day).
-         * - canBuy: A flag indicating if a stock can be bought (1 if you are allowed to buy, 0 if you are allowed to sell).
-         * - txnCount: The number of transactions completed so far (up to 2 transactions are allowed, with txnCount values of 0, 1, or 2).
-         */
+       /*
+        * dp[day][canBuy][txnCount] represents the maximum profit achievable on a given day with specific conditions:
+        *
+        * - If canBuy = 1, it means you are allowed to buy stock on that day. In this case, you have two options:
+        *   1. Buy the stock, which incurs a cost equal to the stock's price.
+        *   2. Skip buying the stock, maintaining your current profit.
+        * 
+        * - If canBuy = 0, it means you are not allowed to buy stock on that day (i.e., you can only sell the stock). In this scenario, you also have two options:
+        *   1. Sell the stock, which will increase your profit by the current stock price.
+        *   2. Skip selling the stock, which means your profit remains the same as the previous day.
+        * 
+        * - txnCount: The number of transactions completed so far (up to 2 transactions are allowed, with txnCount values of 0, 1, or 2).
+        */
         int[][][] dp = new int[prices.length][2][3];
 
         /*
