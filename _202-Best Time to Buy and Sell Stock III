@@ -155,30 +155,30 @@ class Solution {
 
 class Solution {
     public int maxProfit(int[] prices) {
-        int[][] previousRow = new int[2][3];
-        int[][] currentRow = new int[2][3];
+        int[][] previousDayProfit = new int[2][3];
+        int[][] currentDayProfit = new int[2][3];
 
-        previousRow[1][0] = previousRow[1][1] = previousRow[1][2] = -prices[0];
+        previousDayProfit[1][0] = previousDayProfit[1][1] = previousDayProfit[1][2] = -prices[0];
 
         for (int day = 1; day < prices.length; day++) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
                 for (int txnCount = 0; txnCount <= 2; txnCount++) {
                     if (canBuy == 1) {
-                        currentRow[canBuy][txnCount] = Math.max(previousRow[1][txnCount], previousRow[0][txnCount] - prices[day]);
+                        currentDayProfit[1][txnCount] = Math.max(previousDayProfit[1][txnCount], previousDayProfit[0][txnCount] - prices[day]);
                     } else {
-                        currentRow[canBuy][txnCount] = previousRow[0][txnCount];
+                        currentDayProfit[0][txnCount] = previousDayProfit[0][txnCount];
                         if (txnCount > 0) {
-                            currentRow[canBuy][txnCount] = Math.max(currentRow[canBuy][txnCount], previousRow[1][txnCount - 1] + prices[day]);
+                            currentDayProfit[0][txnCount] = Math.max(currentDayProfit[0][txnCount], previousDayProfit[1][txnCount - 1] + prices[day]);
                         }
                     }
                 }
             }
-            int[][] temp = currentRow;
-            currentRow = previousRow;
-            previousRow = temp;
+            int[][] temp = currentDayProfit;
+            currentDayProfit = previousDayProfit;
+            previousDayProfit = temp;
         }
 
-        return previousRow[0][2];
+        return previousDayProfit[0][2];
     }
 }
 
@@ -206,33 +206,5 @@ class Solution {
         }
 
         return dp[0][2];
-    }
-}
-
-
-//Aliter (space optimised : 2D array to 2 1D array)
-
-class Solution {
-    public int maxProfit(int[] prices) {
-        int[] previousRow = new int[3];
-        int[] currentRow = new int[3];
-
-        previousRow[0] = previousRow[1] = previousRow[2] = -prices[0];
-
-        for (int day = 1; day < prices.length; day++) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                for (int txnCount = 0; txnCount <= 2; txnCount++) {
-                    if (canBuy == 1) {
-                        previousRow[txnCount] = Math.max(previousRow[txnCount], currentRow[txnCount] - prices[day]);
-                    } else {
-                        if (txnCount > 0) {
-                            currentRow[txnCount] = Math.max(currentRow[txnCount], previousRow[txnCount - 1] + prices[day]);
-                        }
-                    }
-                }
-            }
-        }
-
-        return currentRow[2];
     }
 }
