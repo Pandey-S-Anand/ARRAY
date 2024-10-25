@@ -80,14 +80,14 @@ class Solution {
         int[][][] dp = new int[prices.length + 1][2][3];
 
         /*
-         * Although buying is technically allowed, buying stock on day 0 is impossible
-         * since trading hasn't started. Consequently, profit remains 0 regardless
-         * of the number of transactions allowed.
+         * On day 0, trading hasn't started yet.
+         * Selling is not possible since we do not hold any stock at this point.
+         * Therefore, profit is 0, regardless of the number of transactions allowed.
          */
         dp[0][0][0] = dp[0][0][1] = dp[0][0][2] = 0;
         /*
-         * Although selling is technically allowed, it's an invalid state here because
-         * we can't sell stock we don’t possess. Since trading hasn't started on day 0,
+         * Although buying is technically allowed, it's an invalid state here because
+         * we can't buy stock we don’t possess. Since trading hasn't started on day 0,
          * we set these values to Integer.MIN_VALUE to indicate they are impossible
          * states.
          */
