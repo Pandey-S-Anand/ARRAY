@@ -23,7 +23,7 @@ class Solution {
 }
 
 
-//Good Approach
+//Better Approach
 
 class Solution {
     private int[][][] memo;
@@ -64,7 +64,7 @@ class Solution {
 }
 
 
-//Better Approach 
+//Optimal Approach
 
 //Naive Implementation 
 
@@ -80,10 +80,10 @@ class Solution {
         int[][][] dp = new int[prices.length + 1][2][3];
 
         /*
-         * On day 0, trading hasn't started yet.
-         * Selling is not possible since we do not hold any stock at this point.
-         * Therefore, profit is 0, regardless of the number of transactions allowed.
+         * Although selling is technically allowed, we do not hold any stock at this point. 
+         * On day 0, trading hasn't started yet. Therefore, profit is 0, regardless of the number of transactions allowed.
          */
+
         dp[0][0][0] = dp[0][0][1] = dp[0][0][2] = 0;
         /*
          * Although buying is technically allowed, it's an invalid state here because
@@ -246,6 +246,3 @@ class Solution {
         return currentRow[2];
     }
 }
-
-//Optimal Approach
-
