@@ -1,0 +1,166 @@
+//Bruteforce Approach
+
+class Solution {
+    public int maxProfit(int[] prices, int fee) {
+      return getMaxProfitWithFee(0,prices,1,fee);
+    }
+
+    private int getMaxProfitWithFee(int index, int[] prices, int canBuy, int txnFee) {
+        if (index == prices.length) {
+            return 0;
+        }
+
+        if (canBuy == 1) {
+            int buyStock = -prices[index] + getMaxProfitWithFee(index + 1, prices, 0, txnFee);
+            int skipBuy = getMaxProfitWithFee(index + 1, prices, 1, txnFee);
+            return Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[index] + getMaxProfitWithFee(index + 1, prices, 1, txnFee) - txnFee ;
+        int skipSell = getMaxProfitWithFee(index + 1, prices, 0, txnFee);
+        return Math.max(sellStock, skipSell);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] memo;
+
+    public int maxProfit(int[] prices, int fee) {
+        memo = new int[prices.length][2];
+        intializeMemo();
+        return getMaxProfitWithFee(0, prices, 1, fee);
+    }
+
+    private int getMaxProfitWithFee(int index, int[] prices, int canBuy, int txnFee) {
+        if (index == prices.length) {
+            return 0;
+        }
+
+        if (memo[index][canBuy] != -1) {
+            return memo[index][canBuy];
+        }
+
+        if (canBuy == 1) {
+            int buyStock = -prices[index] + getMaxProfitWithFee(index + 1, prices, 0, txnFee);
+            int skipBuy = getMaxProfitWithFee(index + 1, prices, 1, txnFee);
+            return memo[index][canBuy] = Math.max(buyStock, skipBuy);
+        }
+
+        int sellStock = prices[index] + getMaxProfitWithFee(index + 1, prices, 1, txnFee) - txnFee;
+        int skipSell = getMaxProfitWithFee(index + 1, prices, 0, txnFee);
+        return memo[index][canBuy] = Math.max(sellStock, skipSell);
+    }
+
+    private void intializeMemo() {
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
+//Naive Implementation 
+
+class Solution {
+    public int maxProfit(int[] prices, int txnFee) {
+        int[][] dp = new int[prices.length][2];
+
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int day = 1; day < prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                int netProfit;
+                if (canBuy == 1) {
+                    int buyStock = -prices[day] + dp[day - 1][0];
+                    int sellStock = dp[day - 1][1];
+                    netProfit = Math.max(buyStock, sellStock);
+                } else {
+                    int sellStock = prices[day] + dp[day - 1][1] - txnFee;
+                    int skipSell = dp[day - 1][0];
+                    netProfit = Math.max(sellStock, skipSell);
+                }
+                dp[day][canBuy] = netProfit;
+            }
+        }
+
+        return dp[prices.length - 1][0];
+    }
+}
+
+//Optimal Implementation 
+
+class Solution {
+    public int maxProfit(int[] prices, int txnFee) {
+        int[][] dp = new int[prices.length][2];
+
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+
+        for (int day = 1; day < prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                if (canBuy == 1) {
+                    dp[day][canBuy] = Math.max(-prices[day] + dp[day - 1][0], dp[day - 1][1]);
+                } else {
+                    dp[day][canBuy] = Math.max(prices[day] + dp[day - 1][1] - txnFee, dp[day - 1][0]);
+                }
+            }
+        }
+
+        return dp[prices.length - 1][0];
+    }
+}
+
+//Aliter (Space optimised)
+
+class Solution {
+    public int maxProfit(int[] prices, int txnFee) {
+        int[] previousRow = new int[2];
+        int[] currentRow = new int[2];
+
+        previousRow[0] = 0;
+        previousRow[1] = -prices[0];
+
+        for (int day = 1; day < prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                if (canBuy == 1) {
+                    currentRow[canBuy] = Math.max(-prices[day] + previousRow[0], previousRow[1]);
+                } else {
+                    currentRow[canBuy] = Math.max(prices[day] + previousRow[1] - txnFee, previousRow[0]);
+                }
+            }
+            int[] temp = currentRow;
+            currentRow = previousRow;
+            previousRow = temp;
+        }
+
+        return previousRow[0];
+    }
+}
+
+//Aliter (Further space optimised)
+
+class Solution {
+    public int maxProfit(int[] prices, int txnFee) {
+        int prevDayCanBuy = -prices[0], prevDayCanSell = 0, currDayCanBuy = 0, currDayCanSell = 0;
+
+        for (int day = 1; day < prices.length; day++) {
+            for (int canBuy = 0; canBuy <= 1; canBuy++) {
+                if (canBuy == 1) {
+                    currDayCanBuy = Math.max(-prices[day] + prevDayCanSell, prevDayCanBuy);
+                } else {
+                    currDayCanSell = Math.max(prices[day] + prevDayCanBuy - txnFee, prevDayCanSell);
+                }
+            }
+            prevDayCanBuy = currDayCanBuy;
+            prevDayCanSell = currDayCanSell;
+        }
+
+        return prevDayCanSell;
+    }
+}
