@@ -64,6 +64,20 @@ class Solution {
 
 //Optimal Approach
 
+/*
+ * When deciding between forward and backward iteration in dynamic programming problems,
+ * the key factor to consider is state dependencies.
+ * 
+ * Backward iteration is often more appropriate when the current state's decision
+ * is influenced by future states, particularly in problems with cooldown periods
+ * where selling today affects the options available for the next two days.
+ * 
+ * Conversely, forward iteration can be used even when referencing future states
+ * (like indices i+1 or i+2), as long as these references do not create dependencies
+ * that influence the current state's decisions.
+ */
+
+
 //Naive Implementation
 
 class Solution {
