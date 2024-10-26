@@ -69,7 +69,7 @@ class Solution {
  * the key factor to consider is state dependencies.
  * 
  * Backward iteration is often more appropriate when the current state's decision
- * is influenced by future states, particularly in problems with cooldown periods
+ * influences future states, particularly in problems with cooldown periods
  * where selling today affects the options available for the next two days.
  * 
  * Conversely, forward iteration can be used even when referencing future states
