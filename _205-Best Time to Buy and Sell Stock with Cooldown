@@ -136,13 +136,8 @@ class Solution {
         int[][] dp = new int[prices.length + 2][2];
 
         for (int day = prices.length - 1; day >= 0; day--) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                if (canBuy == 1) {
-                    dp[day][canBuy] = Math.max(-prices[day] + dp[day + 1][0], dp[day + 1][1]);
-                } else {
-                    dp[day][canBuy] = Math.max(prices[day] + dp[day + 2][1], dp[day + 1][0]);
-                }
-            }
+            dp[day][1] = Math.max(-prices[day] + dp[day + 1][0], dp[day + 1][1]);
+            dp[day][0] = Math.max(prices[day] + dp[day + 2][1], dp[day + 1][0]);
         }
 
         return dp[0][1];
@@ -156,19 +151,14 @@ class Solution {
     public int maxProfit(int[] prices) {
         int[] currentDay = new int[2];
         int[] nextDay = new int[2];
-        int[] nextNextDay = new int[2];
+        int[] dayAfterNext = new int[2];
 
         for (int day = prices.length - 1; day >= 0; day--) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                if (canBuy == 1) {
-                    currentDay[canBuy] = Math.max(-prices[day] + nextDay[0], nextDay[1]);
-                } else {
-                    currentDay[canBuy] = Math.max(prices[day] + nextNextDay[1], nextDay[0]);
-                }
-            }
+            currentDay[1] = Math.max(-prices[day] + nextDay[0], nextDay[1]);
+            currentDay[0] = Math.max(prices[day] + dayAfterNext[1], nextDay[0]);
 
-            int[] temp = nextNextDay;
-            nextNextDay = nextDay;
+            int[] temp = dayAfterNext;
+            dayAfterNext = nextDay;
             nextDay = currentDay;
             currentDay = temp;
         }
