@@ -1,5 +1,8 @@
 //Bruteforce Approach
 
+
+//Improved Approach
+
 class Solution {
     public int lengthOfLIS(int[] arr) {
         return lengthOfLIS(arr, 0, -1);
@@ -22,7 +25,7 @@ class Solution {
 }
 
 
-//Better Approach
+//Good Approach
 
 class Solution {
     private int[][] memo;
@@ -61,7 +64,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Better Approach
 
 /*
    Approach:
@@ -110,3 +113,7 @@ class Solution {
        return overallMaxLISLength;
     }
 }
+
+
+//Optimal Approach
+
