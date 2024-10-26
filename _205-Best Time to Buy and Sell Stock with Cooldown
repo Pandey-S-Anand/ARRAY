@@ -93,7 +93,7 @@ class Solution {
          * 
          * - If canBuy = 0: This means we are only allowed to sell the stock on the current day. Here, we also have two choices:
          * 1. Sell the stock: This will increase our profit by the current stock price. 
-         *.   Due to a 1-day cooldown period after selling,we will be in a state where we can buy (canBuy = 1) only after skipping the next day.
+         *    Following a sale, there is a 1-day cooldown period, which means we can only buy again (canBuy = 1) after skipping the next day.
          * 2. Skip selling the stock: This keeps our profit as it was the previous day,  allowing us to reconsider selling on the next day.
          */
 
