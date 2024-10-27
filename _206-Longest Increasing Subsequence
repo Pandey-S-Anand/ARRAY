@@ -1,5 +1,39 @@
 //Bruteforce Approach
 
+class Solution {
+    private int maxLISLength;
+
+    public int lengthOfLIS(int[] arr) {
+        maxLISLength = 0;
+        generateAllSubsequences(arr, 0, new ArrayList<>());
+        return maxLISLength;
+    }
+
+    private void generateAllSubsequences(int[] arr, int index, List<Integer> currentSubsequence) {
+        if (index == arr.length) {
+            if (isIncreasingSubsequence(currentSubsequence) && currentSubsequence.size() > maxLISLength) {
+                maxLISLength = currentSubsequence.size();
+            }
+            return;
+        }
+
+        currentSubsequence.add(arr[index]);
+        generateAllSubsequences(arr, index + 1, currentSubsequence);
+        currentSubsequence.remove(currentSubsequence.size() - 1);
+        generateAllSubsequences(arr, index + 1, currentSubsequence);
+    }
+
+    private boolean isIncreasingSubsequence(List<Integer> subsequence) {
+        for (int i = 1; i < subsequence.size(); i++) {
+            if (subsequence.get(i) <= subsequence.get(i - 1)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
 
 //Improved Approach
 
@@ -13,13 +47,20 @@ class Solution {
             return 0;
         }
 
+        // Option 1: Include the current element in the subsequence (if it creates an increasing order)
         int include = 0;
+        /*
+         * Check if the current element is either the first element of the subsequence
+         * (lastIncludedIdx == -1) or greater than the last included element in the current subsequence
+         */
         if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
             include = 1 + lengthOfLIS(arr, index + 1, index);
         }
 
+        // Option 2: Exclude the current element and move to the next index
         int exclude = lengthOfLIS(arr, index + 1, lastIncludedIdx);
-
+        
+        // Return the maximum length of LIS obtained by either including or excluding the current element
         return Math.max(include, exclude);
     }
 }
@@ -117,3 +158,75 @@ class Solution {
 
 //Optimal Approach
 
+class Solution {
+    public int lengthOfLIS(int[] arr) {
+        List<Integer> tail = new ArrayList<>(arr.length);
+
+        for (int num : arr) {
+            int index = lowerBound(tail, num);
+
+            if (index == tail.size()) {
+                tail.add(num);
+            } else {
+                tail.set(index, num);
+            }
+        }
+
+        return tail.size();
+    }
+
+    private int lowerBound(List<Integer> arr, int x) {
+        int low = 0, high = arr.size() - 1, lowerBound = arr.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr.get(mid) >= x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
+
+//Aliter
+
+class Solution {
+    public int lengthOfLIS(int[] arr) {
+        int[] tail = new int[arr.length];
+        int length = 0;
+
+        for (int num : arr) {
+            int index = lowerBound(tail, length, num);
+
+            if (index == length) {
+                length++;
+            }
+
+            tail[index] = num;
+        }
+
+        return length;
+    }
+
+    private int lowerBound(int[] arr, int n, int x) {
+        int low = 0, high = n - 1, lowerBound = n;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] >= x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
