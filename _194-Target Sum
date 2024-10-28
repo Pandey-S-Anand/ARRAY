@@ -126,7 +126,7 @@ class Solution {
                 int newSubsetSum = num + subsetSums.get(i);
 
                 if (newSubsetSum == targetSum) {
-                    targetSumSubsetCount = (targetSumSubsetCount + 1);
+                    targetSumSubsetCount++;
                 }
 
                 if (newSubsetSum <= targetSum) {
@@ -207,11 +207,11 @@ class Solution {
             return 0;
         }
 
-        return countSubsetsWithTargetSum(arr, 0, (arrSum - d) / 2);
+        return countSubsetsWithTargetSum(arr, arr.length - 1, (arrSum - d) / 2);
     }
 
     private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (index == arr.length) {
+        if (index < 0) {
             return targetSum == 0 ? 1 : 0;
         }
 
@@ -219,8 +219,8 @@ class Solution {
             return 0;
         }
 
-        int include = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index]);
-        int exclude = countSubsetsWithTargetSum(arr, index + 1, targetSum);
+        int include = countSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index]);
+        int exclude = countSubsetsWithTargetSum(arr, index - 1, targetSum);
 
         return (include + exclude);
     }
