@@ -2,19 +2,19 @@
 
 class Solution {
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
-        return findMaxValue(0, weights, values, n, capacity);
+        return findMaxValue(weights, values, n, n - 1, capacity);
     }
 
-    private static int findMaxValue(int index, int[] weights, int[] values, int n, int remainingCapacity) {
-        if (remainingCapacity == 0 || index == weights.length) {
+    private static int findMaxValue(int[] weights, int[] values, int n, int index, int capacity) {
+        if (capacity == 0 || index < 0) {
             return 0;
         }
 
-        int exclude = findMaxValue(index + 1, weights, values, n, remainingCapacity);
+        int exclude = findMaxValue(weights, values, n, index - 1, capacity);
 
         int include = Integer.MIN_VALUE;
-        if (weights[index] <= remainingCapacity) {
-            include = values[index] + findMaxValue(index, weights, values, n, remainingCapacity - weights[index]);
+        if (weights[index] <= capacity) {
+            include = values[index] + findMaxValue(weights, values, n, index, capacity - weights[index]);
         }
 
         return Math.max(include, exclude);
@@ -25,36 +25,36 @@ class Solution {
 //Better Approach
 
 class Solution {
-    private static int[][] memo;
+    private static int[][] cache;
 
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
-        memo = new int[n][capacity + 1];
-        intializeMemo();
-        return findMaxValue(0, weights, values, n, capacity);
+        cache = new int[n][capacity + 1];
+        intializeCache();
+        return findMaxValue(weights, values, n, n - 1, capacity);
     }
 
-    private static int findMaxValue(int index, int[] weights, int[] values, int n, int remainingCapacity) {
-        if (remainingCapacity == 0 || index == weights.length) {
+    private static int findMaxValue(int[] weights, int[] values, int n, int index, int capacity) {
+        if (capacity == 0 || index < 0) {
             return 0;
         }
 
-        if (memo[index][remainingCapacity] != -1) {
-            return memo[index][remainingCapacity];
+        if (cache[index][capacity] != -1) {
+            return cache[index][capacity];
         }
 
-        int exclude = findMaxValue(index + 1, weights, values, n, remainingCapacity);
+        int exclude = findMaxValue(weights, values, n, index - 1, capacity);
 
         int include = Integer.MIN_VALUE;
-        if (weights[index] <= remainingCapacity) {
-            include = values[index] + findMaxValue(index, weights, values, n, remainingCapacity - weights[index]);
+        if (weights[index] <= capacity) {
+            include = values[index] + findMaxValue(weights, values, n, index, capacity - weights[index]);
         }
 
-        return memo[index][remainingCapacity] = Math.max(include, exclude);
+        return cache[index][capacity] = Math.max(include, exclude);
     }
 
-    private static void intializeMemo() {
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo[i], -1);
+    private static void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
@@ -68,22 +68,26 @@ class Solution {
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
         int[][] dp = new int[n + 1][capacity + 1];
 
-        for (int i = 0; i <= capacity; i++) {
-            dp[0][i] = 0;
+        dp[0][0] = 0;
+
+        for (int index = 1; index <= n; index++) {
+            dp[index][0] = 0;
         }
 
-        for (int i = 1; i <= n; i++) {
-            dp[i][0] = 0;
+        for (int cap = 1; cap <= capacity; cap++) {
+            dp[0][cap] = 0;
         }
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= capacity; j++) {
-                int exclude = dp[i - 1][j];
+        for (int index = 1; index <= n; index++) {
+            for (int cap = 1; cap <= capacity; cap++) {
+                int exclude = dp[index - 1][cap];
+
                 int include = Integer.MIN_VALUE;
-                if (weights[i - 1] <= j) {
-                    include = values[i - 1] + dp[i][j - weights[i - 1]];
+                if (weights[index - 1] <= cap) {
+                    include = values[index - 1] + dp[index][cap - weights[index - 1]];
                 }
-                dp[i][j] = Math.max(include, exclude);
+
+                dp[index][cap] = Math.max(include, exclude);
             }
         }
 
@@ -91,18 +95,23 @@ class Solution {
     }
 }
 
+
 //Optimal Implementation 
 
 class Solution {
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
         int[][] dp = new int[n + 1][capacity + 1];
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= capacity; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (weights[i - 1] <= j) {
-                    dp[i][j] = Math.max(dp[i][j], values[i - 1] + dp[i][j - weights[i - 1]]);
+        for (int index = 1; index <= n; index++) {
+            for (int cap = 1; cap <= capacity; cap++) {
+                int exclude = dp[index - 1][cap];
+
+                int include = Integer.MIN_VALUE;
+                if (weights[index - 1] <= cap) {
+                    include = values[index - 1] + dp[index][cap - weights[index - 1]];
                 }
+
+                dp[index][cap] = Math.max(include, exclude);
             }
         }
 
@@ -115,20 +124,23 @@ class Solution {
 
 class Solution {
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
-        int[] previousRow = new int[capacity + 1];
-        int[] currentRow = new int[capacity + 1];
+        int[] previousRow=new int[capacity+1];
+        int[] currentRow=new int[capacity+1];
+        
+        for (int index = 1; index <= n; index++) {
+            for (int cap = 1; cap <= capacity; cap++) {
+                int exclude = previousRow[cap];
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= capacity; j++) {
-                currentRow[j] = previousRow[j];
-                if (weights[i - 1] <= j) {
-                    currentRow[j] = Math.max(currentRow[j], values[i - 1] + currentRow[j - weights[i - 1]]);
+                int include = Integer.MIN_VALUE;
+                if (weights[index - 1] <= cap) {
+                    include = values[index - 1] + currentRow[cap - weights[index - 1]];
                 }
-            }
 
-            int[] temp = currentRow;
-            currentRow = previousRow;
-            previousRow = temp;
+                currentRow[cap] = Math.max(include, exclude);
+            }
+            int[] temp=currentRow;
+            currentRow=previousRow;
+            previousRow=temp;
         }
 
         return previousRow[capacity];
@@ -140,13 +152,18 @@ class Solution {
 
 class Solution {
     static int knapSack(int n, int capacity, int[] values, int[] weights) {
-        int[] dp = new int[capacity + 1];
+        int[] dp=new int[capacity+1];
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= capacity; j++) {
-                if (weights[i - 1] <= j) {
-                    dp[j] = Math.max(dp[j], values[i - 1] + dp[j - weights[i - 1]]);
+        for (int index = 1; index <= n; index++) {
+            for (int cap = 1; cap <= capacity; cap++) {
+                int exclude = dp[cap];
+
+                int include = Integer.MIN_VALUE;
+                if (weights[index - 1] <= cap) {
+                    include = values[index - 1] + dp[cap - weights[index - 1]];
                 }
+
+                dp[cap] = Math.max(include, exclude);
             }
         }
 
