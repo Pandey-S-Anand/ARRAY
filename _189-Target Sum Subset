@@ -122,33 +122,33 @@ class Solution {
     }
 
     private static boolean hasSubsetWithTargetSum(int[] arr, int index, int targetSum) {
-        // Base case: If targetSum is 0, we have found a subset
-        if (targetSum == 0) {
-            return true;
+        /*
+         * Base case: If we've exhauated the array (index < 0),
+         * check if the target sum is zero. If it is, we have found a valid subset
+         * that adds up to the target sum, so return 1 to count this subset.
+         * Otherwise, return 0 to indicate no valid subset was found for this path.
+         */
+
+        if (index < 0) {
+            return targetSum == 0 ? 1 : 0;
+        }
+        
+         /*
+         * If the current element is greater than the target sum, we cannot include it in the subset.
+         * Including this element would reduce the target sum to a negative value, which is not achievable.
+         * According to the problem constraints, both the array elements and the target
+         * sum are positive.Therefore, once the target sum becomes negative, it cannot return to a
+         * non-negative value, so this path can safely be ignored.
+         * This check prevents unnecessary recursive calls, improving the efficiency of the algorithm.
+         */
+        int include = 0;
+        if (targetSum >= arr[index]) {
+            include = countSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index]) % MOD;
         }
 
-        /*
-         * Base case (index < 0): if we have considered all elements and still unable
-         * to find target sum subset
-         * Early Termination (target < 0): As per constraint, target sum will always be
-         * positive integer also the given array will contains only positive integers, so once 
-         * the target becomes negative during the recursive exploration,
-         * it will always remain negative for that path. Hence, further exploration of
-         * that path won't yield a valid combination. Therefore, once the
-         * targetSum is negative, we can conclude that this subset combination is
-         * invalid. This check prevents unnecessary recursive calls, improving the 
-         * efficiency of the algorithm.
-         */
-        if (index < 0 || targetSum < 0) {
-            return false;
-        }
-        /*
-         * Recursive case:
-         * 1. Include the current element (arr[index]) in the subset and reduce the targetSum
-         * 2. Exclude the current element from the subset and move to the next element
-         */
-        return hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index])
-                || hasSubsetWithTargetSum(arr, index - 1, targetSum);
+        int exclude = countSubsetsWithTargetSum(arr, index - 1, targetSum) % MOD;
+
+        return (include + exclude) % MOD;
     }
 }
 
@@ -165,12 +165,8 @@ class Solution {
             return true;
         }
 
-        if (targetSum < 0) {
-            return false;
-        }
-
         for (int i = index; i >= 0; i--) {
-            if (hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
+            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
                 return true;
             }
         }
@@ -198,7 +194,7 @@ class Solution {
             return true;
         }
 
-        if (index < 0 || targetSum < 0) {
+        if (index < 0) {
             return false;
         }
 
@@ -206,8 +202,15 @@ class Solution {
             return cache[index][targetSum] == 1;
         }
 
-        cache[index][targetSum] = hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index])
-                || hasSubsetWithTargetSum(arr, index - 1, targetSum) ? 1 : 0;
+        boolean include = false;
+
+        if (targetSum >= arr[index]) {
+            include = hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index]);
+        }
+
+        boolean exclude = hasSubsetWithTargetSum(arr, index - 1, targetSum);
+
+        cache[index][targetSum] = (include || exclude) ? 1 : 0;
 
         return cache[index][targetSum] == 1;
     }
@@ -222,12 +225,11 @@ class Solution {
 
 //Method 2
 
-
 class Solution {
-    private static int[][]cache;
-    
+    private static int[][] cache;
+
     static Boolean isSubsetSum(int arr[], int targetSum) {
-        cache=new int[arr.length][targetSum+1];
+        cache = new int[arr.length][targetSum + 1];
         intializeCache();
         return hasSubsetWithTargetSum(arr, arr.length - 1, targetSum);
     }
@@ -237,28 +239,24 @@ class Solution {
             return true;
         }
 
-        if (targetSum < 0) {
-            return false;
-        }
-        
-        if(cache[index][targetSum]!=-1){
-            return cache[index][targetSum]==1;
+        if (cache[index][targetSum] != -1) {
+            return cache[index][targetSum] == 1;
         }
 
         for (int i = index; i >= 0; i--) {
-            if (hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
-                cache[index][targetSum]=1;
-                return cache[index][targetSum]==1;
+            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
+                cache[index][targetSum] = 1;
+                return cache[index][targetSum] == 1;
             }
         }
-        
-        cache[index][targetSum]=0;
-        return cache[index][targetSum]==1;
+
+        cache[index][targetSum] = 0;
+        return cache[index][targetSum] == 1;
     }
-    
-    private static void intializeCache(){
-        for(int i=0;i<cache.length;i++){
-            Arrays.fill(cache[i],-1);
+
+    private static void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
