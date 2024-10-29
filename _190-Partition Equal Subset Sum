@@ -340,7 +340,7 @@ class Solution {
              */
             if (arr[index - 1] >= targetSum) {
                 // If the current element is equal to the target sum, we can form the target sum subset with this element
-                return arr[index - 1] == targetSum ? true : false; 
+                return arr[index - 1] == targetSum; 
             }
             
             for (int sum = 1; sum <= targetSum; sum++) {
