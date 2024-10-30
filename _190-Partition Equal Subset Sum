@@ -259,8 +259,10 @@ class Solution {
         for (int num : arr) {
             arrSum += num;
         }
+
         cache = new int[arr.length][arrSum / 2 + 1];
         intializeCache();
+
         return arrSum % 2 != 0 ? false : hasSubsetWithTargetSum(arr, arr.length - 1, arrSum / 2);
     }
 
@@ -269,7 +271,7 @@ class Solution {
             return true;
         }
 
-        if (targetSum < 0) {
+        if (index < 0) {
             return false;
         }
 
@@ -278,11 +280,12 @@ class Solution {
         }
 
         for (int i = index; i >= 0; i--) {
-            if (targetSum >= arr[index] && hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[i])) {
+            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
                 cache[index][targetSum] = 1;
                 return cache[index][targetSum] == 1;
             }
         }
+
         cache[index][targetSum] = 0;
         return cache[index][targetSum] == 1;
     }
@@ -293,7 +296,6 @@ class Solution {
         }
     }
 }
-
 
 //Optimal Approach
 
