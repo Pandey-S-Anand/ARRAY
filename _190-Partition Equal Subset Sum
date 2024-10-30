@@ -140,16 +140,12 @@ class Solution {
 //Method 1
 
 class Solution {
-    private int[][] cache;
-
     public boolean canPartition(int[] arr) {
         int arrSum = 0;
         for (int num : arr) {
             arrSum += num;
         }
 
-        cache = new int[arr.length][arrSum / 2 + 1];
-        intializeCache();
         return arrSum % 2 != 0 ? false : hasSubsetWithTargetSum(arr, arr.length - 1, arrSum / 2);
     }
 
@@ -158,26 +154,20 @@ class Solution {
             return true;
         }
 
-        if (index < 0 || targetSum < 0) {
+        if (index < 0) {
             return false;
         }
 
-        if (cache[index][targetSum] != -1) {
-            return cache[index][targetSum] == 1;
+        boolean include = false;
+        if (targetSum >= arr[index]) {
+            include = hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index]);
         }
 
-        cache[index][targetSum] = (hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index]) || hasSubsetWithTargetSum(arr, index - 1, targetSum)) ? 1 : 0;
-        return cache[index][targetSum] == 1;
-    }
+        boolean exclude = hasSubsetWithTargetSum(arr, index - 1, targetSum);
 
-    private void intializeCache() {
-        for (int i = 0; i < cache.length; i++) {
-            Arrays.fill(cache[i], -1);
-        }
+        return include || exclude;
     }
 }
-
-
 
 //Method 2
 
@@ -197,12 +187,8 @@ class Solution {
             return true;
         }
 
-        if (targetSum < 0) {
-            return false;
-        }
-
         for (int i = index; i >= 0; i--) {
-            if (hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
+            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
                 return true;
             }
         }
@@ -217,22 +203,17 @@ class Solution {
 //Method 1
 
 class Solution {
-    private int[][] memo;
+    private int[][] cache;
 
     public boolean canPartition(int[] arr) {
         int arrSum = 0;
-
         for (int num : arr) {
             arrSum += num;
         }
 
-        return arrSum % 2 != 0 ? false : hasSubsetWithTargetSum(arr, arrSum / 2);
-    }
-
-    private boolean hasSubsetWithTargetSum(int arr[], int targetSum) {
-        memo = new int[arr.length][targetSum + 1];
-        intializeMemo();
-        return hasSubsetWithTargetSum(arr, 0, targetSum);
+        cache = new int[arr.length][arrSum / 2 + 1];
+        intializeCache();
+        return arrSum % 2 != 0 ? false : hasSubsetWithTargetSum(arr, arr.length - 1, arrSum / 2);
     }
 
     private boolean hasSubsetWithTargetSum(int[] arr, int index, int targetSum) {
@@ -240,25 +221,32 @@ class Solution {
             return true;
         }
 
-        if (index == arr.length || targetSum < 0) {
+        if (index < 0) {
             return false;
         }
 
-        if (memo[index][targetSum] != -1) {
-            return memo[index][targetSum] == 1;
+        if (cache[index][targetSum] != -1) {
+            return cache[index][targetSum] == 1;
         }
 
-        memo[index][targetSum] = (hasSubsetWithTargetSum(arr, index + 1, targetSum - arr[index]) || hasSubsetWithTargetSum(arr, index + 1, targetSum)) ? 1 : 0;
-        return memo[index][targetSum] == 1;
+        boolean include = false;
+        if (targetSum >= arr[index]) {
+            include = hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[index]);
+        }
+
+        boolean exclude = hasSubsetWithTargetSum(arr, index - 1, targetSum);
+
+        cache[index][targetSum] = (include || exclude) ? 1 : 0;
+
+        return cache[index][targetSum] == 1;
     }
 
-    private void intializeMemo() {
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo[i], -1);
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
-
 
 //Method 2
 
@@ -290,7 +278,7 @@ class Solution {
         }
 
         for (int i = index; i >= 0; i--) {
-            if (hasSubsetWithTargetSum(arr, i - 1, targetSum - arr[i])) {
+            if (targetSum >= arr[index] && hasSubsetWithTargetSum(arr, index - 1, targetSum - arr[i])) {
                 cache[index][targetSum] = 1;
                 return cache[index][targetSum] == 1;
             }
