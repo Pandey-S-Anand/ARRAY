@@ -86,131 +86,99 @@ class Solution {
 //Naive Implementation 
 
 class Solution {
-    public int maxProfit(int[] prices) {
-        /*
-         * dp[day][canBuy] represents the maximum profit achievable on a specific day under certain conditions:
-         * 
-         * - If canBuy = 1, it means you are allowed to buy stock on that day. In this case, you have two options:
-         *   1. Buy the stock, which incurs a cost equal to the stock's price.
-         *   2. Skip buying the stock, maintaining your current profit.
-         * 
-         * - If canBuy = 0, it means you are not allowed to buy stock on that day (i.e., you can only sell the stock). In this scenario, you also have two options:
-         *   1. Sell the stock, which will increase your profit by the current stock price.
-         *   2. Skip selling the stock, which means your profit remains the same as the  previous day.
-         */
-        int[][] dp = new int[prices.length][2];
+  public int maxProfit(int[] prices) {
+    /*
+     * dp[day][canBuy] represents the maximum profit achievable from the current
+     * day (i.e., 'day') up to the last day (prices.length - 1) given the
+     * following condition:
+     *
+     * - If canBuy = 1: This indicates that we are allowed to buy stock on the current day. We have two choices:
+     * 1. Buy the stock: This will decrease our profit by the current stock
+     *    price (incurs a cost) and switch us to a state where we cannot buy (canBuy = 0) on the next day.
+     * 2. Skip buying the stock: This keeps our current profit unchanged and  allows us to consider buying on the next day.
+     *
+     * - If canBuy = 0: This means we are only allowed to sell the stock on the current day. Here, we also have two choices:
+     * 1. Sell the stock: This will increase our profit by the current stock
+     *    price. Following a sale, there is a 1-day cooldown period, which means we can only buy again (canBuy = 1) after skipping the next day.
+     * 2. Skip selling the stock: This keeps our profit as it was the previous
+     *    day,  allowing us to reconsider selling on the next day.
+     */
+    int[][] dp = new int[prices.length + 1][2];
 
-        /*
-         * On the first trading day, we have the option to buy the stock as we dont hold
-         * any stock . If we choose to skip buying on the first day, our profit will remain zero,
-         * However, if we choose to buy the stock, we incur the cost of purchasing it,
-         * which results in a negative profit, since profit is calculated as: profit = selling price - buying price.
-         */
+    dp[prices.length][0] = dp[prices.length][1] = 0;
 
-        dp[0][0] = 0;
-        dp[0][1] = -prices[0];
-
-        for (int day = 1; day < prices.length; day++) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                int profit = 0;
-                if (canBuy == 1) {
-                    int buyStock = -prices[day] + dp[day - 1][0];
-                    int skipBuy = dp[day - 1][1];
-                    profit = Math.max(buyStock, skipBuy);
-                } else {
-                    int sellStock = prices[day] + dp[day - 1][1];
-                    int skipSell = dp[day - 1][0];
-                    profit = Math.max(sellStock, skipSell);
-                }
-                dp[day][canBuy] = profit;
-            }
+    for (int day = prices.length - 1; day >= 0; day--) {
+      for (int canBuy = 0; canBuy <= 1; canBuy++) {
+        int profit = 0;
+        if (canBuy == 1) {
+          int buyStock = -prices[day] + dp[day + 1][0];
+          int skipBuy = dp[day + 1][1];
+          profit = Math.max(buyStock, skipBuy);
+        } else {
+          int sellStock = prices[day] + dp[day + 1][1];
+          int skipSell = dp[day + 1][0];
+          profit = Math.max(sellStock, skipSell);
         }
-        /*
-         * The final return statement, dp[prices.length - 1][0], indicates the maximum
-         * profit achievable on the last day when you do not hold any stock, meaning you
-         * have sold any stock you owned. This is important because if you still hold
-         * stock at the end of the last day, you cannot engage in any further
-         * transactions, which would limit your potential profit.
-         * By selling any stock you had by the conclusion of the trading period, you
-         * ensure that your profit reflects all possible gains made throughout the
-         * trading days.
-         */
-
-        return dp[prices.length - 1][0];
+        dp[day][canBuy] = profit;
+      }
     }
+     /*
+      * Return the maximum profit obtainable starting from the first day to the last
+      * trading day, with the option to buy. This indicates that you have the opportunity to buy
+      * at the end of the trading days, reflecting the completion of all transactions up to that point.
+     */
+    return dp[0][1];
+  }
 }
-
 
 //Optimal Implementation
 
 class Solution {
-    public int maxProfit(int[] prices) {
-        int[][] dp = new int[prices.length][2];
+  public int maxProfit(int[] prices) {
+    int[][] dp = new int[prices.length + 1][2];
 
-        dp[0][0] = 0;
-        dp[0][1] = -prices[0];
-
-        for (int day = 1; day < prices.length; day++) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                if (canBuy == 1) {
-                    dp[day][canBuy] = Math.max(-prices[day] + dp[day - 1][0], dp[day - 1][1]);
-                } else {
-                    dp[day][canBuy] = Math.max(prices[day] + dp[day - 1][1], dp[day - 1][0]);
-                }
-            }
-        }
-
-        return dp[prices.length - 1][0];
+    for (int day = prices.length - 1; day >= 0; day--) {
+      dp[day][1] = Math.max(-prices[day] + dp[day + 1][0], dp[day + 1][1]);
+      dp[day][0] = Math.max(prices[day] + dp[day + 1][1], dp[day + 1][0]);
     }
+
+    return dp[0][1];
+  }
 }
 
 
 //Aliter (space optimised)
 
 class Solution {
-    public int maxProfit(int[] prices) {
-        int[] previousDay = new int[2];
-        int[] currentDay = new int[2];
+  public int maxProfit(int[] prices) {
+    int[] currentDay = new int[2];
+    int[] nextDay = new int[2];
 
-        previousDay[0] = 0;
-        previousDay[1] = -prices[0];
-
-        for (int day = 1; day < prices.length; day++) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                if (canBuy == 1) {
-                    currentDay[canBuy] = Math.max(-prices[day] + previousDay[0], previousDay[1]);
-                } else {
-                    currentDay[canBuy] = Math.max(prices[day] + previousDay[1], previousDay[0]);
-                }
-            }
-            int[] temp = currentDay;
-            currentDay = previousDay;
-            previousDay = temp;
-        }
-
-        return previousDay[0];
+    for (int day = prices.length - 1; day >= 0; day--) {
+      currentDay[1] = Math.max(-prices[day] + nextDay[0], nextDay[1]);
+      currentDay[0] = Math.max(prices[day] + nextDay[1], nextDay[0]);
+      
+      int[] temp = currentDay;
+      currentDay = nextDay;
+      nextDay = temp;
     }
+
+    return nextDay[1];
+  }
 }
 
 
 //Aliter (further space optimised)
 
 class Solution {
-    public int maxProfit(int[] prices) {
-        int prevDayCanBuy = -prices[0], prevDayCanNotBuy = 0, currDayCanBuy = 0, currDayCanNotBuy = 0;
+  public int maxProfit(int[] prices) {
+    int[] dp = new int[2];
 
-        for (int day = 1; day < prices.length; day++) {
-            for (int canBuy = 0; canBuy <= 1; canBuy++) {
-                if (canBuy == 1) {
-                    currDayCanBuy = Math.max(-prices[day] + prevDayCanNotBuy, prevDayCanBuy);
-                } else {
-                    currDayCanNotBuy = Math.max(prices[day] + prevDayCanBuy, prevDayCanNotBuy);
-                }
-            }
-            prevDayCanBuy = currDayCanBuy;
-            prevDayCanNotBuy = currDayCanNotBuy;
-        }
-
-        return prevDayCanNotBuy;
+    for (int day = prices.length - 1; day >= 0; day--) {
+      dp[1] = Math.max(-prices[day] + dp[0], dp[1]);
+      dp[0] = Math.max(prices[day] + dp[1], dp[0]);
     }
+
+    return dp[1];
+  }
 }
