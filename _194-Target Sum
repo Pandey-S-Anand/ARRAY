@@ -214,14 +214,14 @@ class Solution {
             return targetSum == 0 ? 1 : 0;
         }
 
-        if (targetSum < 0) {
-            return 0;
+        int include = 0;
+        if (targetSum >= arr[index]) {
+            include = countSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index]);
         }
 
-        int include = countSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index]);
         int exclude = countSubsetsWithTargetSum(arr, index - 1, targetSum);
 
-        return (include + exclude);
+        return include + exclude;
     }
 }
 
@@ -236,7 +236,6 @@ class Solution {
     }
 
     private int countPartitions(int[] arr, int d) {
-        targetSumSubsetsCount = 0;
         int arrSum = 0;
 
         for (int val : arr) {
@@ -247,21 +246,19 @@ class Solution {
             return 0;
         }
 
-        countSubsetsWithTargetSum(arr, 0, 0, (arrSum - d) / 2);
+        countSubsetsWithTargetSum(arr, arr.length - 1, 0, (arrSum - d) / 2);
         return targetSumSubsetsCount;
     }
 
     private void countSubsetsWithTargetSum(int[] arr, int index, int currentSubsetSum, int targetSum) {
         if (currentSubsetSum == targetSum) {
-            targetSumSubsetsCount = (targetSumSubsetsCount + 1);
+            targetSumSubsetsCount++;
         }
 
-        if (currentSubsetSum > targetSum) {
-            return;
-        }
-
-        for (int i = index; i < arr.length; i++) {
-            countSubsetsWithTargetSum(arr, i + 1, currentSubsetSum + arr[i], targetSum);
+        for (int i = index; i >= 0; i--) {
+            if ((currentSubsetSum + arr[i]) <= targetSum) {
+                countSubsetsWithTargetSum(arr, i - 1, currentSubsetSum + arr[i], targetSum);
+            }
         }
     }
 }
@@ -270,7 +267,7 @@ class Solution {
 //Better Approach
 
 class Solution {
-    private int[][] memo;
+    private int[][] cache;
 
     public int findTargetSumWays(int[] arr, int targetSum) {
         return countPartitions(arr, targetSum);
@@ -288,34 +285,34 @@ class Solution {
         }
 
         int targetSum = (arrSum - d) / 2;
-        memo = new int[arr.length][targetSum + 1];
-        intializeMemo();
+        cache = new int[arr.length][targetSum + 1];
+        intializeCache();
 
-        return countSubsetsWithTargetSum(arr, 0, (arrSum - d) / 2);
+        return countSubsetsWithTargetSum(arr, arr.length - 1, (arrSum - d) / 2);
     }
 
     private int countSubsetsWithTargetSum(int[] arr, int index, int targetSum) {
-        if (index == arr.length) {
+        if (index < 0) {
             return targetSum == 0 ? 1 : 0;
         }
 
-        if (targetSum < 0) {
-            return 0;
+        if (cache[index][targetSum] != -1) {
+            return cache[index][targetSum];
         }
 
-        if (memo[index][targetSum] != -1) {
-            return memo[index][targetSum];
+        int include = 0;
+        if (targetSum >= arr[index]) {
+            include = countSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index]);
         }
 
-        memo[index][targetSum] = countSubsetsWithTargetSum(arr, index + 1, targetSum - arr[index])
-                + countSubsetsWithTargetSum(arr, index + 1, targetSum);
+        int exclude = countSubsetsWithTargetSum(arr, index - 1, targetSum);
 
-        return memo[index][targetSum];
+        return cache[index][targetSum] = (include + exclude);
     }
 
-    private void intializeMemo() {
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo[i], -1);
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
@@ -342,20 +339,19 @@ class Solution {
         return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
     }
 
-    private int countSubsetsWithTargetSum(int arr[], int targetSum) {
+    private int countSubsetsWithTargetSum(int[] arr, int targetSum) {
         int[][] dp = new int[arr.length + 1][targetSum + 1];
 
         dp[0][0] = 1;
-        for (int i = 1; i <= arr.length; i++) {
-            dp[i][0] = arr[i - 1] == 0 ? 2 * dp[i - 1][0] : dp[i - 1][0];
-        }
 
-        for (int i = 1; i <= arr.length; i++) {
-            for (int j = 1; j <= targetSum; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (j >= arr[i - 1]) {
-                    dp[i][j] = (dp[i][j] + dp[i - 1][j - arr[i - 1]]);
+        for (int index = 1; index <= arr.length; index++) {
+            for (int sum = 0; sum <= targetSum; sum++) {
+                int include = 0;
+                if (sum >= arr[index - 1]) {
+                    include = dp[index - 1][sum - arr[index - 1]];
                 }
+                int exclude = dp[index - 1][sum];
+                dp[index][sum] = include + exclude;
             }
         }
 
@@ -365,7 +361,6 @@ class Solution {
 
 
 //Aliter (space optimised)
-
 
 class Solution {
     public int findTargetSumWays(int[] arr, int targetSum) {
@@ -386,26 +381,69 @@ class Solution {
         return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
     }
 
-    private int countSubsetsWithTargetSum(int arr[], int targetSum) {
-        int[] previousRow = new int[targetSum + 1];
+    private int countSubsetsWithTargetSum(int[] arr, int targetSum) {
         int[] currentRow = new int[targetSum + 1];
+        int[] previousRow = new int[targetSum + 1];
 
         previousRow[0] = 1;
 
-        for (int i = 1; i <= arr.length; i++) {
-            currentRow[0] = arr[i - 1] == 0 ? 2 * previousRow[0] : previousRow[0];
-            for (int j = 1; j <= targetSum; j++) {
-                currentRow[j] = previousRow[j];
-                if (j >= arr[i - 1]) {
-                    currentRow[j] = (currentRow[j] + previousRow[j - arr[i - 1]]);
+        for (int index = 1; index <= arr.length; index++) {
+            for (int sum = 0; sum <= targetSum; sum++) {
+                int include = 0;
+                if (sum >= arr[index - 1]) {
+                    include = previousRow[sum - arr[index - 1]];
                 }
+                int exclude = previousRow[sum];
+                currentRow[sum] = include + exclude;
             }
 
-            int[] temp = previousRow;
-            previousRow = currentRow;
-            currentRow = temp;
+            int[] temp = currentRow;
+            currentRow = previousRow;
+            previousRow = temp;
         }
 
         return previousRow[targetSum];
+    }
+}
+
+
+//Aliter (Further space optimised)
+
+class Solution {
+    public int findTargetSumWays(int[] arr, int targetSum) {
+        return countPartitions(arr, targetSum);
+    }
+
+    private int countPartitions(int[] arr, int d) {
+        int arrSum = 0;
+
+        for (int val : arr) {
+            arrSum += val;
+        }
+
+        if ((arrSum - d) < 0 || (arrSum - d) % 2 != 0) {
+            return 0;
+        }
+
+        return countSubsetsWithTargetSum(arr, (arrSum - d) / 2);
+    }
+
+    private int countSubsetsWithTargetSum(int[] arr, int targetSum) {
+        int[] dp = new int[targetSum + 1];
+
+        dp[0] = 1;
+
+        for (int index = 1; index <= arr.length; index++) {
+            for (int sum = targetSum; sum >= 0; sum--) {
+                int include = 0;
+                if (sum >= arr[index - 1]) {
+                    include = dp[sum - arr[index - 1]];
+                }
+                int exclude = dp[sum];
+                dp[sum] = include + exclude;
+            }
+        }
+
+        return dp[targetSum];
     }
 }
