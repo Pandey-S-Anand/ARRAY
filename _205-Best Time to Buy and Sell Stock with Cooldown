@@ -2,22 +2,22 @@
 
 class Solution {
     public int maxProfit(int[] prices) {
-        return calculateMaxProfit(0, prices, true);
+        return calculateMaxProfit(1, prices, true);
     }
 
-    private int calculateMaxProfit(int index, int[] prices, boolean canBuy) {
-        if (index >= prices.length) {
+    private int calculateMaxProfit(int day, int[] prices, boolean canBuy) {
+        if (day > prices.length) {
             return 0;
         }
 
         if (canBuy) {
-            int buyStock = -prices[index] + calculateMaxProfit(index + 1, prices, false);
-            int skipBuy = calculateMaxProfit(index + 1, prices, true);
+            int buyStock = -prices[day - 1] + calculateMaxProfit(day + 1, prices, false);
+            int skipBuy = calculateMaxProfit(day + 1, prices, true);
             return Math.max(buyStock, skipBuy);
         }
 
-        int sellStock = prices[index] + calculateMaxProfit(index + 2, prices, true);
-        int skipSell = calculateMaxProfit(index + 1, prices, false);
+        int sellStock = prices[day - 1] + calculateMaxProfit(day + 2, prices, true);
+        int skipSell = calculateMaxProfit(day + 1, prices, false);
         return Math.max(sellStock, skipSell);
     }
 }
@@ -26,59 +26,43 @@ class Solution {
 //Better Approach
 
 class Solution {
-    private int[][] memo;
+    private int[][] cache;
 
     public int maxProfit(int[] prices) {
-        memo = new int[prices.length][2];
-        initializeMemo();
-        return calculateMaxProfit(0, prices, 1);
+        cache = new int[prices.length + 1][2];
+        intilaizeCache();
+        return calculateMaxProfit(1, prices, 1);
     }
 
-    private int calculateMaxProfit(int index, int[] prices, int canBuy) {
-        if (index >= prices.length) {
+    private int calculateMaxProfit(int day, int[] prices, int canBuy) {
+        if (day > prices.length) {
             return 0;
         }
 
-        if (memo[index][canBuy] != -1) {
-            return memo[index][canBuy];
+        if (cache[day][canBuy] != -1) {
+            return cache[day][canBuy];
         }
 
         if (canBuy == 1) {
-            int buyStock = -prices[index] + calculateMaxProfit(index + 1, prices, 0);
-            int skipBuy = calculateMaxProfit(index + 1, prices, 1);
-            return memo[index][canBuy] = Math.max(buyStock, skipBuy);
+            int buyStock = -prices[day - 1] + calculateMaxProfit(day + 1, prices, 0);
+            int skipBuy = calculateMaxProfit(day + 1, prices, 1);
+            return cache[day][canBuy] = Math.max(buyStock, skipBuy);
         }
 
-        int sellStock = prices[index] + calculateMaxProfit(index + 2, prices, 1);
-        int skipSell = calculateMaxProfit(index + 1, prices, 0);
-        return memo[index][canBuy] = Math.max(sellStock, skipSell);
+        int sellStock = prices[day - 1] + calculateMaxProfit(day + 2, prices, 1);
+        int skipSell = calculateMaxProfit(day + 1, prices, 0);
+        return cache[day][canBuy] = Math.max(sellStock, skipSell);
     }
 
-    private void initializeMemo() {
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo[i], -1);
+    private void intilaizeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
 
 
 //Optimal Approach
-
-/*
- * When choosing between forward and backward iteration in dynamic programming problems,
- * the primary consideration should be state dependencies.
- * 
- * Backward iteration is generally more suitable when the decision made in the current state
- * impacts future states. This is especially true in scenarios involving cooldown periods,
- * where selling today limits the actions available tomorrow.
- * If your current decision imposes restrictions or requirements on future states—such as
- * cooldowns or mandatory waiting periods—then you have a case of future state dependency.
- * 
- * In contrast, forward iteration may be utilized even when looking ahead to future states 
- * (like indices i+1 or i+2), as long as these references do not create dependencies 
- * that affect the decisions of the current state.
- */
-
 
 //Naive Implementation
 
@@ -98,13 +82,9 @@ class Solution {
          *    Following a sale, there is a 1-day cooldown period, which means we can only buy again (canBuy = 1) after skipping the next day.
          * 2. Skip selling the stock: This keeps our profit as it was the previous day,  allowing us to reconsider selling on the next day.
          */
-
         int[][] dp = new int[prices.length + 2][2];
 
-        dp[prices.length][0] = 0;
-        dp[prices.length][1] = 0;
-        dp[prices.length + 1][0] = 0;
-        dp[prices.length + 1][1] = 0;
+        dp[prices.length][0] = dp[prices.length][1] = dp[prices.length + 1][1] = dp[prices.length + 1][1] = 0;
 
         for (int day = prices.length - 1; day >= 0; day--) {
             for (int canBuy = 0; canBuy <= 1; canBuy++) {
@@ -138,8 +118,8 @@ class Solution {
         int[][] dp = new int[prices.length + 2][2];
 
         for (int day = prices.length - 1; day >= 0; day--) {
-            dp[day][1] = Math.max(-prices[day] + dp[day + 1][0], dp[day + 1][1]);
             dp[day][0] = Math.max(prices[day] + dp[day + 2][1], dp[day + 1][0]);
+            dp[day][1] = Math.max(-prices[day] + dp[day + 1][0], dp[day + 1][1]);
         }
 
         return dp[0][1];
@@ -156,8 +136,8 @@ class Solution {
         int[] dayAfterNext = new int[2];
 
         for (int day = prices.length - 1; day >= 0; day--) {
-            currentDay[1] = Math.max(-prices[day] + nextDay[0], nextDay[1]);
             currentDay[0] = Math.max(prices[day] + dayAfterNext[1], nextDay[0]);
+            currentDay[1] = Math.max(-prices[day] + nextDay[0], nextDay[1]);
 
             int[] temp = dayAfterNext;
             dayAfterNext = nextDay;
