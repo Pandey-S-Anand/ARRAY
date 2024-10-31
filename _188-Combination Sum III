@@ -85,7 +85,6 @@ class Solution {
 
 //Method 2
 
-
 class Solution {
     public List<List<Integer>> combinationSum3(int k, int n) {
         return generateKSizeTargetSumSubsets(k, n);
@@ -125,8 +124,6 @@ class Solution {
 
 //Method 1
 
-//Naive Implementation 
-
 class Solution {
     private List<List<Integer>> sizeKTargetSumSubsets;
 
@@ -137,31 +134,40 @@ class Solution {
     }
 
     private void generateSizeKTargetSumSubsets(int currentNumber, int k, int targetSum, List<Integer> currentSubset) {
+        // Base condition: if current subset has size k and targetSum is reached, add it to the result list
         if (currentSubset.size() == k && targetSum == 0) {
             sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
             return;
         }
 
-        if (currentSubset.size() > k || targetSum < 0 || currentNumber > 9) {
+        // If currentNumber exceeds 9, no more numbers can be added (since we're limited to digits 1-9)
+        if (currentNumber > 9) {
             return;
         }
 
         currentSubset.add(currentNumber);
-        generateSizeKTargetSumSubsets(currentNumber + 1, k, targetSum - currentNumber, currentSubset);
+        /*
+         * Early exit condition:
+         * A negative target sum cannot be achieved because, according to the problem
+         * constraints, the numbers range from 1 to 9. Additionally, we are only interested in
+         * subsets of size k.
+         */
+        if (targetSum >= currentNumber && currentSubset.size() <= k) {
+            generateSizeKTargetSumSubsets(currentNumber + 1, k, targetSum - currentNumber, currentSubset);
+        }
         currentSubset.remove(currentSubset.size() - 1);
         generateSizeKTargetSumSubsets(currentNumber + 1, k, targetSum, currentSubset);
     }
 }
 
-
-//Optimal Implementation
+//Aliter
 
 class Solution {
     private List<List<Integer>> sizeKTargetSumSubsets;
 
     public List<List<Integer>> combinationSum3(int k, int n) {
         sizeKTargetSumSubsets = new ArrayList<>();
-        generateSizeKTargetSumSubsets(1, k, n, new ArrayList<>());
+        generateSizeKTargetSumSubsets(9, k, n, new ArrayList<>());
         return sizeKTargetSumSubsets;
     }
 
@@ -171,53 +177,22 @@ class Solution {
             return;
         }
 
-        if (currentSubset.size() > k || currentNumber > targetSum || currentNumber > 9) {
+        if (currentNumber == 0) {
             return;
         }
 
         currentSubset.add(currentNumber);
-        generateSizeKTargetSumSubsets(currentNumber + 1, k, targetSum - currentNumber, currentSubset);
+        if (targetSum >= currentNumber && currentSubset.size() <= k) {
+            generateSizeKTargetSumSubsets(currentNumber - 1, k, targetSum - currentNumber, currentSubset);
+        }
         currentSubset.remove(currentSubset.size() - 1);
-        generateSizeKTargetSumSubsets(currentNumber + 1, k, targetSum, currentSubset);
+        generateSizeKTargetSumSubsets(currentNumber - 1, k, targetSum, currentSubset);
     }
 }
-
 
 
 //Method 2
 
-//Naive Implementation
-
-class Solution {
-    private List<List<Integer>> sizeKTargetSumSubsets;
-
-    public List<List<Integer>> combinationSum3(int k, int n) {
-        sizeKTargetSumSubsets = new ArrayList<>();
-        generateSizeKTargetSumSubsets(1, k, n, new ArrayList<>());
-        return sizeKTargetSumSubsets;
-    }
-
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int targetSum, List<Integer> currentSubset) {
-        if (currentSubset.size() == k && targetSum == 0) {
-            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-        
-        if (currentSubset.size() > k || targetSum < 0) {
-            return;
-        }
-
-        for (int num = currentNumber; num <= 9; num++) {
-            currentSubset.add(num);
-            generateSizeKTargetSumSubsets(num + 1, k, targetSum - num, currentSubset);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-
-//Optimal Implementation
-
 class Solution {
     private List<List<Integer>> sizeKTargetSumSubsets;
 
@@ -233,17 +208,14 @@ class Solution {
             return;
         }
 
-        if (currentSubset.size() > k) {
-            return;
-        }
-
         for (int num = currentNumber; num <= 9; num++) {
-            /*
-             * Since numbers are in increasing order, if the current number exceeds
-             * targetSum, all subsequent numbers will also be larger. No point in exploring
-             * further in this path.
+             /*
+             * Since the numbers are in increasing order, if the current number exceeds
+             * the targetSum, all subsequent numbers will also be larger. Therefore, there is no need
+             * to explore further along this path. Additionally, if the size of the current subset
+             * exceeds k, further exploration is unnecessary as we are only concerned with subsets of size k.
              */
-            if (num > targetSum) {
+            if (num > targetSum || currentSubset.size() > k) {
                 break;
             }
             currentSubset.add(num);
