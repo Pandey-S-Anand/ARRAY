@@ -224,3 +224,36 @@ class Solution {
         }
     }
 }
+
+//Aliter
+
+class Solution {
+    private List<List<Integer>> sizeKTargetSumSubsets;
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        sizeKTargetSumSubsets = new ArrayList<>();
+        generateSizeKTargetSumSubsets(9, k, n, new ArrayList<>());
+        return sizeKTargetSumSubsets;
+    }
+
+    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int targetSum, List<Integer> currentSubset) {
+        if (currentSubset.size() == k && targetSum == 0) {
+            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
+            return;
+        }
+
+        for (int num = currentNumber; num >= 1; num--) {
+            if (num > targetSum) {
+                continue;
+            }
+
+            if (currentSubset.size() > k) {
+                break;
+            }
+
+            currentSubset.add(num);
+            generateSizeKTargetSumSubsets(num - 1, k, targetSum - num, currentSubset);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+}
