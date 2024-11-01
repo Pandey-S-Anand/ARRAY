@@ -51,7 +51,12 @@ class Solution {
         int include = 0;
         /*
          * Check if the current element is either the first element of the subsequence
-         * (lastIncludedIdx == -1) or greater than the last included element in the current subsequence
+         * (lastIncludedIdx == -1) or greater than the last included element in the current subsequence.
+         * 
+         * lastIncludedIdx = -1 is used as a base case to indicate no prior element in the subsequence, 
+         * allowing any element to start a new subsequence.
+         * 
+         * For other values, lastIncludedIdx can only take values from -1 up to one less than the current index
          */
         if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
             include = 1 + lengthOfLIS(arr, index + 1, index);
@@ -65,16 +70,39 @@ class Solution {
     }
 }
 
+//Aliter
+
+class Solution {
+    public int lengthOfLIS(int[] arr) {
+        return lengthOfLIS(arr, arr.length - 1, arr.length);
+    }
+
+    private int lengthOfLIS(int[] arr, int index, int lastIncludedIdx) {
+        if (index < 0) {
+            return 0;
+        }
+
+        int include = 0;
+
+        if (lastIncludedIdx == arr.length || arr[index] < arr[lastIncludedIdx]) {
+            include = 1 + lengthOfLIS(arr, index - 1, index);
+        }
+
+        int exclude = lengthOfLIS(arr, index - 1, lastIncludedIdx);
+
+        return Math.max(include, exclude);
+    }
+}
+
 
 //Good Approach
 
 class Solution {
-    private int[][] memo;
+    private int[][] cache;
 
     public int lengthOfLIS(int[] arr) {
-        int[][] dp = new int[arr.length][arr.length + 1];
-        memo = new int[arr.length][arr.length + 1];
-        intializeMemo();
+        cache = new int[arr.length][arr.length + 1];
+        intializeCache();
         return lengthOfLIS(arr, 0, -1);
     }
 
@@ -83,8 +111,8 @@ class Solution {
             return 0;
         }
 
-        if (memo[index][lastIncludedIdx + 1] != -1) {
-            return memo[index][lastIncludedIdx + 1];
+        if (cache[index][lastIncludedIdx + 1] != -1) {
+            return cache[index][lastIncludedIdx + 1];
         }
 
         int include = 0;
@@ -94,12 +122,50 @@ class Solution {
 
         int exclude = lengthOfLIS(arr, index + 1, lastIncludedIdx);
 
-        return memo[index][lastIncludedIdx + 1] = Math.max(include, exclude);
+        return cache[index][lastIncludedIdx + 1] = Math.max(include, exclude);
     }
 
-    private void intializeMemo() {
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo[i], -1);
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
+        }
+    }
+}
+
+//Aliter
+
+class Solution {
+    private int[][] cache;
+
+    public int lengthOfLIS(int[] arr) {
+        cache = new int[arr.length][arr.length + 1];
+        intializeCache();
+        return lengthOfLIS(arr, arr.length - 1, arr.length);
+    }
+
+    private int lengthOfLIS(int[] arr, int index, int lastIncludedIdx) {
+        if (index < 0) {
+            return 0;
+        }
+
+        if (cache[index][lastIncludedIdx] != -1) {
+            return cache[index][lastIncludedIdx];
+        }
+
+        int include = 0;
+
+        if (lastIncludedIdx == arr.length || arr[index] < arr[lastIncludedIdx]) {
+            include = 1 + lengthOfLIS(arr, index - 1, index);
+        }
+
+        int exclude = lengthOfLIS(arr, index - 1, lastIncludedIdx);
+
+        return cache[index][lastIncludedIdx] = Math.max(include, exclude);
+    }
+
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
         }
     }
 }
@@ -107,54 +173,90 @@ class Solution {
 
 //Better Approach
 
-/*
-   Approach:
-   
-   Subsequence Ending at Each Index:
-   Every increasing subsequence in the array must end at some index `i`. 
-   So, we focus on calculating the length of the longest increasing subsequence (LIS) that ends at each index `i`.
-   Once we know the LIS length for each ending index, the longest subsequence in the array 
-   will be the maximum length among these values.
-
-   Finding Potential LIS Candidates:
-   For each element `arr[i]`, we look at all previous elements `arr[j]` (where `j < i`).
-   If `arr[i]` is greater than `arr[j]`, then `arr[i]` can extend the increasing subsequence that ends at `arr[j]`.
-
-   Updating the LIS Length for Each `i`:
-   - For each valid candidate `arr[j]`, we retrieve the LIS ending at `j` (stored in `dp[j]`).
-   - Among all such candidates, the longest subsequence ending at `j` provides the longest possible subsequence that `i` can extend.
-   - Finally, we add 1 to this length to include the current element `arr[i]`, which gives us the LIS length ending at `i`.
-
-   Final Step:
-   After calculating the LIS ending at each index, the overall longest increasing subsequence in the array
-   is simply the maximum value in the `dp` array.
-*/
-
-
 class Solution {
     public int lengthOfLIS(int[] arr) {
-       // dp[i] = length of longest increasing subsequence ending at index i
-       int[] dp = new int[arr.length];
+        /*
+         * dp[i][j] represents the length of the longest increasing subsequence starting
+         * from index i to the last index, with j - 1 as the last included index in the subsequence.
+         */
+        int[][] dp = new int[arr.length + 1][arr.length + 1];
 
-       for (int i = 0; i < arr.length; i++) {
-           int maxLISLengthBeforeIndexI = 0;
-           for (int j = 0; j < i; j++) {
-               if (arr[i] > arr[j]) {
-                   maxLISLengthBeforeIndexI = Math.max(maxLISLengthBeforeIndexI, dp[j]);
-               }
-           }
-           dp[i] = maxLISLengthBeforeIndexI + 1;
-       }
-        
-       int overallMaxLISLength = 0;
-       for (int i = 0; i < arr.length; i++) {
-           overallMaxLISLength = Math.max(dp[i], overallMaxLISLength);
-       }
+        dp[arr.length][0] = 0;
 
-       return overallMaxLISLength;
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+                int include = 0;
+                if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
+                    include = 1 + dp[index + 1][index + 1];
+                }
+
+                int exclude = dp[index + 1][lastIncludedIdx + 1];
+
+                dp[index][lastIncludedIdx + 1] = Math.max(include, exclude);
+            }
+        }
+        /*
+         * dp[0][0], which represents the maximum length of the increasing subsequence
+         * starting from index 0 till the last index with no elements included before it
+         * (simulating the lastIncludedIdx = -1 condition in the top-down approach).
+         */
+        return dp[0][0];
     }
 }
 
+//Aliter (space optimised)
+
+class Solution {
+    public int lengthOfLIS(int[] arr) {
+        int[] currentRow = new int[arr.length + 1];
+        int[] nextRow = new int[arr.length + 1];
+
+        nextRow[0] = 0;
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+                int include = 0;
+                if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
+                    include = 1 + nextRow[index + 1];
+                }
+
+                int exclude = nextRow[lastIncludedIdx + 1];
+
+                currentRow[lastIncludedIdx + 1] = Math.max(include, exclude);
+            }
+            int[] temp = currentRow;
+            currentRow = nextRow;
+            nextRow = temp;
+        }
+
+        return nextRow[0];
+    }
+}
+
+//Aliter (Further space optimised)
+
+class Solution {
+    public int lengthOfLIS(int[] arr) {
+        int[] dp = new int[arr.length + 1];
+
+        dp[0] = 0;
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+                int include = 0;
+                if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
+                    include = 1 + dp[index + 1];
+                }
+
+                int exclude = dp[lastIncludedIdx + 1];
+
+                dp[lastIncludedIdx + 1] = Math.max(include, exclude);
+            }
+        }
+
+        return dp[0];
+    }
+}
 
 //Optimal Approach
 
