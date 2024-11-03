@@ -16,6 +16,11 @@ Not sell the stock: If you choose not to sell, you cannot buy any other stock un
 
 When we reach the end of the index, In this case, the maximum profit will be 0, as there are no more days left to make any trades.
 */
+/*
+We do not use a backward recursive approach in the stock buy-and-sell problem because once you buy a stock on a particular day, you can only sell it on future days, not in the past.
+Likewise, if you sell a stock on a specific day, it would be impossible to determine on which previous days it was purchased. 
+The forward recursion aligns with the logic and constraints of real-world stock trading, where decisions made on any given day affect only future opportunities.
+*/
 
 //Bruteforce Approach
 
