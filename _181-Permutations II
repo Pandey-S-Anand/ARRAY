@@ -34,6 +34,8 @@ The distinct permutations of [A, A, B] are: [A, A, B], [A, B, A], and [B, A, A].
 
 //Naive Implementation
 
+//Forward recursive approach
+
 class Solution {
     private Set<List<Integer>> uniquePermutations;
 
@@ -63,7 +65,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private Set<List<Integer>> uniquePermutations;
@@ -96,6 +98,8 @@ class Solution {
 
 
 //Better Implementation
+
+//Forward recursive approach
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -139,7 +143,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> uniquePermutations;
@@ -176,6 +180,8 @@ class Solution {
 
 //Optimal Implementation
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> uniquePermutations;
 
@@ -211,7 +217,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> uniquePermutations;
@@ -253,6 +259,8 @@ class Solution {
 
 //Naive Implementation
 
+//Forward recursive approach
+
 class Solution {
     private Set<List<Integer>> uniquePermutations;
 
@@ -287,7 +295,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private Set<List<Integer>> uniquePermutations;
@@ -336,6 +344,8 @@ Why sorting and then skipping won't work here ?
 Because we are manipulating the input array itself to form the permutation which involves swapping. If you sort the array and then swap elements, the order of elements is modified,the array is no longer in its sorted order, which invalidates the duplicate-checking logic (arr[i] == arr[i - 1]) that assumes adjacent duplicates.
 */
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> uniquePermutations;
 
@@ -377,7 +387,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> uniquePermutations;
