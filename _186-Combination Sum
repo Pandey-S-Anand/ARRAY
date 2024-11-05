@@ -2,6 +2,8 @@
 
 //Method 1
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> targetSumcombinations;
 
@@ -30,7 +32,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> targetSumcombinations;
@@ -63,6 +65,8 @@ class Solution {
 
 //Method 2
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> targetSumcombinations;
 
@@ -88,7 +92,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> targetSumcombinations;
