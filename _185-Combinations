@@ -204,6 +204,8 @@ class Solution {
 
 //Method 1
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> sizeKSubsets;
 
@@ -235,7 +237,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> sizeKSubsets;
@@ -267,6 +269,8 @@ class Solution {
 
 //Method 2
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> sizeKSubsets;
 
@@ -294,7 +298,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> sizeKSubsets;
