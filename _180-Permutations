@@ -69,6 +69,8 @@ There are 4P2 = 4! / (4 - 2)! = 4! / 2! = (4 × 3 × 2 × 1) / (2 × 1) = 12 per
 
 // Method 1
 
+//Forward recursive approach
+
 class Solution {
     private List<List<Integer>> permutations;
 
@@ -96,7 +98,7 @@ class Solution {
     }
 }
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> permutations;
@@ -127,6 +129,8 @@ class Solution {
 
 
 //Method 2
+
+//Forward recursive approach
 
 class Solution {
     private List<List<Integer>> permutations;
@@ -162,7 +166,7 @@ class Solution {
 }
 
 
-//Aliter
+//Backward recursive approach
 
 class Solution {
     private List<List<Integer>> permutations;
