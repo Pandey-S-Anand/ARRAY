@@ -289,6 +289,8 @@ Ex : arr[]={1, 2, 3, 4}
 
 //Method 1
 
+// Forward recursive approach
+
 class Solution {
     private List<List<Integer>> subsets;
 
@@ -324,7 +326,7 @@ class Solution {
 }
 
 
-// Aliter
+// Backward recursive approach
 
 class Solution {
     private List<List<Integer>> subsets;
@@ -351,6 +353,8 @@ class Solution {
 
 //Method 2
 
+// Forward recursive approach
+
 class Solution {
     private List<List<Integer>> subsets;
 
@@ -371,7 +375,7 @@ class Solution {
     }
 }
 
-//Aliter
+// Backward recursive approach
 
 class Solution {
     private List<List<Integer>> subsets;
