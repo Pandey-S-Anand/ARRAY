@@ -1,11 +1,3 @@
-/*
-To accurately generate or print results in subsequence-related problems—such as printing subsequences and supersequences—a forward recursive approach is generally more effective.
-This method preserves the order of elements, ensuring the output reflects the natural order of subsequences, which inherently maintain the order of appearance. 
-In contrast, a backward recursive approach does not uphold this order.
-If the objective is simply to determine the length in problems like finding the length of the shortest common supersequence or the length of the longest increasing subsequence (LIS), 
-then backward recursion can still be a valid approach. However, the forward recursive approach is typically more intuitive for these cases.
-*/
-
 //Bruteforce Approach
 
 class Solution {
