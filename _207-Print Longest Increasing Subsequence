@@ -1,0 +1,67 @@
+//Bruteforce Approach
+
+//Forward recursive approach 
+
+class Solution {
+    int maxLengthLis = 0;
+    private ArrayList<Integer> longestIncreasingSubsequence;
+
+    public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
+        generateLIS(arr, 0, -1, n, new ArrayList<>());
+        return longestIncreasingSubsequence;
+    }
+
+    private void generateLIS(int[] arr, int index, int lastIncludedIndex, int n, List<Integer> increasingSubsequence) {
+        if (index == n) {
+            if (increasingSubsequence.size() > maxLengthLis) {
+                maxLengthLis = increasingSubsequence.size();
+                longestIncreasingSubsequence = new ArrayList<>(increasingSubsequence);
+            }
+            return;
+        }
+
+        if (lastIncludedIndex == -1 || arr[lastIncludedIndex] < arr[index]) {
+            increasingSubsequence.add(arr[index]);
+            generateLIS(arr, index + 1, index, n, increasingSubsequence);
+            increasingSubsequence.remove(increasingSubsequence.size() - 1); // Backtrack
+        }
+
+        generateLIS(arr, index + 1, lastIncludedIndex, n, increasingSubsequence);
+    }
+}
+
+
+//Backward recursive approach 
+
+class Solution {
+    int maxLengthLis = 0;
+    private ArrayList<Integer> longestIncreasingSubsequence;
+
+    public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
+        generateLIS(arr, n - 1, n, n, new ArrayList<>());
+        return longestIncreasingSubsequence;
+    }
+
+    private void generateLIS(int[] arr, int index, int n, int lastIncludedIndex, List<Integer> increasingSubsequence) {
+        if (index < 0) {
+            if (increasingSubsequence.size() >= maxLengthLis) {
+                maxLengthLis = increasingSubsequence.size();
+                longestIncreasingSubsequence = new ArrayList<>(increasingSubsequence);
+            }
+            return;
+        }
+
+        if (lastIncludedIndex == n || arr[index] < arr[lastIncludedIndex]) {
+            increasingSubsequence.add(0, arr[index]);
+            generateLIS(arr, index - 1, n, index, increasingSubsequence);
+            increasingSubsequence.remove(0); // Backtrack
+        }
+
+        generateLIS(arr, index - 1, n, lastIncludedIndex, increasingSubsequence);
+    }
+}
+
+
+//Optimal Approach
+
+//Using Forward DP
