@@ -232,7 +232,7 @@ class Solution {
         dp[arr.length][0] = 0;
 
         for (int index = arr.length - 1; index >= 0; index--) {
-            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+            for (int lastIncludedIdx = index-1; lastIncludedIdx >= -1; lastIncludedIdx--) {
                 int include = 0;
                 if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
                     include = 1 + dp[index + 1][index + 1];
@@ -291,7 +291,7 @@ class Solution {
         nextRow[0] = 0;
 
         for (int index = arr.length - 1; index >= 0; index--) {
-            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+            for (int lastIncludedIdx = index-1; lastIncludedIdx >= -1; lastIncludedIdx--) {
                 int include = 0;
                 if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
                     include = 1 + nextRow[index + 1];
@@ -345,7 +345,7 @@ class Solution {
         dp[0] = 0;
 
         for (int index = arr.length - 1; index >= 0; index--) {
-            for (int lastIncludedIdx = -1; lastIncludedIdx < index; lastIncludedIdx++) {
+            for (int lastIncludedIdx = index - 1; lastIncludedIdx >= -1; lastIncludedIdx--) {
                 int include = 0;
                 if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
                     include = 1 + dp[index + 1];
