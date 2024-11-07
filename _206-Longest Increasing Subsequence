@@ -188,12 +188,12 @@ class Solution {
 
 //Better Approach
 
-//Backward DP approach
+//Forward DP approach
 
 class Solution {
     public int lengthOfLIS(int[] arr) {
-         /*
-         * dp[i][j] represents the length of the longest increasing subsequence in the 
+        /*
+         * dp[i][j] represents the length of the longest increasing subsequence in the
          * subarray arr[0......i-1] , with j - 1 as the last included index in the subsequence.
          */
         int[][] dp = new int[arr.length + 1][arr.length + 1];
@@ -201,7 +201,7 @@ class Solution {
         dp[0][arr.length] = 0;
 
         for (int index = 1; index <= arr.length; index++) {
-            for (int lastIncludedIdx = arr.length; lastIncludedIdx > index - 1; lastIncludedIdx--) {
+            for (int lastIncludedIdx = index - 1 + 1; lastIncludedIdx <= arr.length; lastIncludedIdx++) {
                 int include = 0;
                 if (lastIncludedIdx == arr.length || arr[index - 1] < arr[lastIncludedIdx]) {
                     include = 1 + dp[index - 1][index - 1];
@@ -219,7 +219,7 @@ class Solution {
     }
 }
 
-//Forward DP approach
+//Backward DP approach
 
 class Solution {
     public int lengthOfLIS(int[] arr) {
@@ -264,7 +264,7 @@ class Solution {
         previousRow[arr.length] = 0;
 
         for (int index = 1; index <= arr.length; index++) {
-            for (int lastIncludedIdx = arr.length; lastIncludedIdx > index - 1; lastIncludedIdx--) {
+            for (int lastIncludedIdx = index; lastIncludedIdx <= arr.length; lastIncludedIdx++) {
                 int include = 0;
                 if (lastIncludedIdx == arr.length || arr[index - 1] < arr[lastIncludedIdx]) {
                     include = 1 + previousRow[index - 1];
@@ -322,7 +322,7 @@ class Solution {
         dp[arr.length] = 0;
 
         for (int index = 1; index <= arr.length; index++) {
-            for (int lastIncludedIdx = arr.length; lastIncludedIdx > index - 1; lastIncludedIdx--) {
+            for (int lastIncludedIdx = index; lastIncludedIdx <= arr.length; lastIncludedIdx++) {
                 int include = 0;
                 if (lastIncludedIdx == arr.length || arr[index - 1] < arr[lastIncludedIdx]) {
                     include = 1 + dp[index - 1];
