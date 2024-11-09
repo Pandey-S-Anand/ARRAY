@@ -1,0 +1,62 @@
+//Bruteforce Approach
+
+class Solution {
+    public int findNumberOfLIS(int[] arr) {
+        return countAndLengthOfLIS(arr, 0, -1)[1]; // The second element in the result array holds the count of LIS
+    }
+
+    private int[] countAndLengthOfLIS(int[] arr, int index, int lastIncludedIdx) {
+        /* 
+          Base case: Once all elements have been processed (i.e., the array is exhausted),
+          the LIS length is 0, and there is only one way to form the empty subsequence. 
+        */
+        if (index == arr.length) {
+            return new int[] { 0, 1 }; 
+        }
+
+        int[] includeResult = new int[2];
+        // Option 1: Include the current element, if it's larger than the last included element
+        if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
+            int[] nextResult = countAndLengthOfLIS(arr, index + 1, index);
+            /*
+             * (countAndLengthOfLIS(arr, currentIndex + 1, arr[currentIndex])), it is returning two things:
+             * 
+             * nextResult[0]=The length of the LIS , starting from the current index onward. i.e from current index + 1
+             * nextResult[1]=The number of such subsequences (of length nextResult[0])
+             */
+            includeResult[0] = 1 + nextResult[0];
+            includeResult[1] = nextResult[1];
+            /*
+             * includeResult[0]= The length of the LIS starting from currentIndex will be 1 + nextResult[0], 
+             * because we are adding the element arr[currentIndex] to the subsequences formed from currentIndex + 1. 
+             * This increases the length by 1 compared to what we would get starting from currentIndex + 1.
+             * 
+             * includeResult[1]=The number of such subsequences (i.e of length  includeResult[0]) = nextResult[1]
+             * It is the same as the count of subsequences that start from currentIndex + 1, i.e., nextResult[1], 
+             * because the subsequences formed by including arr[currentIndex] will be the same as the ones formed 
+             * by the subsequences from currentIndex + 1 — we're simply adding arr[currentIndex] to them.
+             */
+        }
+
+        // Option 2: Exclude the current element
+        int[] excludeResult = countAndLengthOfLIS(arr, index + 1, lastIncludedIdx);
+        int[] result = new int[2]; // {LIS length, count}
+
+        if (includeResult[0] > excludeResult[0]) {
+            result[0] = includeResult[0];
+            result[1] = includeResult[1];
+        } else if (includeResult[0] < excludeResult[0]) {
+            result[0] = excludeResult[0];
+            result[1] = excludeResult[1];
+        } else { // Both include and exclude give the same LIS length
+            result[0] = includeResult[0];
+            result[1] = includeResult[1] + excludeResult[1];
+        }
+
+        return result;
+    }
+}
+
+
+//Better Approach
+
