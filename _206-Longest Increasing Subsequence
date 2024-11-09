@@ -209,6 +209,13 @@ class Solution {
             for (int lastIncludedIdx = index - 1 + 1; lastIncludedIdx <= arr.length; lastIncludedIdx++) {
                 int include = 0;
                 if (lastIncludedIdx == arr.length || arr[index - 1] < arr[lastIncludedIdx]) {
+                    /*
+                     * In recursion, we directly work with array indices (from 0 to n-1), and the case where lastIncludedIndex is 'n' is naturally handled by the recursion.
+                     * However, in the tabulation approach, we need to store each original 'lastIncludedIndex' as 'lastIncludedIndex - 1' in the DP table.
+                     * This -1 shift allows us to handle the case where 'lastIncludedIndex' is 'n' (which represents no element being included yet).
+                     * By storing 'n' at index n - 1, we can properly reference 'lastIncludedIndex' in the DP table using 'index - 1'.
+                     * Therefore, whenever we need to reference 'lastIncludedIndex' in the DP table,  we use 'index - 1' (i.e., original array index - 1).
+                     */
                     include = 1 + dp[index - 1][index - 1];
                 }
                 int exclude = dp[index - 1][lastIncludedIdx];
@@ -240,7 +247,14 @@ class Solution {
             for (int lastIncludedIdx = index-1; lastIncludedIdx >= -1; lastIncludedIdx--) {
                 int include = 0;
                 if (lastIncludedIdx == -1 || arr[lastIncludedIdx] < arr[index]) {
-                    include = 1 + dp[index + 1][index + 1];
+                    /*
+                     * In recursion, we directly work with array indices (from 0 to n-1), and the case where lastIncludedIndex is -1 is naturally handled by the recursion.
+                     * However, in the tabulation approach, we need to store each original 'lastIncludedIndex' as 'lastIncludedIndex + 1' in the DP table.
+                     * This +1 shift allows us to handle the case where 'lastIncludedIndex' is -1 (which represents no element being included yet).
+                     * By storing -1 at index 0, we can properly reference 'lastIncludedIndex' in the DP table using 'index + 1'.
+                     * Therefore, whenever we need to reference 'lastIncludedIndex' in the DP table,  we use 'index + 1' (i.e., original array index + 1).
+                     */
+                    include = 1 + dp[index + 1][index + 1]; 
                 }
 
                 int exclude = dp[index + 1][lastIncludedIdx + 1];
