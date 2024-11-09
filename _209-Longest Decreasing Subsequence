@@ -46,14 +46,23 @@ public class Solution {
         if (index == arr.length) {
             return 0;
         }
-
+        // Option 1: Include the current element in the subsequence (if it creates an decreasing order)
         int include = 0;
+        /*
+         * Check if the current element is either the first element of the subsequence
+         * (lastIncludedIdx == -1) or less than the last included element in the current subsequence.
+         * 
+         * lastIncludedIdx = -1 is used as a base case to indicate no prior element in the subsequence, 
+         * allowing any element to start a new subsequence.
+         * 
+         * For other values, lastIncludedIdx can only take values from -1 up to one less than the current index
+         */
         if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
             include = 1 + lengthOfLDS(arr, index + 1, index);
         }
-
+        // Option 2: Exclude the current element and move to the next index
         int exclude = lengthOfLDS(arr, index + 1, lastIncludedIndex);
-
+        // Return the maximum length of LDS obtained by either including or excluding the current element
         return Math.max(include, exclude);
     }
 }
@@ -101,12 +110,23 @@ public class Solution {
 
 public class Solution {
     public static int LDS(int[] arr) {
+        /*
+         * dp[i][j] represents the length of the longest decreasing subsequence starting
+         * from index i to arr.length-1, with j-1 as the last included index that can be used in the subsequence.
+         */
         int[][] dp = new int[arr.length + 1][arr.length + 1];
 
         for (int index = arr.length - 1; index >= 0; index--) {
             for (int lastIncludedIndex = index - 1; lastIncludedIndex >= -1; lastIncludedIndex--) {
                 int include = 0;
                 if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+                    /*
+                     * In recursion, we directly work with array indices (from 0 to n-1), and the case where lastIncludedIndex is -1 is naturally handled by the recursion.
+                     * However, in the tabulation approach, we need to store each original 'lastIncludedIndex' as 'lastIncludedIndex + 1' in the DP table.
+                     * This +1 shift allows us to handle the case where 'lastIncludedIndex' is -1 (which represents no element being included yet).
+                     * By storing -1 at index 0, we can properly reference 'lastIncludedIndex' in the DP table using 'index + 1'.
+                     * Therefore, whenever we need to reference 'lastIncludedIndex' in the DP table,  we use 'index + 1' (i.e., original array index + 1).
+                     */
                     include = 1 + dp[index + 1][index + 1];
                 }
 
@@ -115,7 +135,11 @@ public class Solution {
                 dp[index][lastIncludedIndex + 1] = Math.max(include, exclude);
             }
         }
-
+         /*
+         * dp[0][0], which represents the maximum length of the decreasing subsequence
+         * starting from index 0 till the last index with no elements included before it
+         * (simulating the lastIncludedIdx = -1 condition in the top-down approach).
+         */
         return dp[0][0];
     }
 }
