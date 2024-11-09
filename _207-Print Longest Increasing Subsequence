@@ -1,7 +1,5 @@
 //Bruteforce Approach
 
-//Forward recursive approach 
-
 class Solution {
     int maxLengthLis = 0;
     private ArrayList<Integer> longestIncreasingSubsequence;
@@ -31,105 +29,7 @@ class Solution {
 }
 
 
-//Backward recursive approach 
-
-class Solution {
-    int maxLengthLis = 0;
-    private ArrayList<Integer> longestIncreasingSubsequence;
-
-    public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
-        generateLIS(arr, n - 1, n, n, new ArrayList<>());
-        return longestIncreasingSubsequence;
-    }
-
-    private void generateLIS(int[] arr, int index, int n, int lastIncludedIndex, List<Integer> increasingSubsequence) {
-        if (index < 0) {
-            if (increasingSubsequence.size() >= maxLengthLis) {
-                maxLengthLis = increasingSubsequence.size();
-                longestIncreasingSubsequence = new ArrayList<>(increasingSubsequence);
-            }
-            return;
-        }
-
-        if (lastIncludedIndex == n || arr[index] < arr[lastIncludedIndex]) {
-            increasingSubsequence.add(0, arr[index]);
-            generateLIS(arr, index - 1, n, index, increasingSubsequence);
-            increasingSubsequence.remove(0); // Backtrack
-        }
-
-        generateLIS(arr, index - 1, n, lastIncludedIndex, increasingSubsequence);
-    }
-}
-
-
 //Optimal Approach
-
-//Using Forward DP
-
-class Solution {
-    public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
-        int[][] dp = new int[n + 1][n + 1];
-
-        // Fill the dp table to compute the maximum LIS length for each subproblem
-        for (int index = 1; index <= n; index++) {
-            for (int lastIncludedIdx = index; lastIncludedIdx <= n; lastIncludedIdx++) {
-                int include = 0;
-                if (lastIncludedIdx == n || arr[index - 1] < arr[lastIncludedIdx]) {
-                    include = 1 + dp[index - 1][index - 1];
-                }
-                int exclude = dp[index - 1][lastIncludedIdx];
-                dp[index][lastIncludedIdx] = Math.max(include, exclude);
-            }
-        }
-
-        ArrayList<Integer> longestIncreasingSubsequence = new ArrayList<>();
-        int lastIncludedIdx = n;
-        // dp[n][n] stores the length of the LIS
-        int currentLISLength = dp[n][n]; // Length we aim to reconstruct
-
-        // Traverse from the end of the array to reconstruct the LIS
-        for (int index = n; index >= 1; index--) {
-            int include = 0;
-            if (lastIncludedIdx == n || arr[index - 1] < arr[lastIncludedIdx]) {
-                include = 1 + dp[index - 1][index - 1];
-            }
-            int exclude = dp[index - 1][lastIncludedIdx];
-
-            /*
-             * The value dp[index][lastIncludedIdx] represents the maximum possible length
-             * of the LIS from the start of the array up to index `index - 1`.
-             * We use this value to determine if including the current element will help form
-             * the LIS. If including it yields a higher length, we add it to the result;
-             * otherwise, we skip it.
-             */
-
-            /*
-             * In reconstructing the LIS, using include > exclude ensures we get the longest
-             * subsequence that also respects lexicographical order. By favoring elements 
-             * later in the sequence when they give equal LIS lengths, we ensure each 
-             * position in the LIS is filled by the last qualifying element, resulting 
-             * in the smallest possible subsequence in lexicographical terms.
-             * 
-             * If we used include >= exclude, we would prefer the earliest possible element
-             * in the array, which would result in earlier elements appearing in the LIS, 
-             * creating a lexicographically larger sequence.
-             */
-            if (include > exclude) {
-                longestIncreasingSubsequence.add(0, arr[index - 1]);
-                lastIncludedIdx = index - 1;
-                currentLISLength--;  // Reduce the target LIS length by 1
-                if (currentLISLength == 0) {
-                    break; // Stop once we've collected the full LIS
-                }
-            }
-        }
-
-        return longestIncreasingSubsequence;
-    }
-}
-
-
-//Using Backward DP
 
 class Solution {
     public ArrayList<Integer> longestIncreasingSubsequence(int n, int arr[]) {
