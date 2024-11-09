@@ -1,0 +1,171 @@
+//Bruteforce approach
+
+public class Solution {
+    private static int maxLISLength;
+
+    public static int LDS(int[] arr) {
+        maxLISLength = 0;
+        generateAllSubsequences(arr, 0, new ArrayList<>());
+        return maxLISLength;
+    }
+
+    private static void generateAllSubsequences(int[] arr, int index, List<Integer> currentSubsequence) {
+        if (index == arr.length) {
+            if (isDecreasingSubsequence(currentSubsequence) && currentSubsequence.size() > maxLISLength) {
+                maxLISLength = currentSubsequence.size();
+            }
+            return;
+        }
+
+        currentSubsequence.add(arr[index]);
+        generateAllSubsequences(arr, index + 1, currentSubsequence);
+        currentSubsequence.remove(currentSubsequence.size() - 1);
+        generateAllSubsequences(arr, index + 1, currentSubsequence);
+    }
+
+    private static boolean isDecreasingSubsequence(List<Integer> subsequence) {
+        for (int i = 1; i < subsequence.size(); i++) {
+            if (subsequence.get(i) >= subsequence.get(i - 1)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+//Improved Approach
+
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        return lengthOfLDS(arr, 0, -1);
+    }
+
+    private static int lengthOfLDS(int[] arr, int index, int lastIncludedIndex) {
+        if (index == arr.length) {
+            return 0;
+        }
+
+        int include = 0;
+        if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+            include = 1 + lengthOfLDS(arr, index + 1, index);
+        }
+
+        int exclude = lengthOfLDS(arr, index + 1, lastIncludedIndex);
+
+        return Math.max(include, exclude);
+    }
+}
+
+
+//Better Approach
+
+public class Solution {
+    private static int[][] cache;
+
+    public static int LDS(int[] arr) {
+        cache = new int[arr.length][arr.length + 1];
+        intializeCache();
+        return lengthOfLDS(arr, 0, -1);
+    }
+
+    private static int lengthOfLDS(int[] arr, int index, int lastIncludedIndex) {
+        if (index == arr.length) {
+            return 0;
+        }
+
+        if (cache[index][lastIncludedIndex + 1] != -1) {
+            return cache[index][lastIncludedIndex + 1];
+        }
+
+        int include = 0;
+        if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+            include = 1 + lengthOfLDS(arr, index + 1, index);
+        }
+
+        int exclude = lengthOfLDS(arr, index + 1, lastIncludedIndex);
+
+        return cache[index][lastIncludedIndex + 1] = Math.max(include, exclude);
+    }
+
+    private static void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
+        }
+    }
+}
+
+
+//Optimal approach
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        int[][] dp = new int[arr.length + 1][arr.length + 1];
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIndex = index - 1; lastIncludedIndex >= -1; lastIncludedIndex--) {
+                int include = 0;
+                if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+                    include = 1 + dp[index + 1][index + 1];
+                }
+
+                int exclude = dp[index + 1][lastIncludedIndex + 1];
+
+                dp[index][lastIncludedIndex + 1] = Math.max(include, exclude);
+            }
+        }
+
+        return dp[0][0];
+    }
+}
+
+//Aliter (space optimised)
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        int[] currentRow = new int[arr.length + 1];
+        int[] nextRow = new int[arr.length + 1];
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIndex = index - 1; lastIncludedIndex >= -1; lastIncludedIndex--) {
+                int include = 0;
+                if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+                    include = 1 + nextRow[index + 1];
+                }
+
+                int exclude = nextRow[lastIncludedIndex + 1];
+
+                currentRow[lastIncludedIndex + 1] = Math.max(include, exclude);
+            }
+            int[] temp = currentRow;
+            currentRow = nextRow;
+            nextRow = temp;
+        }
+
+        return nextRow[0];
+    }
+}
+
+//Aliter (Further space optimised)
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        int[] dp = new int[arr.length + 1];
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIndex = index - 1; lastIncludedIndex >= -1; lastIncludedIndex--) {
+                int include = 0;
+                if (lastIncludedIndex == -1 || arr[index] < arr[lastIncludedIndex]) {
+                    include = 1 + dp[index + 1];
+                }
+
+                int exclude = dp[lastIncludedIndex + 1];
+
+                dp[lastIncludedIndex + 1] = Math.max(include, exclude);
+            }
+        }
+
+        return dp[0];
+    }
+}
