@@ -71,3 +71,89 @@ class Solution {
         return dp;
     }
 }
+
+//Optimal Approach
+
+class Solution {
+    public int minimumMountainRemovals(int[] arr) {
+        return arr.length - longestBitonicSequence(arr);
+    }
+
+    public int longestBitonicSequence(int[] arr) {
+        if (arr.length < 3) {
+            return 0;
+        }
+
+        int longestBitonicSubsequence = 0;
+        int[] lisDp = lengthOfLIS(arr);
+        int[] ldsDp = lengthOfLDS(arr);
+
+        for (int i = 0; i < arr.length; i++) {
+            int lis = lisDp[i];
+            int ldx = ldsDp[i];
+
+            if (lis == 1 || ldsDp[i] == 1) {
+                continue;
+            }
+
+            longestBitonicSubsequence = Math.max(longestBitonicSubsequence, lis + ldsDp[i] - 1);
+        }
+
+        return longestBitonicSubsequence;
+    }
+
+    private int[] lengthOfLIS(int[] arr) {
+        int[] lis = new int[arr.length];
+        int[] tail = new int[arr.length];
+        int length = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            int index = lowerBound(tail, length, arr[i]);
+
+            if (index == length) {
+                length++;
+            }
+
+            tail[index] = arr[i];
+            lis[i] = index + 1;
+        }
+
+        return lis;
+    }
+
+    private int[] lengthOfLDS(int[] arr) {
+        int[] lds = new int[arr.length];
+        int[] tail = new int[arr.length];
+        int length = 0;
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int index = lowerBound(tail, length, arr[i]);
+
+            if (index == length) {
+                length++;
+            }
+
+            tail[index] = arr[i];
+            lds[i] = index + 1;
+        }
+
+        return lds;
+    }
+
+    private int lowerBound(int[] arr, int n, int x) {
+        int low = 0, high = n - 1, lowerBound = n;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] >= x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
