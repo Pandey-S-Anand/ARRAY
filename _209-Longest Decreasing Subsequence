@@ -195,30 +195,6 @@ public class Solution {
 
 //Alternate DP approach
 
-/*
-   Following is the approach to find the Longest Decreasing Subsequence (LIS) in the array by calculating the LDS ending at each index:
-
-   Approach :
-   
-   Subsequence Ending at Each Index:
-    Every decreasing subsequence in the array must end at some index `i`. 
-    So, we focus on calculating the length of the longest decreasing subsequence (LIS) that ends at each index `i`.
-    Once we know the LDS length for each ending index, the longest decreasing subsequence in the array 
-    will be the maximum length among these values.
-
-   Finding Potential LDS Candidates:
-    For each element `arr[i]`, we look at all previous elements `arr[j]` (where `j < i`).
-    If `arr[i]` is lesser than `arr[j]`, then `arr[i]` can extend the decreasing subsequence that ends at `arr[j]`.
-
-   Updating the LIS Length for Each `i`:
-   - For each valid candidate `arr[j]`, we retrieve the LDS ending at `j` (stored in `dp[j]`).
-   - Among all such candidates, the longest subsequence ending at `j` provides the longest possible subsequence that `i` can extend.
-   - Finally, we add 1 to this length to include the current element `arr[i]`, which gives us the LDS length ending at `i`.
-
-   Final Step:
-   After calculating the LDS ending at each index, the overall longest decreasing subsequence in the array is simply the maximum value in the `dp` array.
-*/
-
 public class Solution {
     public static int LDS(int[] arr) {
         // dp[i] = length of longest decreasing subsequence ending at index i
