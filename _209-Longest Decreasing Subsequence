@@ -218,3 +218,80 @@ public class Solution {
         return overallMaxLengthLDS;
     }
 }
+
+
+//Optimal Approach
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        List<Integer> tail = new ArrayList<>(arr.length);
+
+        for (int i=arr.length-1;i>=0;i--) {
+            int index = lowerBound(tail, arr[i]);
+
+            if (index == tail.size()) {
+                tail.add(arr[i]);
+            } else {
+                tail.set(index,  arr[i]);
+            }
+        }
+
+        return tail.size();
+    }
+
+    private static int lowerBound(List<Integer> arr, int x) {
+        int low = 0, high = arr.size() - 1, lowerBound = arr.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr.get(mid) >= x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
+
+
+//Aliter
+
+public class Solution {
+    public static int LDS(int[] arr) {
+        int[] tail = new int[arr.length];
+        int length = 0;
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int index = lowerBound(tail, length, arr[i]);
+
+            if (index == length) {
+                length++;
+            }
+
+            tail[index] = arr[i];
+        }
+
+        return length;
+    }
+
+    private static int lowerBound(int[] arr, int n, int x) {
+        int low = 0, high = n - 1, lowerBound = n;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] >= x) {
+                lowerBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return lowerBound;
+    }
+}
