@@ -1,0 +1,77 @@
+// Note: The first and last elements of the array cannot be the peak,because a peak requires both left and right neighbors to compare.
+
+//Bruteforce Approach
+
+class Solution {
+    public boolean validMountainArray(int[] arr) {
+        if (arr.length < 3) {
+            return false;
+        }
+
+        for (int i = 1; i <= arr.length - 2; i++) {
+            if (isStrictlyIncreasingUntil(arr, i) && isStrictlyDecreasingFrom(arr, i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isStrictlyIncreasingUntil(int[] arr, int index) {
+        for (int i = 0; i < index; i++) {
+            if (arr[i] >= arr[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isStrictlyDecreasingFrom(int[] arr, int index) {
+        for (int i = index + 1; i < arr.length; i++) {
+            if (arr[i] >= arr[i - 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+//Optimal Approach
+
+class Solution {
+    public boolean validMountainArray(int[] arr) {
+        // Step 1: Check if the array has at least 3 elements, which is the minimum required for a mountain structure.
+        if (arr.length < 3) {
+            return false;
+        }
+
+        int i = 1;
+
+        // Step 2: Ascend to the peak of the mountain.
+        // Move forward while each element is greater than the previous one.
+        while (i < arr.length && arr[i] > arr[i - 1]) {
+            i++;
+        }
+         
+        /*
+           Check peak validity:
+           - If i == 1, there’s no ascending part, so it’s not a mountain.
+           - If i == arr.length, the entire array is an ascending sequence without a descent.
+           In both cases, we don't have a valid peak for a mountain.
+        */
+        if (i == 1 || i == arr.length) {
+            return false;
+        }
+
+        // Step 3: Descend the mountain after reaching the peak.
+        // Continue moving forward while each element is less than the previous one.
+        while (i < arr.length && arr[i] < arr[i - 1]) {
+            i++;
+        }
+
+        // Step 4: If we've reached the end of the array after the descent, the array forms a valid mountain.
+        return i == arr.length;
+    }
+}
