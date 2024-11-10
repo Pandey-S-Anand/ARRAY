@@ -1,0 +1,66 @@
+/*
+The first and last elements are skipped because a valid mountain requires both
+an increasing part and a decreasing part around a peak, and the first/last elements
+cannot have both neighbors to form a valid peak.
+*/
+
+//Bruteforce Approach
+
+class Solution {
+    public int longestMountain(int[] arr) {
+        int longestBitonicSubarray = 0;
+
+        for (int i = 1; i < arr.length - 1; i++) {
+            // Check for the length of the longest strictly increasing subarray ending at index 'i'.
+            int lis = longestIncreasingSubarray(arr, i);
+            // Check for the length of the longest strictly decreasing subarray starting at index 'i'.
+            int lds = longestDecreasingSubarray(arr, i);
+
+            /*
+             * For a valid mountain (bitonic subarray), there must be both an increasing phase and a
+             * decreasing phase. If either the increasing or decreasing length is 1, it means there is no valid
+             * transition between the increasing and decreasing phases. This indicates that the current subarray
+             * is not a valid mountain.
+             */
+
+            if (lis == 1 || lds == 1) {
+                continue;
+            }
+            /*
+             * Calculate the total length of the bitonic (mountain) subarray:
+             * Total length = length of increasing + length of decreasing - 1 (to avoid double counting the peak element).
+             */
+            longestBitonicSubarray = Math.max(longestBitonicSubarray, lis + lds - 1);
+        }
+
+        return longestBitonicSubarray;
+    }
+
+    private int longestIncreasingSubarray(int[] arr, int index) {
+        int length = 1; // Start with length 1 as the current element is always part of the increasing subarray.
+
+        for (int i = index - 1; i >= 0; i--) {
+            if (arr[i] >= arr[i + 1]) {
+                break;
+            }
+
+            length++;
+        }
+
+        return length;
+    }
+
+    private int longestDecreasingSubarray(int[] arr, int index) {
+        int length = 1; // Start with length 1 as the current element is always part of the decreasing subarray.
+
+        for (int i = index + 1; i < arr.length; i++) {
+            if (arr[i] >= arr[i - 1]) {
+                break;
+            }
+
+            length++;
+        }
+
+        return length;
+    }
+}
