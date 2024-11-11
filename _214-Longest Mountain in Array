@@ -122,7 +122,7 @@ class Solution {
 }
 
 
-//Better approach
+//Good approach
 
 class Solution {
     public int longestMountain(int[] arr) {
@@ -176,5 +176,51 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Better Approach
+
+class Solution {
+    public int longestMountain(int[] arr) {
+        if (arr.length < 3) {
+            return 0;
+        }
+
+        int longestBitonicSubarray = 0;
+
+        int[] lds = longestDecreasingSubarray(arr);
+        int lisLength = 1; // longest increasing subarray ending at index 0
+        
+        for (int i = 1; i < arr.length - 1; i++) {
+            // Update lisLength to reflect the longest increasing subarray ending at i
+            if (arr[i] > arr[i - 1]) {
+                lisLength++;
+            } else {
+                lisLength = 1; // Reset increasing subarray length to 1 if sequence breaks
+            }
+
+            if (lisLength > 1 && lds[i] > 1) {
+                longestBitonicSubarray = Math.max(longestBitonicSubarray, lisLength + lds[i] - 1);
+            }
+        }
+
+        return longestBitonicSubarray;
+    }
+
+    private int[] longestDecreasingSubarray(int[] arr) {
+        // lis[i] stores the length of the longest decreasing subarray starting at i.
+        int[] lds = new int[arr.length];
+        lds[arr.length - 1] = 1;
+
+        for (int i = arr.length - 2; i > 0; i--) {
+            lds[i] = 1;
+            if (arr[i] > arr[i + 1]) {
+                lds[i] += lds[i + 1];
+            }
+        }
+
+        return lds;
+    }
+}
+
+//Optimised Approach
+
 
