@@ -4,7 +4,7 @@ an increasing part and a decreasing part around a peak, and the first/last eleme
 cannot have both neighbors to form a valid peak.
 */
 
-//Bruteforce Approach
+//Bruteforce approach
 
 class Solution {
     public int longestMountain(int[] arr) {
@@ -64,3 +64,55 @@ class Solution {
         return length;
     }
 }
+
+
+//Better approach
+
+class Solution {
+    public int longestMountain(int[] arr) {
+        int longestBitonicSubarray = 0;
+
+        for (int i = 1; i < arr.length - 1; i++) {
+            // Only proceed if 'i' is a potential peak (i.e., greater than both neighbors).
+            if (arr[i] > arr[i - 1] && arr[i] > arr[i + 1]) {
+                int lis = longestIncreasingSubarray(arr, i);
+                int lds = longestDecreasingSubarray(arr, i);
+                longestBitonicSubarray = Math.max(longestBitonicSubarray, lis + lds - 1);
+            }
+        }
+
+        return longestBitonicSubarray;
+    }
+
+    private int longestIncreasingSubarray(int[] arr, int index) {
+        int length = 1;
+
+        for (int i = index - 1; i >= 0; i--) {
+            if (arr[i] >= arr[i + 1]) {
+                break;
+            }
+
+            length++;
+        }
+
+        return length;
+    }
+
+    private int longestDecreasingSubarray(int[] arr, int index) {
+        int length = 1;
+
+        for (int i = index + 1; i < arr.length; i++) {
+            if (arr[i] >= arr[i - 1]) {
+                break;
+            }
+
+            length++;
+        }
+
+        return length;
+    }
+}
+
+
+//Optimal approach
+
