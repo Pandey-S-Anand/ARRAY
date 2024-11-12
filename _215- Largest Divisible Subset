@@ -1,0 +1,74 @@
+//Bruteforce approach
+
+
+/*
+Sorting plays a crucial role in ensuring that divisibility is maintained among elements of any particular subset:
+
+For any indices i < j, if `arr[j]` is divisible by an earlier element `arr[i]`, 
+then all factors of `arr[i]` that appear before it in the sorted array will also divide `arr[j]`. 
+This order allows us to only check divisibility between consecutive elements in the sorted order,
+rather than needing to verify divisibility between all pairs in a subset.
+
+Example:
+    arr: {2, 4, 8, 16, 32}
+    Since 32 is divisible by 16, it will also be divisible by 8, 4, and 2 due to the sorted order.
+
+Note: A subset doesn't necessarily need to maintain the original order of appearance from the input array.
+      Any subset can be arranged in multiple configurations; however, one such configuration will form a subsequence.
+      Therefore, the problem can be thought of as finding the longest divisible subsequence.
+      
+For example:
+    arr: {1, 2, 3}
+    
+    Subsets:
+        - {1}
+        - {2}
+        - {3}
+        - {1, 2} or {2, 1} 
+          (here, {1, 2} is both a subset and a subsequence, while {2, 1} is just a subset)
+        - {1, 3} or {3, 1} 
+          (here, {1, 3} is both a subset and a subsequence, while {3, 1} is just a subset)
+        - {1, 2, 3}, {2, 1, 3}, {3, 1, 2}, {1, 3, 2}, {2, 3, 1}, {3, 2, 1}
+          (only {1, 2, 3} is both a subset and a subsequence, while the rest are only subsets)
+          
+This means we are effectively searching for the longest divisible subsequence of elements in the sorted array.
+*/
+
+//Better Approach
+
+class Solution {
+    int maxLengthDivisibleSubset;
+    private List<Integer> longestDivisibleSubset;
+
+    public List<Integer> largestDivisibleSubset(int[] arr) {
+        maxLengthDivisibleSubset = 0;
+        Arrays.sort(arr);
+        generateLargestDivisibleSubset(arr, 0, -1, new ArrayList<>());
+        return longestDivisibleSubset;
+    }
+
+    private void generateLargestDivisibleSubset(int[] arr, int index, int lastIncludedIndex, List<Integer> currentSubset) {
+        if (index == arr.length) {
+            if (currentSubset.size() > maxLengthDivisibleSubset) {
+                maxLengthDivisibleSubset = currentSubset.size();
+                longestDivisibleSubset = new ArrayList<>(currentSubset);
+            }
+            return;
+        }
+
+        /*
+         * Include arr[index] in the subset if it's divisible by the last included element.
+         * lastIncludedIndex == -1 condition allows us to add the first element without any divisibility check.
+         */
+        if (lastIncludedIndex == -1 || (arr[index] % arr[lastIncludedIndex]) == 0) {
+            currentSubset.add(arr[index]);
+            generateLargestDivisibleSubset(arr, index + 1, index, currentSubset);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+        // Exclude arr[index] and move to the next element.
+        generateLargestDivisibleSubset(arr, index + 1, lastIncludedIndex, currentSubset);
+    }
+}
+
+//Optimal Approach
+
