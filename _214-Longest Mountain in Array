@@ -122,7 +122,7 @@ class Solution {
 }
 
 
-//Good approach
+//Better approach
 
 class Solution {
     public int longestMountain(int[] arr) {
@@ -176,7 +176,7 @@ class Solution {
 }
 
 
-//Better Approach
+//Optimised Approach Approach
 
 class Solution {
     public int longestMountain(int[] arr) {
@@ -220,7 +220,3 @@ class Solution {
         return lds;
     }
 }
-
-//Optimised Approach
-
-
