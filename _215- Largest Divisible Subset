@@ -1,5 +1,50 @@
 //Bruteforce approach
 
+class Solution {
+    // Track the maximum length of a divisible subset found
+    private int maxSubsetLength;
+    // Store the elements of the largest divisible subset found
+    private List<Integer> largestDivisibleSubset;
+
+    public List<Integer> largestDivisibleSubset(int[] arr) {
+        maxSubsetLength = 0;
+        generateLargestDivisibleSubset(arr, 0, new ArrayList<>());
+        return largestDivisibleSubset;
+    }
+
+    private void generateLargestDivisibleSubset(int[] arr, int index, List<Integer> currentSubset) {
+        if (index == arr.length) {
+            if (currentSubset.size() > maxSubsetLength && isDivisibleSubset(currentSubset)) {
+                largestDivisibleSubset = new ArrayList<>(currentSubset);
+                maxSubsetLength = currentSubset.size();
+            }
+            return;
+        }
+
+        currentSubset.add(arr[index]);
+        generateLargestDivisibleSubset(arr, index + 1, currentSubset);
+        currentSubset.remove(currentSubset.size() - 1);
+        generateLargestDivisibleSubset(arr, index + 1, currentSubset);
+    }
+
+    /*
+     * This method checks if a subset is a valid divisible subset.
+     * A subset is valid if every pair of elements (i, j) within it satisfies
+     * either subset[i] % subset[j] == 0 or subset[j] % subset[i] == 0.
+     */
+    private boolean isDivisibleSubset(List<Integer> subset) {
+        for (int i = 0; i < subset.size(); i++) {
+            for (int j = i + 1; j < subset.size(); j++) {
+                if ((subset.get(j) % subset.get(i)) != 0 && (subset.get(i) % subset.get(j)) != 0) {
+                    return false; // Return false if any pair fails the divisibility check
+                }
+            }
+        }
+
+        return true; // Return true if all pairs satisfy divisibility conditions
+    }
+}
+
 
 /*
 Sorting plays a crucial role in ensuring that divisibility is maintained among elements of any particular subset:
@@ -37,21 +82,21 @@ This means we are effectively searching for the longest divisible subsequence of
 //Better Approach
 
 class Solution {
-    int maxLengthDivisibleSubset;
-    private List<Integer> longestDivisibleSubset;
+    int maxSubsetLength;
+    private List<Integer> largestDivisibleSubset;
 
     public List<Integer> largestDivisibleSubset(int[] arr) {
-        maxLengthDivisibleSubset = 0;
+        maxSubsetLength = 0;
         Arrays.sort(arr);
         generateLargestDivisibleSubset(arr, 0, -1, new ArrayList<>());
-        return longestDivisibleSubset;
+        return largestDivisibleSubset;
     }
 
     private void generateLargestDivisibleSubset(int[] arr, int index, int lastIncludedIndex, List<Integer> currentSubset) {
         if (index == arr.length) {
-            if (currentSubset.size() > maxLengthDivisibleSubset) {
-                maxLengthDivisibleSubset = currentSubset.size();
-                longestDivisibleSubset = new ArrayList<>(currentSubset);
+            if (currentSubset.size() > maxSubsetLength) {
+                maxSubsetLength = currentSubset.size();
+                largestDivisibleSubset = new ArrayList<>(currentSubset);
             }
             return;
         }
@@ -70,5 +115,55 @@ class Solution {
     }
 }
 
+
 //Optimal Approach
 
+class Solution {
+    private List<Integer> longestDivisibleSubset;
+
+    public List<Integer> largestDivisibleSubset(int[] arr) {
+        Arrays.sort(arr);
+        int[][] dp = new int[arr.length + 1][arr.length + 1];
+
+        for (int index = arr.length - 1; index >= 0; index--) {
+            for (int lastIncludedIdx = index - 1; lastIncludedIdx >= -1; lastIncludedIdx--) {
+                int include = 0;
+                if (lastIncludedIdx == -1 || (arr[index] % arr[lastIncludedIdx]) == 0) {
+                    include = 1 + dp[index + 1][index + 1];
+                }
+                int exclude = dp[index + 1][lastIncludedIdx + 1];
+                dp[index][lastIncludedIdx + 1] = Math.max(include, exclude);
+            }
+        }
+
+        ArrayList<Integer> longestDivisibleSubsequence = new ArrayList<>();
+        int lastIncludedIdx = -1;
+        // dp[0][0] stores the length of the longest divisible subsequence (LDS)
+        int currentLDSLength = dp[0][0]; // Target length of the LDS sequence to stop at
+
+        for (int index = 0; index < arr.length; index++) {
+            int include = 0;
+            if (lastIncludedIdx == -1 || (arr[index] % arr[lastIncludedIdx]) == 0) {
+                include = 1 + dp[index + 1][index + 1];
+            }
+            int exclude = dp[index + 1][lastIncludedIdx + 1];
+
+            /*
+             * The value dp[index][lastIncludedIdx + 1] stores the maximum possible length
+             * of the LDS starting from index `index`. We can use this value to decide
+             * whether to include the current element in our result. If including the element
+             * contributes to forming the LDS, we add it to the result; otherwise, we skip it.
+             */
+            if (include >= exclude) {
+                longestDivisibleSubsequence.add(arr[index]);
+                lastIncludedIdx = index;
+                currentLDSLength--; // Reduce the target LDS length by 1
+                if (currentLDSLength == 0) {
+                    break; // Stop once we've collected the full LDS
+                }
+            }
+        }
+
+        return longestDivisibleSubsequence;
+    }
+}
