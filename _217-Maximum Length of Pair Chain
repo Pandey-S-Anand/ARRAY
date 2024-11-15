@@ -52,7 +52,7 @@ class Solution {
 }
 
 
-//Better Approach
+//Improved Approach
 
 class Solution {
     private int[][] cache;
@@ -91,7 +91,7 @@ class Solution {
     }
 }
 
-//Optimal Approach
+//Better Approach
 
 class Solution {
     public int findLongestChain(int[][] pairs) {
@@ -169,5 +169,31 @@ class Solution {
         }
 
         return dp[0];
+    }
+}
+
+//Optimal Approach
+
+/*
+We use a greedy approach here because sorting pairs by their end values lets us efficiently build 
+the longest chain by always selecting the earliest finishing pair that can follow the last included pair. 
+This strategy maximizes the chain length while ensuring each added pair leaves space for future pairs.
+*/
+
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        Arrays.sort(pairs, (pair1, pair2) -> Integer.compare(pair1[1], pair2[1]));
+
+        int lastIncludedIndex = -1;
+        int maxLengthChain = 0;
+
+        for (int index = 0; index < pairs.length; index++) {
+            if (lastIncludedIndex == -1 || pairs[lastIncludedIndex][1] < pairs[index][0]) {
+                maxLengthChain++;
+                lastIncludedIndex = index;
+            }
+        }
+
+        return maxLengthChain;
     }
 }
