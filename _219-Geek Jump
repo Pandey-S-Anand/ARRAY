@@ -1,0 +1,190 @@
+//Bruteforce Approach
+
+//Forward Recursive Approach
+
+class Solution{
+    public int minimumEnergy(int arr[],int n){
+      // Call the recursive function starting from the first stair (index 0) to the last stair (index n-1).
+      return minimumEnergy(arr,0,n-1);  
+    }
+    
+    public int minimumEnergy(int[] height,int currentStair,int destinationStair){
+      // Base case 1: If we have reached the destination stair, no energy is required further.
+      if(currentStair==destinationStair){
+          return 0;
+      }
+      
+      // Base case 2: If the current stair exceeds the destination, it is not a valid path.
+      if(currentStair > destinationStair){
+          return Integer.MAX_VALUE;  // Represents an invalid path.
+      }
+       
+      // Take a 1-step jump from the current stair and calculate the minimum energy required to reach the destination stair starting from currentStair + 1.
+      int oneStepJump=minimumEnergy(height,currentStair+1,destinationStair);
+      // If the 1-step path is valid, add the energy cost of the 1-step jump.
+      if(oneStepJump!=Integer.MAX_VALUE){
+          oneStepJump +=Math.abs(height[currentStair+1]- height[currentStair]);
+      }  
+      
+      // Take a 2-step jump from the current stair and calculate the minimum energy required to reach the destination stair starting from currentStair + 2.
+      int twoStepJump=minimumEnergy(height,currentStair+2,destinationStair);
+      // If the 2-step path is valid, add the energy cost of the 2-step jump.
+      if(twoStepJump!=Integer.MAX_VALUE){
+         twoStepJump += Math.abs(height[currentStair+2]- height[currentStair]);
+      }
+       
+      // Return the minimum energy required between the 1-step jump and the 2-step jump.
+      return Math.min(oneStepJump,twoStepJump);
+    }
+}
+
+
+//Backward Recursive Approach
+
+class Solution {
+    public int minimumEnergy(int arr[], int n) {
+        return minimumEnergyHelper(arr, n - 1);
+    }
+
+    public int minimumEnergyHelper(int[] height, int currentStair) {
+        // Base case 1: If we have reached the 0th stair (index 0), no energy is required.
+        if (currentStair == 0) {
+            return 0;
+        }
+        
+        // Base case 2: If the current stair  is below 0, return Integer.MAX_VALUE, indicating an invalid path.
+        if (currentStair < 0) {
+            return Integer.MAX_VALUE;
+        }
+        
+        // Take a 1-step jump from the current stair and calculate the minimum energy required to reach the 0th stair starting from currentStair - 1.
+        int oneStepJump = minimumEnergyHelper(height, currentStair - 1);
+        // If the 1-step path is valid, add the energy cost of the 1-step jump.
+        if (oneStepJump != Integer.MAX_VALUE) {
+            oneStepJump += Math.abs(height[currentStair] - height[currentStair - 1]);
+        }
+        
+        // Take a 2-step jump from the current stair and calculate the minimum energy required to reach the 0th stair starting from currentStair - 2.
+        int twoStepJump = minimumEnergyHelper(height, currentStair - 2);
+         // If the 2-step path is valid, add the energy cost of the 1-step jump.
+        if (twoStepJump != Integer.MAX_VALUE) {
+            twoStepJump += Math.abs(height[currentStair] - height[currentStair - 2]);
+        }
+        
+        // Return the minimum energy required between the 1-step jump and the 2-step jump.
+        return Math.min(oneStepJump, twoStepJump);
+    }
+}
+
+
+//Better Approach
+
+//Forward Recursive Approach
+
+class Solution {
+    private int[] cache;
+
+    public int minimumEnergy(int arr[], int n) {
+        cache = new int[n];
+        Arrays.fill(cache, -1);
+        return minimumEnergy(arr, 0, n - 1);
+    }
+
+    public int minimumEnergy(int[] height, int currentStair, int destinationStair) {
+        if (currentStair == destinationStair) {
+            return 0;
+        }
+
+        if (currentStair > destinationStair) {
+            return Integer.MAX_VALUE;
+        }
+
+        if (cache[currentStair] != -1) {
+            return cache[currentStair];
+        }
+
+        int oneStepJump = minimumEnergy(height, currentStair + 1, destinationStair);
+        if (oneStepJump != Integer.MAX_VALUE) {
+            oneStepJump += Math.abs(height[currentStair + 1] - height[currentStair]);
+        }
+
+        int twoStepJump = minimumEnergy(height, currentStair + 2, destinationStair);
+        if (twoStepJump != Integer.MAX_VALUE) {
+            twoStepJump += Math.abs(height[currentStair + 2] - height[currentStair]);
+        }
+
+        return cache[currentStair] = Math.min(oneStepJump, twoStepJump);
+    }
+}
+
+//Backward Recursive Approach
+
+class Solution {
+    private int[] cache;
+
+    public int minimumEnergy(int arr[], int n) {
+        cache = new int[n];
+        Arrays.fill(cache, -1);
+        return minimumEnergyHelper(arr, n - 1);
+    }
+
+    public int minimumEnergyHelper(int[] height, int currentStair) {
+        if (currentStair == 0) {
+            return 0;
+        }
+
+        if (currentStair < 0) {
+            return Integer.MAX_VALUE;
+        }
+
+        if (cache[currentStair] != -1) {
+            return cache[currentStair];
+        }
+
+        int oneStepJump = minimumEnergyHelper(height, currentStair - 1);
+        if (oneStepJump != Integer.MAX_VALUE) {
+            oneStepJump += Math.abs(height[currentStair] - height[currentStair - 1]);
+        }
+
+        int twoStepJump = minimumEnergyHelper(height, currentStair - 2);
+        if (twoStepJump != Integer.MAX_VALUE) {
+            twoStepJump += Math.abs(height[currentStair] - height[currentStair - 2]);
+        }
+
+        return cache[currentStair] = Math.min(oneStepJump, twoStepJump);
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int minimumEnergy(int height[], int n) {
+        // dp[stair] represents the minimum energy consumed to reach 'stair-1' from 0th stair 
+        int[]dp= new int[n+1];
+        
+        // Represents an invalid state.
+        dp[0]=Integer.MAX_VALUE;
+        // Base case: No energy required to stay at the first stair.
+        dp[1]=0;
+        
+        for(int stair=2;stair<=n;stair++){
+           int oneStepJump = dp[stair - 1];
+           
+           if (oneStepJump != Integer.MAX_VALUE) {
+              oneStepJump += Math.abs(height[stair-1] - height[stair - 2]);
+           }
+           
+          
+           int twoStepJump = dp[stair - 2];
+           if (twoStepJump != Integer.MAX_VALUE) {
+             twoStepJump += Math.abs(height[stair-1] - height[stair - 3]);
+           }
+
+          
+           dp[stair] = Math.min(oneStepJump, twoStepJump);
+        }
+        
+        return dp[n];
+    }
+}
