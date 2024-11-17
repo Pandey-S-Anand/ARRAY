@@ -12,30 +12,18 @@
 
 class Solution {
     public int climbStairs(int n) {
-        /*
-         * Base Case:
-         * If n == 1, there is exactly 1 way to reach the ground floor from the 1st stair:
-         * - Take a single 1-step jump (1).
-         *
-         * If n == 2, there are exactly 2 ways to reach the ground floor from the 2nd stair:
-         * - Two 1-steps jump (1 + 1).
-         * - One 2-step jump (2).
-         *
-         * If n == 3, there are exactly 3 ways to reach the ground floor from the 3rd stair:
-         * - Three 1-steps (1 + 1 + 1).
-         * - A 1-step followed by a 2-step (1 + 2).
-         * - A 2-step followed by a 1-step (2 + 1).
-         *
-         * For n <= 3, we can directly return n because the number of ways to reach
-         * the ground floor is equivalent to n.
-         */
-        if (n <= 3) {
-            return n; // For n = 1, 2, or 3, simply return the value of n.
+        // Base case: If we've reached the ground floor, there is 1 way to reach it.
+        if (n == 0) {
+            return 1;
+        }
+         
+        //Base case: We've gone below the ground, which is invalid, so return 0.
+        if(n<0){
+          return 0;
         }
 
         /*
          * Recursive Case:
-         * If n > 3, we break the problem into two smaller subproblems:
          * - To reach the ground floor from the nth stair, you can either:
          *
          * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
@@ -56,6 +44,37 @@ class Solution {
         return climbStairs(n - 1) + climbStairs(n - 2);
     }
 }
+
+//Slight optimisation
+
+class Solution {
+    public int climbStairs(int n) {
+        /*
+         * Base Case:
+         * If n == 1, there is exactly 1 way to reach the ground floor from the 1st
+         * stair:
+         * - Take a single 1-step jump (1).
+         *
+         * If n == 2, there are exactly 2 ways to reach the ground floor from the 2nd stair:
+         * - Two 1-steps jump (1 + 1).
+         * - One 2-step jump (2).
+         *
+         * If n == 3, there are exactly 3 ways to reach the ground floor from the 3rd stair:
+         * - Three 1-steps (1 + 1 + 1).
+         * - A 1-step followed by a 2-step (1 + 2).
+         * - A 2-step followed by a 1-step (2 + 1).
+         *
+         * For n <= 3, we can directly return n because the number of ways to reach
+         * the ground floor is equivalent to n.
+         */
+        if (n <= 3) {
+            return n;
+        }
+
+        return climbStairs(n - 1) + climbStairs(n - 2);
+    }
+}
+
 
 //Forward recursion
 
@@ -86,5 +105,56 @@ class Solution {
          * extending those paths with the current step (1 or 2) to reach the nth stair.
          */
         return climbStairs(currentStair + 1, destinationStair) + climbStairs(currentStair + 2, destinationStair);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[] cache;
+
+    public int climbStairs(int n) {
+        cache = new int[n + 1];
+        Arrays.fill(cache, -1);
+        return climbStairsHelper(n);
+    }
+
+    private int climbStairsHelper(int n) {
+        if (n <= 3) {
+            return n;
+        }
+
+        if (cache[n] != -1) {
+            return cache[n];
+        }
+
+        return cache[n] = climbStairsHelper(n - 1) + climbStairsHelper(n - 2);
+    }
+}
+
+
+//Optimal Approach
+
+class Solution {
+    public int climbStairs(int n) {
+        // Base cases: For n <= 3, the number of ways to reach the ground floor equals n.
+        if (n <= 3) {
+            return n;
+        }
+
+        //dp[stair] represents the number of ways to reach the ground floor starting from the given stair, 'stair'.
+        int[] dp = new int[n + 1];
+
+        dp[1] = 1; // 1 way to reach the ground floor from the 1st stair.
+        dp[2] = 2; // 2 ways to reach the ground floor from the 2nd stair.
+        dp[3] = 3; // 3 ways to reach the ground floor from the 3rd stair.
+
+        for (int stair = 4; stair <= n; stair++) {
+            dp[stair] = dp[stair - 1] + dp[stair - 2];
+        }
+
+        // Return the total number of ways to reach the ground floor from the nth stair.
+        return dp[n];
     }
 }
