@@ -1,0 +1,90 @@
+/*
+ * Climbing from the ground to the nth stair is mathematically equivalent 
+ * to descending from the nth stair to the ground. If you reverse the process, 
+ * the number of ways to reach the nth stair from the ground is the same as 
+ * the number of ways to descend from the nth stair to the ground.
+ * 
+ * - Climbing from the nth stair to the ground can be viewed as a backward recursion.
+ * - Climbing from the ground to the nth stair can be viewed as a forward recursion.
+ */
+
+//Backward recursion
+
+class Solution {
+    public int climbStairs(int n) {
+        /*
+         * Base Case:
+         * If n == 1, there is exactly 1 way to reach the ground floor from the 1st stair:
+         * - Take a single 1-step jump (1).
+         *
+         * If n == 2, there are exactly 2 ways to reach the ground floor from the 2nd stair:
+         * - Two 1-steps jump (1 + 1).
+         * - One 2-step jump (2).
+         *
+         * If n == 3, there are exactly 3 ways to reach the ground floor from the 3rd stair:
+         * - Three 1-steps (1 + 1 + 1).
+         * - A 1-step followed by a 2-step (1 + 2).
+         * - A 2-step followed by a 1-step (2 + 1).
+         *
+         * For n <= 3, we can directly return n because the number of ways to reach
+         * the ground floor is equivalent to n.
+         */
+        if (n <= 3) {
+            return n; // For n = 1, 2, or 3, simply return the value of n.
+        }
+
+        /*
+         * Recursive Case:
+         * If n > 3, we break the problem into two smaller subproblems:
+         * - To reach the ground floor from the nth stair, you can either:
+         *
+         * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
+         * - Now, we need to calculate the number of ways to reach the ground floor from
+         * the (n-1)th stair, i.e., climbStairs(n - 1).
+         *
+         * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
+         * - Now, we need to calculate the number of ways to reach the ground floor from
+         * the (n-2)th stair, i.e., climbStairs(n - 2).
+         *
+         * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
+         * you can add the respective step (either a 1-step or a 2-step) to the existing
+         * paths that lead to those stairs.
+         * Essentially, this means recursively calculating all the paths to the two
+         * previous stairs and then extending those paths with the current step (1 or 2)
+         * to reach the nth stair.
+         */
+        return climbStairs(n - 1) + climbStairs(n - 2);
+    }
+}
+
+//Forward recursion
+
+class Solution {
+    public int climbStairs(int n) {
+        return climbStairs(0, n);
+    }
+
+    private int climbStairs(int currentStair, int destinationStair) {
+        // Base case: If we've reached the destination stair, there is 1 way to reach it.
+        if (currentStair == destinationStair) {
+            return 1;
+        }
+
+        // Base case: If the current stair exceeds the destination, no valid path exists, so return 0.
+        if (currentStair > destinationStair) {
+            return 0;
+        }
+
+        /*
+         * To reach the destination stair from the current stair, there are two
+         * possibilities:
+         * 1. Take a 1-step jump (move from currentStair to currentStair + 1).
+         * 2. Take a 2-step jump (move from currentStair to currentStair + 2).
+         * After determining the number of ways to reach the (currentStair + 1)th and
+         * (currentStair + 2)th stairs, we can add the respective step (either a 1-step
+         * or a 2-step jump) to the existing paths that lead to those stairs.Essentially
+         * extending those paths with the current step (1 or 2) to reach the nth stair.
+         */
+        return climbStairs(currentStair + 1, destinationStair) + climbStairs(currentStair + 2, destinationStair);
+    }
+}
