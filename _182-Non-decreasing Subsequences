@@ -1,0 +1,95 @@
+//Bruteforce Approach
+
+//Recursive Tree
+
+[]
+├── Include 4: [4]
+│   ├── Include 6: [4, 6]
+│   │   ├── Include 7: [4, 6, 7]
+│   │   │   ├── Include 7: [4, 6, 7, 7]
+│   │   │   └── Exclude 7: [4, 6, 7]
+│   │   └── Exclude 7: [4, 6]
+│   │       ├── Include 7: [4, 6, 7]
+│   │       └── Exclude 7: [4, 6]
+│   └── Exclude 6: [4]
+│       ├── Include 7: [4, 7]
+│       │   ├── Include 7: [4, 7, 7]
+│       │   └── Exclude 7: [4, 7]
+│       └── Exclude 7: [4]
+│           ├── Include 7: [4, 7]
+│           └── Exclude 7: [4]
+├── Exclude 4: []
+    ├── Include 6: [6]
+    │   ├── Include 7: [6, 7]
+    │   │   ├── Include 7: [6, 7, 7]
+    │   │   └── Exclude 7: [6, 7]
+    │   └── Exclude 7: [6]
+    │       ├── Include 7: [6, 7]
+    │       └── Exclude 7: [6]
+    └── Exclude 6: []
+        ├── Include 7: [7]
+        │   ├── Include 7: [7, 7]
+        │   └── Exclude 7: [7]
+        └── Exclude 7: []
+            ├── Include 7: [7]
+            └── Exclude 7: []
+
+class Solution {
+    Set<List<Integer>> increasingSubsequences;
+
+    public List<List<Integer>> findSubsequences(int[] arr) {
+        increasingSubsequences = new HashSet<>();
+        generateIncreasingSubsequences(arr, 0, -1, new ArrayList<>());
+        return new ArrayList<>(increasingSubsequences);
+    }
+
+    private void generateIncreasingSubsequences(int[] arr, int index, int lastIncludedIndex, List<Integer> currentSubsequence) {
+        if (index == arr.length) {
+            if (currentSubsequence.size() >1) {
+                increasingSubsequences.add(new ArrayList<>(currentSubsequence));
+            }
+            return;
+        }
+
+        if (lastIncludedIndex == -1 || arr[lastIncludedIndex] <= arr[index]) {
+            currentSubsequence.add(arr[index]);
+            generateIncreasingSubsequences(arr, index + 1, index, currentSubsequence);
+            currentSubsequence.remove(currentSubsequence.size() - 1);
+        }
+
+        generateIncreasingSubsequences(arr, index + 1, lastIncludedIndex, currentSubsequence);
+    }
+}
+
+
+//Optimal Approach
+//Logic : The duplication occurs when we exclude an element while the last included element is the same as the current element.
+
+class Solution {
+    List<List<Integer>> increasingSubsequences;
+
+    public List<List<Integer>> findSubsequences(int[] arr) {
+        increasingSubsequences = new ArrayList<>();
+        generateIncreasingSubsequences(arr, 0, -1, new ArrayList<>());
+        return new ArrayList<>(increasingSubsequences);
+    }
+
+    private void generateIncreasingSubsequences(int[] arr, int index, int lastIncludedIndex, List<Integer> currentSubsequence) {
+        if (index == arr.length) {
+            if (currentSubsequence.size() >1) {
+                increasingSubsequences.add(new ArrayList<>(currentSubsequence));
+            }
+            return;
+        }
+
+        if (lastIncludedIndex == -1 || arr[lastIncludedIndex] <= arr[index]) {
+            currentSubsequence.add(arr[index]);
+            generateIncreasingSubsequences(arr, index + 1, index, currentSubsequence);
+            currentSubsequence.remove(currentSubsequence.size() - 1);
+        }
+
+        if (lastIncludedIndex == -1 || arr[lastIncludedIndex] != arr[index]) { 
+           generateIncreasingSubsequences(arr, index + 1, lastIncludedIndex, currentSubsequence);
+        }
+    }
+}
