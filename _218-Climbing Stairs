@@ -81,10 +81,6 @@ class Solution {
         int count = 0;
 
         for (int step = 1; step <= 2; step++) {
-            if (n - step < 0) {
-                break;
-            }
-
             count += climbStairs(n - step);
         }
 
