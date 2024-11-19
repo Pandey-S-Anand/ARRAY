@@ -8,6 +8,7 @@
  * - Climbing from the ground to the nth stair can be viewed as a forward recursion.
  */
 
+
 //Backward recursion
 
 class Solution {
@@ -16,34 +17,40 @@ class Solution {
         if (n == 0) {
             return 1;
         }
-         
-        //Base case: We've gone below the ground, which is invalid, so return 0.
-        if(n<0){
-          return 0;
+
+        int count = 0;
+
+        for (int step = 1; step <= 2; step++) {
+            // If the current step causes us to go below ground level, terminate the loop.
+            if (n - step < 0) {
+                break;
+            }
+           /*
+            * Recursive Case:
+            * - To reach the ground floor from the nth stair, you can either:
+            *
+            * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-1)th stair, i.e., climbStairs(n - 1).
+            *
+            * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-2)th stair, i.e., climbStairs(n - 2).
+            *
+            * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
+            * you can add the respective step (either a 1-step or a 2-step) to the existing
+            * paths that lead to those stairs.
+            * Essentially, this means recursively calculating all the paths to the two
+            * previous stairs and then extending those paths with the current step (1 or 2)
+            * to reach the nth stair.
+            */
+            count += climbStairs(n - step);
         }
 
-        /*
-         * Recursive Case:
-         * - To reach the ground floor from the nth stair, you can either:
-         *
-         * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
-         * - Now, we need to calculate the number of ways to reach the ground floor from
-         * the (n-1)th stair, i.e., climbStairs(n - 1).
-         *
-         * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
-         * - Now, we need to calculate the number of ways to reach the ground floor from
-         * the (n-2)th stair, i.e., climbStairs(n - 2).
-         *
-         * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
-         * you can add the respective step (either a 1-step or a 2-step) to the existing
-         * paths that lead to those stairs.
-         * Essentially, this means recursively calculating all the paths to the two
-         * previous stairs and then extending those paths with the current step (1 or 2)
-         * to reach the nth stair.
-         */
-        return climbStairs(n - 1) + climbStairs(n - 2);
+        return count;
     }
 }
+
 
 //Slight optimisation
 
@@ -71,7 +78,17 @@ class Solution {
             return n;
         }
 
-        return climbStairs(n - 1) + climbStairs(n - 2);
+        int count = 0;
+
+        for (int step = 1; step <= 2; step++) {
+            if (n - step < 0) {
+                break;
+            }
+
+            count += climbStairs(n - step);
+        }
+
+        return count;
     }
 }
 
@@ -89,22 +106,36 @@ class Solution {
             return 1;
         }
 
-        // Base case: If the current stair exceeds the destination, no valid path exists, so return 0.
-        if (currentStair > destinationStair) {
-            return 0;
+        int count = 0;
+        for (int step = 1; step <= 2; step++) {
+            // If the current step causes us to go beyond the destinationStair, terminate the loop.
+            if (currentStair + step > destinationStair) {
+                break;
+            }
+            
+           /*
+            * Recursive Case:
+            * - To reach the ground floor from the nth stair, you can either:
+            *
+            * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-1)th stair, i.e., climbStairs(n - 1).
+            *
+            * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-2)th stair, i.e., climbStairs(n - 2).
+            *
+            * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
+            * you can add the respective step (either a 1-step or a 2-step) to the existing
+            * paths that lead to those stairs.
+            * Essentially, this means recursively calculating all the paths to the two
+            * previous stairs and then extending those paths with the current step (1 or 2)
+            * to reach the nth stair.
+            */
+            count += climbStairs(currentStair + step, destinationStair);
         }
 
-        /*
-         * To reach the destination stair from the current stair, there are two
-         * possibilities:
-         * 1. Take a 1-step jump (move from currentStair to currentStair + 1).
-         * 2. Take a 2-step jump (move from currentStair to currentStair + 2).
-         * After determining the number of ways to reach the (currentStair + 1)th and
-         * (currentStair + 2)th stairs, we can add the respective step (either a 1-step
-         * or a 2-step jump) to the existing paths that lead to those stairs.Essentially
-         * extending those paths with the current step (1 or 2) to reach the nth stair.
-         */
-        return climbStairs(currentStair + 1, destinationStair) + climbStairs(currentStair + 2, destinationStair);
+        return count;
     }
 }
 
@@ -129,7 +160,17 @@ class Solution {
             return cache[n];
         }
 
-        return cache[n] = climbStairsHelper(n - 1) + climbStairsHelper(n - 2);
+        int count = 0;
+
+        for (int step = 1; step <= 2; step++) {
+            if (n - step < 0) {
+                break;
+            }
+
+            count += climbStairsHelper(n - step);
+        }
+
+        return cache[n] = count;
     }
 }
 
