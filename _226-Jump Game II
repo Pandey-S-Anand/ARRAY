@@ -1,0 +1,94 @@
+//Bruteforce Approach
+
+class Solution {
+    public int jump(int[] arr) {
+        return jump(arr, 0);
+    }
+
+    private int jump(int[] arr, int index) {
+        // Base case: If we have reached the last index, no more jumps are needed
+        if (index == arr.length - 1) {
+            return 0;
+        }
+        
+        // Get the maximum jump length from the current index  
+        int maxJump = arr[index];
+        int minJump = Integer.MAX_VALUE / 2;
+         
+        // Try all possible jump lengths from the current index
+        for (int jump = 1; jump <= maxJump; jump++) {
+            if (index + jump >= arr.length) {
+                break;
+            }
+            // Add 1 to include the current jump and take the minimum across all possible jumps
+            minJump = Math.min(minJump, 1 + jump(arr, index + jump));
+        }
+
+        // Return the minimum number of jumps required to reach the last index
+        return minJump;
+    }
+}
+
+
+//Improved Approach
+
+class Solution {
+    private int[] cache;
+
+    public int jump(int[] arr) {
+        cache = new int[arr.length - 1];
+        Arrays.fill(cache, -1);
+        return jump(arr, 0);
+    }
+
+    private int jump(int[] arr, int index) {
+        if (index == arr.length - 1) {
+            return 0;
+        }
+
+        if (cache[index] != -1) {
+            return cache[index];
+        }
+
+        int maxJump = arr[index];
+        int minJump = Integer.MAX_VALUE / 2;
+
+        for (int jump = 1; jump <= maxJump; jump++) {
+            if (index + jump >= arr.length) {
+                break;
+            }
+
+            minJump = Math.min(minJump, 1 + jump(arr, index + jump));
+        }
+
+        return cache[index] = minJump;
+    }
+}
+
+//Better Approach
+
+class Solution {
+    public int jump(int[] arr) {
+        // dp[i] represents the minimum number of jumps required to reach the last index from index 'i'
+        int[] dp = new int[arr.length];
+        dp[arr.length - 1] = 0;
+
+        for (int index = arr.length - 2; index >= 0; index--) {
+            int maxJump = arr[index];
+            int minJump = Integer.MAX_VALUE / 2;
+
+            for (int jump = 1; jump <= maxJump; jump++) {
+                if (index + jump >= arr.length) {
+                    break;
+                }
+                minJump = Math.min(minJump, 1 + dp[index + jump]);
+            }
+            dp[index] = minJump;
+        }
+
+        return dp[0];
+    }
+}
+
+//Optimal Approach
+
