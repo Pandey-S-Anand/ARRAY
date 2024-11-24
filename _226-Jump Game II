@@ -90,5 +90,36 @@ class Solution {
     }
 }
 
+
 //Optimal Approach
 
+class Solution {
+    public int jump(int[] arr) {
+        // Edge case: If the array has only one element, no jumps are needed.
+        if (arr.length == 1) {
+            return 0;
+        }
+
+        int maxReachableIndex = 0;
+        int windowEndIndex = 0; // Represents the end of the current jump range (window).
+        int minJump = 0;  // Keeps count of the minimum number of jumps.
+
+        for (int i = 0; i < arr.length; i++) {
+            // Update the max index reachable from the current index.
+            maxReachableIndex = Math.max(maxReachableIndex, i + arr[i]);
+            
+            // When we've reached the end of the current jump range (window), we need to increase the jump count and update the range.
+            if (i == windowEndIndex) {
+                windowEndIndex = maxReachableIndex;
+                minJump++;
+                
+                //Early exit : if the last index is reached 
+                if (maxReachableIndex == arr.length - 1) {
+                    break;
+                }
+            }
+        }
+
+        return minJump;
+    }
+}
