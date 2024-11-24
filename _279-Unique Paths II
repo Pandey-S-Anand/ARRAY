@@ -99,8 +99,10 @@ class Solution {
         // Fill the last column (from bottom to top)
         for (int row = m - 2; row >= 0; row--) {
             /*
-             * If there's no obstacle at the current cell and the cell below can reach the destination (bottom-right corner),
-             * mark this cell as reachable (i.e., there's a valid path to the destination from this cell).
+             * If the current cell has no obstacle and the cell below it can reach the destination (bottom-right corner),
+             * mark this cell as having a valid path to the destination.
+             * For cells in the last column, since movement is only possible downward, there is exactly one unique path to the destination
+             * from any cell in the last column.
              */
             if (dp[row + 1][n - 1] == 1 && obstacleGrid[row][n - 1] == 0) {
                 dp[row][n - 1] = 1;
@@ -109,10 +111,11 @@ class Solution {
 
         // Fill the last row (from right to left)
         for (int col = n - 2; col >= 0; col--) {
-            /*
-             * If there's no obstacle at the current cell and the cell to the right can reach the destination (bottom-right corner),
-             * mark this cell as reachable (i.e., there's a valid path to the destination from this cell).
-             */
+           /*
+            * If the current cell does not contain an obstacle and the cell to the right can lead to the destination (bottom-right corner),
+            * mark this cell as having a valid path to the destination.
+            * In the last row, since the only move is to the right, every cell in this row has exactly one unique path to the bottom-right corner.
+            */
             if (dp[m - 1][col + 1] == 1 && obstacleGrid[m - 1][col + 1] == 0) {
                 dp[m - 1][col] = 1;
             }
