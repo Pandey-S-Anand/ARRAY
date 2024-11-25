@@ -1,0 +1,81 @@
+/*
+The triangle:
+
+   2
+  3 4
+ 6 5 7
+4 1 8 3
+
+is conceptually the same as:
+
+2
+3 4
+6 5 7
+4 1 8 3
+
+*/
+
+//Bruteforce Approach
+
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        // Start the recursive function from the top/peak of the triangle (row 0, column 0)
+        return minimumTotal(triangle, 0, 0);
+    }
+
+    private int minimumTotal(List<List<Integer>> triangle, int row, int col) {
+        /*
+         * Base case:
+         * If we reach the last row of the triangle, the minimum path sum
+         * from this point is simply the value of the current cell.
+         */
+        if (row == triangle.size() - 1) {
+            return triangle.get(row).get(col);
+        }
+        /*
+         * Recursive case:
+         * Calculate the minimum path sum for the two possible paths:
+         * 1. Moving straight down to the next row at the same column (col).
+         * 2. Moving diagonally down to the next row at the next column (col + 1).
+         */
+        int straightDown = minimumTotal(triangle, row + 1, col);
+        int diagonalDown = minimumTotal(triangle, row + 1, col + 1);
+        
+        //Return the value of the current cell plus the minimum of the two possible paths.
+        return triangle.get(row).get(col) + Math.min(straightDown, diagonalDown);
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][] cache;
+
+    public int minimumTotal(List<List<Integer>> triangle) {
+        cache = new int[triangle.size()][triangle.get(triangle.size() - 1).size()];
+        intializeCache();
+        return minimumTotal(triangle, 0, 0);
+    }
+
+    private int minimumTotal(List<List<Integer>> triangle, int row, int col) {
+        if (row == triangle.size() - 1) {
+            return triangle.get(row).get(col);
+        }
+
+        if (cache[row][col] != -1) {
+            return cache[row][col];
+        }
+
+        int straightDown = minimumTotal(triangle, row + 1, col);
+        int diagonalDown = minimumTotal(triangle, row + 1, col + 1);
+
+        return cache[row][col] = triangle.get(row).get(col) + Math.min(straightDown, diagonalDown);
+    }
+
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            Arrays.fill(cache[i], -1);
+        }
+    }
+}
