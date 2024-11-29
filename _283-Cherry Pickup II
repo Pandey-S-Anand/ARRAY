@@ -1,0 +1,118 @@
+//Bruteforce Approach
+
+class Solution {
+    public int cherryPickup(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        // Start the recursion from the first row with Robot 1 at column 0 and Robot 2 at the last column.
+        return cherryPickup(grid, 0, 0, n - 1, m, n);
+    }
+
+    public int cherryPickup(int[][] grid, int row, int col1, int col2, int m, int n) {
+        /*
+         * Base case: If we reach the last row, collect cherries from the current positions of both robots.
+         * If both robots are in the same cell, count the cherries only once.
+         * Otherwise, add cherries collected by both robots from their respective cells.
+         */
+
+        if (row == m - 1) {
+            if (col1 == col2) {
+                // Both robots are in the same cell; count cherries only once.
+                return grid[row][col1];
+            }
+            // Robots are in different cells; sum up cherries from both cells.
+            return grid[row][col1] + grid[row][col2];
+        }
+
+        int maxCherryCount = Integer.MIN_VALUE;
+
+        for (int moveRobot1 = -1; moveRobot1 <= 1; moveRobot1++) {
+            for (int moveRobot2 = -1; moveRobot2 <= 1; moveRobot2++) {
+                int robot1NextCol = col1 + moveRobot1; // Next column for Robot 1
+                int robot2NextCol = col2 + moveRobot2; // Next column for Robot 2
+                int currentPathCherryCount = 0;
+
+                // Ensure that the next path is within the grid bounds.
+                if (robot1NextCol >= 0 && robot1NextCol < n && robot2NextCol >= 0 && robot2NextCol < n) {
+                    // Recursively calculate the cherries collected from the next row.
+                    currentPathCherryCount = cherryPickup(grid, row + 1, robot1NextCol, robot2NextCol, m, n);
+                }
+
+                currentPathCherryCount += grid[row][col1]; // Add cherries collected by Robot 1.
+
+                // Add cherries collected by Robot 2 only if the robots are in different cells.
+                if (col1 != col2) {
+                    currentPathCherryCount += grid[row][col2];
+                }
+
+                // Update the maximum cherries collected from this point.
+                maxCherryCount = Math.max(maxCherryCount, currentPathCherryCount);
+            }
+        }
+
+        return maxCherryCount;
+    }
+}
+
+
+//Better Approach
+
+class Solution {
+    private int[][][] cache;
+
+    public int cherryPickup(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        cache = new int[m][n][n];
+        intializeCache();
+        return cherryPickup(grid, 0, 0, n - 1, m, n);
+    }
+
+    public int cherryPickup(int[][] grid, int row, int col1, int col2, int m, int n) {
+        if (row == m - 1) {
+            if (col1 == col2) {
+                return grid[row][col1];
+            }
+            return grid[row][col1] + grid[row][col2];
+        }
+
+        if (cache[row][col1][col2] != -1) {
+            return cache[row][col1][col2];
+        }
+
+        int maxCherryCount = Integer.MIN_VALUE;
+
+        for (int moveRobot1 = -1; moveRobot1 <= 1; moveRobot1++) {
+            for (int moveRobot2 = -1; moveRobot2 <= 1; moveRobot2++) {
+                int robot1NextCol = col1 + moveRobot1;
+                int robot2NextCol = col2 + moveRobot2;
+                int currentPathCherryCount = 0;
+
+                if (robot1NextCol >= 0 && robot1NextCol < n && robot2NextCol >= 0 && robot2NextCol < n) {
+                    currentPathCherryCount = cherryPickup(grid, row + 1, robot1NextCol, robot2NextCol, m, n);
+                }
+
+                currentPathCherryCount += grid[row][col1];
+
+                if (col1 != col2) {
+                    currentPathCherryCount += grid[row][col2];
+                }
+
+                maxCherryCount = Math.max(maxCherryCount, currentPathCherryCount);
+            }
+        }
+
+        return cache[row][col1][col2] = maxCherryCount;
+    }
+
+    private void intializeCache() {
+        for (int i = 0; i < cache.length; i++) {
+            for (int j = 0; j < cache[0].length; j++) {
+                Arrays.fill(cache[i][j], -1);
+            }
+        }
+    }
+}
+
+
+//Optimal Approach
+
+
