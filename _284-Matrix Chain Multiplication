@@ -14,6 +14,8 @@
  * The total number of multiplication operations required will be: m * n (or p) * q
  */
 
+//Bruteforce Approach
+
 class Solution {
     static int matrixMultiplication(int arr[]) {
         /*
@@ -48,8 +50,7 @@ class Solution {
          * Multiplication Cost = 30×5×60 + 30×60×80 = 9000 + 144000 = 153000
          * - Step 2: Multiply A (10×30) with the result of (B×C×D) (30×80):
          * Multiplication Cost = 10×30×80 = 24000
-         * - Total Multiplication Cost for Partition 1:
-         * Total = 153000 + 24000 = 177000
+         * - Total Multiplication Cost for Partition = 153000 + 24000 = 177000
          * 
          * 2. Partition 2: (A × B) × (C × D)
          * - Step 1: Multiply A (10×30) and B (30×5):
@@ -60,8 +61,7 @@ class Solution {
          * Resulting matrix is 5×80.
          * - Step 3: Multiply (A×B) (10×5) with (C×D) (5×80):
          * Multiplication Cost = 10×5×80 = 4000
-         * - Total Multiplication Cost for Partition 2:
-         * Total = 1500 + 24000 + 4000 = 29500
+         * - Total Multiplication Cost for Partition 2 = 1500 + 24000 + 4000 = 29500
          * 
          * 3. Partition 3: (A × B × C) × D
          * - Step 1: Multiply A (10×30), B (30×5), and C (5×60):
@@ -69,8 +69,7 @@ class Solution {
          * Resulting matrix is 10×60.
          * - Step 2: Multiply (A×B×C) (10×60) with D (60×80):
          * Multiplication Cost = 10×60×80 = 48000
-         * - Total Multiplication Cost for Partition 3:
-         * Total = 4500 + 48000 = 52500
+         * - Total Multiplication Cost for Partition 3 = 4500 + 48000 = 52500
          * 
          * Summary of Multiplication Costs:
          * 1. (A × (B × C × D)) → Total cost = 177000
@@ -78,11 +77,30 @@ class Solution {
          * 3. ((A × B × C) × D) → Total cost = 52500
          * 
          * Optimal Order:
-         * The optimal way to multiply these matrices is (A × B) × (C × D), which gives
-         * the minimum multiplication cost of 29500 operations.
+         * The optimal way to multiply these matrices is (A × B) × (C × D), which gives the minimum multiplication cost of 29500 operations.
          */
 
         for (int partition = start; partition < end; partition++) {
+            /*
+             * NOTE:
+             * In Partition 2: (A × B) × (C × D), the recursive approach helps break down
+             * the matrix multiplication into smaller subproblems:
+             * 
+             * Step 1: Multiply A (10×30) and B (30×5):
+             * - This is done by the recursive call minOperations(arr, start, partition).
+             * - The multiplication cost is calculated as: 10×30×5 = 1500.
+             * - The resulting matrix has dimensions 10×5.
+             * 
+             * Step 2: Multiply C (5×60) and D (60×80):
+             * - This is done by the recursive call minOperations(arr, partition + 1, end).
+             * - The multiplication cost is calculated as: 5×60×80 = 24000.
+             * - The resulting matrix has dimensions 5×80.
+             * 
+             * Step 3: Multiply the result of (A×B) (10×5) with the result of (C×D) (5×80):
+             * - The multiplication cost is calculated as: 10×5×80 = 4000.
+             * - This step is handled by the following code: arr[start - 1] * arr[partition] * arr[end].
+             */
+
             int multiplicationCost = arr[start - 1] * arr[partition] * arr[end] + minOperations(arr, start, partition) + minOperations(arr, partition + 1, end);
             minimumMultiplicationCost = Math.min(minimumMultiplicationCost, multiplicationCost);
         }
@@ -91,3 +109,7 @@ class Solution {
         return minimumMultiplicationCost;
     }
 }
+
+
+//Better Approach
+
