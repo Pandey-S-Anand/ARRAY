@@ -14,35 +14,80 @@
  * The total number of multiplication operations required will be: m * n (or p) * q
  */
 
-/*
- * Matrix Chain Multiplication (MCM) Problem:
- * In MCM, our aim is to minimize the total multiplication operations.
- * 
- * Given matrices:
- * A (10 × 30), B (30 × 5), and C (5 × 60), the goal is to find the 
- * optimal order of multiplication to minimize the total number of multiplication operations. 
- * 
- * Case 1: Multiply (A × B) first, then multiply the result with C:
- *    - Step 1: Multiply A (10 × 30) and B (30 × 5):
- *      Multiplication operations = 10 × 30 × 5 = 1500 multiplication operations.
- *      Resultant matrix dimensions = 10 × 5.
- *    - Step 2: Multiply the resultant matrix (10 × 5) with C (5 × 60):
- *      Multiplication operations = 10 × 5 × 60 = 3000 multiplication operations.
- *    - Total multiplication operations = 1500 + 3000 = 4500 multiplication operations.
- * 
- * Case 2: Multiply (B × C) first, then multiply the result with A:
- *    - Step 1: Multiply B (30 × 5) and C (5 × 60):
- *      Multiplication operations = 30 × 5 × 60 = 9000 multiplication operations.
- *      Resultant matrix dimensions = 30 × 60.
- *    - Step 2: Multiply the resultant matrix (30 × 60) with A (10 × 30):
- *      Multiplication operations = 10 × 30 × 60 = 18000 multiplication operations.
- *    - Total multiplication operations = 9000 + 18000 = 27000 multiplication operations.
- * 
- * Multiplication Operations Summary:
- * 1. Order: (A × B) × C → Total Multiplication Operations = 4500.
- * 2. Order: A × (B × C) → Total Multiplication Operations = 27000.
- * 
- * Conclusion:
- * For the given matrices, the optimal order of multiplication is:
- * (A × B) × C, which requires 4500 multiplication operations, as it minimizes the total multiplication operations.
- */
+class Solution {
+    static int matrixMultiplication(int arr[]) {
+        /*
+         * Call the helper function with the full range of matrices (from the first matrix to the last matrix).
+         * The matrix dimensions are represented by arr[i-1] x arr[i] for matrix i.
+         */
+        return minOperations(arr, 1, arr.length - 1);
+    }
+
+    private static int minOperations(int arr[], int start, int end) {
+        // Base case: When there is only one matrix in the chain, no multiplication is needed.
+        if (start == end) {
+            return 0;
+        }
+
+        int minimumMultiplicationCost = Integer.MAX_VALUE;
+        // Iterate through all possible partitions to find the optimal way of multiplying.
+        /*
+         * Matrix Chain Multiplication (MCM) Problem:
+         * Given 4 matrices with the following dimensions:
+         * Matrix 1: A of size 10×30 (10 rows, 30 columns)
+         * Matrix 2: B of size 30×5 (30 rows, 5 columns)
+         * Matrix 3: C of size 5×60 (5 rows, 60 columns)
+         * Matrix 4: D of size 60×80 (60 rows, 80 columns)
+         *
+         * We will have the following partitions:
+         *
+         * 1. Partition 1: A × (B × C × D)
+         * - Step 1: Multiply B (30×5), C (5×60), and D (60×80):
+         * B×C results in a 30×60 matrix.
+         * (B×C)×D results in a 30×80 matrix.
+         * Multiplication Cost = 30×5×60 + 30×60×80 = 9000 + 144000 = 153000
+         * - Step 2: Multiply A (10×30) with the result of (B×C×D) (30×80):
+         * Multiplication Cost = 10×30×80 = 24000
+         * - Total Multiplication Cost for Partition 1:
+         * Total = 153000 + 24000 = 177000
+         * 
+         * 2. Partition 2: (A × B) × (C × D)
+         * - Step 1: Multiply A (10×30) and B (30×5):
+         * Multiplication Cost = 10×30×5 = 1500
+         * Resulting matrix is 10×5.
+         * - Step 2: Multiply C (5×60) and D (60×80):
+         * Multiplication Cost = 5×60×80 = 24000
+         * Resulting matrix is 5×80.
+         * - Step 3: Multiply (A×B) (10×5) with (C×D) (5×80):
+         * Multiplication Cost = 10×5×80 = 4000
+         * - Total Multiplication Cost for Partition 2:
+         * Total = 1500 + 24000 + 4000 = 29500
+         * 
+         * 3. Partition 3: (A × B × C) × D
+         * - Step 1: Multiply A (10×30), B (30×5), and C (5×60):
+         * Multiplication Cost = 10×30×5 + 10×5×60 = 1500 + 3000 = 4500
+         * Resulting matrix is 10×60.
+         * - Step 2: Multiply (A×B×C) (10×60) with D (60×80):
+         * Multiplication Cost = 10×60×80 = 48000
+         * - Total Multiplication Cost for Partition 3:
+         * Total = 4500 + 48000 = 52500
+         * 
+         * Summary of Multiplication Costs:
+         * 1. (A × (B × C × D)) → Total cost = 177000
+         * 2. ((A × B) × (C × D)) → Total cost = 29500
+         * 3. ((A × B × C) × D) → Total cost = 52500
+         * 
+         * Optimal Order:
+         * The optimal way to multiply these matrices is (A × B) × (C × D), which gives
+         * the minimum multiplication cost of 29500 operations.
+         */
+
+        for (int partition = start; partition < end; partition++) {
+            int multiplicationCost = arr[start - 1] * arr[partition] * arr[end] + minOperations(arr, start, partition) + minOperations(arr, partition + 1, end);
+            minimumMultiplicationCost = Math.min(minimumMultiplicationCost, multiplicationCost);
+        }
+
+        // Return the minimum multiplication cost for the current subproblem.
+        return minimumMultiplicationCost;
+    }
+}
