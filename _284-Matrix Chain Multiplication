@@ -32,7 +32,6 @@ class Solution {
         }
 
         int minimumMultiplicationCost = Integer.MAX_VALUE;
-        // Iterate through all possible partitions to find the optimal way of multiplying.
         /*
          * Matrix Chain Multiplication (MCM) Problem:
          * Given 4 matrices with the following dimensions:
@@ -80,6 +79,7 @@ class Solution {
          * The optimal way to multiply these matrices is (A × B) × (C × D), which gives the minimum multiplication cost of 29500 operations.
          */
 
+        // Iterate through all possible partitions to find the optimal way of multiplying.
         for (int partition = start; partition < end; partition++) {
             /*
              * NOTE:
