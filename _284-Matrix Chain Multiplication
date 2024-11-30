@@ -113,3 +113,40 @@ class Solution {
 
 //Better Approach
 
+class Solution {
+    private static int[][] cache;
+
+    static int matrixMultiplication(int arr[]) {
+        cache = new int[arr.length][arr.length];
+        intializeCache();
+        return minOperations(arr, 1, arr.length - 1);
+    }
+
+    private static int minOperations(int arr[], int start, int end) {
+        if (start == end) {
+            return 0;
+        }
+
+        if (cache[start][end] != -1) {
+            return cache[start][end];
+        }
+
+        int minimumMultiplicationCost = Integer.MAX_VALUE;
+        for (int partition = start; partition < end; partition++) {
+            int multiplicationCost = arr[start - 1] * arr[partition] * arr[end] + minOperations(arr, start, partition) + minOperations(arr, partition + 1, end);
+            minimumMultiplicationCost = Math.min(minimumMultiplicationCost, multiplicationCost);
+        }
+
+        return cache[start][end] = minimumMultiplicationCost;
+    }
+
+    private static void intializeCache(){
+        for(int i=0;i<cache.length;i++){
+            Arrays.fill(cache[i],-1);
+        }
+    }
+}
+
+
+//Optimal Approach
+
