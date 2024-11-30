@@ -1,0 +1,48 @@
+/*
+ * Two matrices can be multiplied if and only if the number of columns 
+ * in the first matrix is equal to the number of rows in the second matrix.
+ * 
+ * Let the matrices be:
+ * Matrix A with dimensions m × n: m rows and n columns.
+ * Matrix B with dimensions p × q: p rows and q columns.
+ * 
+ * Resultant Matrix:
+ * If Matrix A (of size m × n) is multiplied with B (of size p × q) 
+ * (where n = p), the resulting matrix C = A × B will have dimensions 
+ * m × q (i.e., m rows and q columns).
+ * 
+ * The total number of multiplication operations required will be: m * n (or p) * q
+ */
+
+/*
+ * Matrix Chain Multiplication (MCM) Problem:
+ * In MCM, our aim is to minimize the total multiplication operations.
+ * 
+ * Given matrices:
+ * A (10 × 30), B (30 × 5), and C (5 × 60), the goal is to find the 
+ * optimal order of multiplication to minimize the total number of multiplication operations. 
+ * 
+ * Case 1: Multiply (A × B) first, then multiply the result with C:
+ *    - Step 1: Multiply A (10 × 30) and B (30 × 5):
+ *      Multiplication operations = 10 × 30 × 5 = 1500 multiplication operations.
+ *      Resultant matrix dimensions = 10 × 5.
+ *    - Step 2: Multiply the resultant matrix (10 × 5) with C (5 × 60):
+ *      Multiplication operations = 10 × 5 × 60 = 3000 multiplication operations.
+ *    - Total multiplication operations = 1500 + 3000 = 4500 multiplication operations.
+ * 
+ * Case 2: Multiply (B × C) first, then multiply the result with A:
+ *    - Step 1: Multiply B (30 × 5) and C (5 × 60):
+ *      Multiplication operations = 30 × 5 × 60 = 9000 multiplication operations.
+ *      Resultant matrix dimensions = 30 × 60.
+ *    - Step 2: Multiply the resultant matrix (30 × 60) with A (10 × 30):
+ *      Multiplication operations = 10 × 30 × 60 = 18000 multiplication operations.
+ *    - Total multiplication operations = 9000 + 18000 = 27000 multiplication operations.
+ * 
+ * Multiplication Operations Summary:
+ * 1. Order: (A × B) × C → Total Multiplication Operations = 4500.
+ * 2. Order: A × (B × C) → Total Multiplication Operations = 27000.
+ * 
+ * Conclusion:
+ * For the given matrices, the optimal order of multiplication is:
+ * (A × B) × C, which requires 4500 multiplication operations, as it minimizes the total multiplication operations.
+ */
