@@ -21,6 +21,14 @@ class Solution {
         /*
          * Call the helper function with the full range of matrices (from the first matrix to the last matrix).
          * The matrix dimensions are represented by arr[i-1] x arr[i] for matrix i.
+         * 
+         * NOTE:
+         * If the array is of size 'n', then the number of possible matrices to multiply will be n-1.
+         * For example, if arr = {10, 30, 5, 60}, then the matrices represented are:
+         * Matrix 1: 10×30
+         * Matrix 2: 30×5
+         * Matrix 3: 5×60
+         * Total matrices = 4 - 1 = 3.
          */
         return minOperations(arr, 1, arr.length - 1);
     }
