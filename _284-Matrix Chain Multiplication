@@ -158,3 +158,52 @@ class Solution {
 
 //Optimal Approach
 
+//Intuitive implementation
+
+class Solution {
+    static int matrixMultiplication(int[] arr) {
+        int n = arr.length;
+        int[][] dp = new int[n][n]; // dp[i][j] represents the minimum multiplication cost for matrices from i to j
+
+        
+        for(int start=n-1;start>=1;start--){
+            for(int end=start;end<n;end++){
+                if(start==end){
+                    dp[start][end]=0; // If the start index is the same as the end index, it means we're working with a single matrix, so no multiplication cost.
+                }else{
+                   int minimumMultiplicationCost=Integer.MAX_VALUE;
+                   for(int partition=start;partition<end;partition++){
+                        int multiplicationCost = arr[start - 1] * arr[partition] * arr[end] + dp[start][partition] + dp[partition + 1][end];
+                        minimumMultiplicationCost = Math.min(minimumMultiplicationCost, multiplicationCost);
+                   }
+                   dp[start][end]=minimumMultiplicationCost;
+                }
+                
+            }
+        }
+         // The final answer will be the minimum cost to multiply matrices from 1 to n-1
+        return dp[1][n-1];
+    }
+}
+
+
+//Optimal implementation
+
+class Solution {
+    static int matrixMultiplication(int[] arr) {
+        int n = arr.length;
+        int[][] dp = new int[n][n];
+
+        for (int start = n - 1; start >= 1; start--) {
+            for (int end = start + 1; end < n; end++) {
+                int minimumMultiplicationCost = Integer.MAX_VALUE;
+                for (int partition = start; partition < end; partition++) {
+                    int multiplicationCost = arr[start - 1] * arr[partition] * arr[end] + dp[start][partition] + dp[partition + 1][end];
+                    minimumMultiplicationCost = Math.min(minimumMultiplicationCost, multiplicationCost);
+                }
+                dp[start][end] = minimumMultiplicationCost;
+            }
+        }
+        return dp[1][n - 1];
+    }
+}
