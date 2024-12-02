@@ -1,0 +1,80 @@
+//Bruteforce Approach
+
+class Solution {
+    private List<List<Integer>> balloonBurstOrders;
+
+    public int maxCoins(int[] arr) {
+        // Convert the array into a list to work with easier removal of elements
+        List<Integer> originalBalloons = new ArrayList<>();
+        for (int num : arr) {
+            originalBalloons.add(num);
+        }
+
+        // Generate all possible burst orders of the balloons
+        generatePermutations(arr);
+
+        // Variable to store the maximum coins obtained from all burst orders
+        int maxCoins = 0;
+
+        // For each burst order, calculate the total coins collected by bursting balloons in that order
+        for (List<Integer> burstOrder : balloonBurstOrders) {
+            maxCoins = Math.max(maxCoins, calculateCoins(new ArrayList<>(originalBalloons), burstOrder));
+        }
+
+        return maxCoins;
+    }
+
+    // Function to calculate the total coins collected by bursting balloons in the given burst order
+    private int calculateCoins(List<Integer> originalBalloons, List<Integer> burstOrder) {
+        int totalCoins = 0;
+
+        // Loop through each balloon in the burst order and calculate the coins for bursting it
+        for (int i = 0; i < burstOrder.size(); i++) {
+            int currentBalloon = burstOrder.get(i);
+
+            // Find the index of the current balloon in the original list
+            int indexInOriginal = originalBalloons.indexOf(currentBalloon);
+
+            // Get the left and right neighbors of the current balloon from the original list
+            int leftNeighbor = (indexInOriginal == 0) ? 1 : originalBalloons.get(indexInOriginal - 1);
+            int rightNeighbor = (indexInOriginal == originalBalloons.size() - 1) ? 1 : originalBalloons.get(indexInOriginal + 1);
+
+            // Calculate the coins collected by bursting this balloon
+            totalCoins += leftNeighbor * currentBalloon * rightNeighbor;
+
+            // Remove the balloon from the original list after it is burst
+            originalBalloons.remove(indexInOriginal);
+        }
+
+        return totalCoins;
+    }
+
+    private List<List<Integer>> generatePermutations(int[] arr) {
+        balloonBurstOrders = new ArrayList<>();
+        generatePermutations(arr, arr.length - 1);
+        return balloonBurstOrders;
+    }
+
+    private void generatePermutations(int[] arr, int index) {
+        if (index < 0) {
+            List<Integer> currentPermutation = new ArrayList<>();
+            for (int num : arr) {
+                currentPermutation.add(num);
+            }
+            balloonBurstOrders.add(currentPermutation);
+            return;
+        }
+
+        for (int i = index; i >= 0; i--) {
+            swap(arr, index, i);
+            generatePermutations(arr, index - 1);
+            swap(arr, index, i);
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
