@@ -49,10 +49,9 @@ class Solution {
         return totalCoins;
     }
 
-    private List<List<Integer>> generatePermutations(int[] arr) {
+    private void generatePermutations(int[] arr) {
         balloonBurstOrders = new ArrayList<>();
         generatePermutations(arr, arr.length - 1);
-        return balloonBurstOrders;
     }
 
     private void generatePermutations(int[] arr, int index) {
@@ -78,3 +77,6 @@ class Solution {
         arr[j] = temp;
     }
 }
+
+//Improved Approach
+
