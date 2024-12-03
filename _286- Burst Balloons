@@ -80,14 +80,53 @@ class Solution {
 
 
 //Improved Approach
+
+/**
+ * To apply recursion or dynamic programming, we need to break the problem into smaller, independent subproblems.
+ * In the "Burst Balloons" problem, the objective is to maximize the coins obtained by bursting balloons in an optimal sequence.
+ * However, if we attempt to solve the problem by bursting each balloon as the first one, the subproblems created are not independent.
+ * This is because the number of coins collected from bursting a balloon depends on its neighboring balloons, and these neighbors
+ * change dynamically as other balloons are burst. This interdependency of subproblems makes it challenging to apply a straightforward
+ * recursive approach when considering each balloon as the first to burst.
+ *
+ * The critical insight for solving the "Burst Balloons" problem using recursion or dynamic programming is to change the way we think
+ * about the problem. Instead of bursting balloons in the first-to-last order, we reverse the approach and consider each balloon as the
+ * last one to burst within a subarray.
+ *
+ * When a balloon is chosen as the last to burst in its subarray, its neighbors are fixed based on the boundaries of the subarray.
+ * This makes the calculation of coins straightforward. Additionally, the two resulting subarrays ([start, ..., i-1] and [i+1, ..., end])
+ * become completely independent of each other. This independence allows the problem to be broken down into smaller, non-overlapping
+ * subproblems, making it suitable for recursion and dynamic programming.
+ */
+
 /*
-To apply recursion or dynamic programming, we need to break the problem into smaller, independent subproblems.
-In the "Burst Balloons" problem, the goal is to maximize the coins obtained by bursting all balloons in an optimal order.
-The challenge arises because the number of coins you collect depends on the neighboring balloons, and these neighbors change as you burst each balloon.
-This interdependency of subproblems complicates a straightforward recursive solution.
-However, the key insight for applying recursion is to treat each balloon as the last one to burst within any given subarray.
-This approach effectively decomposes the problem into smaller, independent subproblems, making it suitable for recursion and dynamic programming.
+
+Note :
+
+Input: nums = [3,1,5,8] 
+Output: 167 
+Explanation: nums = [3,1,5,8] --> [3,5,8] --> [3,8] --> [8] --> [] 
+coins = 3*1*5 + 3*5*8 + 1*3*8 + 1*8*1 = 167 
+
+Suppose we know the last balloon to be burst is 8, and the second last is 3. 
+Now we are determining the third-last balloon. Suppose we choose 5 as the third-last balloon to burst.
+
+Why is 3 the neighbor on the left of 5 and not 1?
+
+Explanation:
+- Since we already know 8 will be the last balloon and 3 will be the second last, 
+  this means 1 and 5 must have already been burst earlier (as the first or second balloons to burst).
+- Therefore, when evaluating for the third-last balloon, its neighbors at that step are dynamically updated.
+  At this point, the only remaining neighbors of 5 are 3 and 8.
+- This is why 3 is considered the neighbor on the left, and 8 is the neighbor on the right.
+- Working backwards from the last balloon helps us know the exact neighbors at each step.
+- The neighbors are determined dynamically based on the balloons that have already been burst, rather than 
+  the initial configuration of the array.
+
+This approach ensures that at each step of the recursive/dynamic programming solution, we correctly account 
+for the current state of the neighbors as the array of remaining balloons shrinks.
 */
+
 
 class Solution {
     public int maxCoins(int[] balloons) {
