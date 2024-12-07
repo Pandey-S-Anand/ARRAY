@@ -34,8 +34,6 @@ The distinct permutations of [A, A, B] are: [A, A, B], [A, B, A], and [B, A, A].
 
 //Naive Implementation
 
-//Forward recursive approach
-
 class Solution {
     private Set<List<Integer>> uniquePermutations;
 
@@ -65,41 +63,9 @@ class Solution {
     }
 }
 
-//Backward recursive approach
-
-class Solution {
-    private Set<List<Integer>> uniquePermutations;
-
-    public List<List<Integer>> permuteUnique(int[] arr) {
-        uniquePermutations = new HashSet<>();
-        findUniquePermutations(arr, new ArrayList<>(), new boolean[arr.length]);
-        return new ArrayList<>(uniquePermutations);
-    }
-
-    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, boolean[] visited) {
-        if (currentPermutation.size() == arr.length) {
-            if (!uniquePermutations.contains(currentPermutation)) {
-                uniquePermutations.add(new ArrayList<>(currentPermutation));
-            }
-            return;
-        }
-
-        for (int i = arr.length - 1; i >= 0; i--) {
-            if (!visited[i]) {
-                visited[i] = true;
-                currentPermutation.add(arr[i]);
-                findUniquePermutations(arr, currentPermutation, visited);
-                currentPermutation.remove(currentPermutation.size() - 1);
-                visited[i] = false;
-            }
-        }
-    }
-}
-
 
 //Better Implementation
 
-//Forward recursive approach
 
 class Solution {
     public List<List<Integer>> permuteUnique(int[] arr) {
@@ -143,44 +109,8 @@ class Solution {
     }
 }
 
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> uniquePermutations;
-
-    public List<List<Integer>> permuteUnique(int[] arr) {
-        uniquePermutations = new ArrayList<>();
-        Arrays.sort(arr);
-        findUniquePermutations(arr, new ArrayList<>(), new boolean[arr.length]);
-        return uniquePermutations;
-    }
-
-    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, boolean[] visited) {
-        if (currentPermutation.size() == arr.length) {
-            uniquePermutations.add(new ArrayList<>(currentPermutation));
-            return;
-        }
-
-        for (int i = arr.length - 1; i >= 0; i--) {
-            if (i < arr.length - 1 && arr[i + 1] == arr[i] && !visited[i + 1]) {
-                continue;
-            }
-
-            if (!visited[i]) {
-                visited[i] = true;
-                currentPermutation.add(arr[i]);
-                findUniquePermutations(arr, currentPermutation, visited);
-                currentPermutation.remove(currentPermutation.size() - 1);
-                visited[i] = false;
-            }
-        }
-    }
-}
-
 
 //Optimal Implementation
-
-//Forward recursive approach
 
 class Solution {
     private List<List<Integer>> uniquePermutations;
@@ -217,49 +147,10 @@ class Solution {
     }
 }
 
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> uniquePermutations;
-
-    public List<List<Integer>> permuteUnique(int[] arr) {
-        uniquePermutations = new ArrayList<>();
-        findUniquePermutations(arr, new ArrayList<>(), new boolean[arr.length]);
-        return uniquePermutations;
-    }
-
-    private void findUniquePermutations(int[] arr, List<Integer> currentPermutation, boolean[] visited) {
-        if (currentPermutation.size() == arr.length) {
-            uniquePermutations.add(new ArrayList<>(currentPermutation));
-            return;
-        }
-
-        // To keep track of elements used at the current level of recursion
-        Set<Integer> used = new HashSet<>();
-
-        for (int i = arr.length - 1; i >= 0; i--) {
-            if (used.contains(arr[i])) {
-                continue; // Skip duplicates
-            }
-
-            if (!visited[i]) {
-                used.add(arr[i]);
-                visited[i] = true;
-                currentPermutation.add(arr[i]);
-                findUniquePermutations(arr, currentPermutation, visited);
-                currentPermutation.remove(currentPermutation.size() - 1);
-                visited[i] = false;
-            }
-        }
-    }
-}
-
 
 // Method 2
 
 //Naive Implementation
-
-//Forward recursive approach
 
 class Solution {
     private Set<List<Integer>> uniquePermutations;
@@ -284,42 +175,6 @@ class Solution {
         for (int i = index; i < arr.length; i++) {
             swap(arr, index, i);
             findUniquePermutations(arr, index + 1);
-            swap(arr, index, i);
-        }
-    }
-
-    private void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-}
-
-//Backward recursive approach
-
-class Solution {
-    private Set<List<Integer>> uniquePermutations;
-
-    public List<List<Integer>> permuteUnique(int[] arr) {
-        uniquePermutations = new HashSet<>();
-        findUniquePermutations(arr, arr.length - 1);
-        return new ArrayList<>(uniquePermutations);
-    }
-
-    private void findUniquePermutations(int[] arr, int index) {
-        if (index < 0) {
-            List<Integer> currentPermutation = new ArrayList<>();
-            for (int num : arr) {
-                currentPermutation.add(num);
-            }
-            uniquePermutations.add(currentPermutation);
-
-            return;
-        }
-
-        for (int i = index; i >= 0; i--) {
-            swap(arr, index, i);
-            findUniquePermutations(arr, index - 1);
             swap(arr, index, i);
         }
     }
@@ -344,8 +199,6 @@ Why sorting and then skipping won't work here ?
 Because we are manipulating the input array itself to form the permutation which involves swapping. If you sort the array and then swap elements, the order of elements is modified,the array is no longer in its sorted order, which invalidates the duplicate-checking logic (arr[i] == arr[i - 1]) that assumes adjacent duplicates.
 */
 
-//Forward recursive approach
-
 class Solution {
     private List<List<Integer>> uniquePermutations;
 
@@ -376,48 +229,6 @@ class Solution {
             used.add(arr[i]);
             swap(arr, index, i);
             findUniquePermutations(arr, index + 1);
-            swap(arr, index, i);
-        }
-    }
-
-    private void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-}
-
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> uniquePermutations;
-
-    public List<List<Integer>> permuteUnique(int[] arr) {
-        uniquePermutations = new ArrayList<>();
-        findUniquePermutations(arr, arr.length - 1);
-        return uniquePermutations;
-    }
-
-    private void findUniquePermutations(int[] arr, int index) {
-        if (index < 0) {
-            List<Integer> currentPermutation = new ArrayList<>();
-            for (int num : arr) {
-                currentPermutation.add(num);
-            }
-            uniquePermutations.add(currentPermutation);
-            return;
-        }
-
-        Set<Integer> used = new HashSet<>();
-
-        for (int i = index; i >= 0; i--) {
-            if (used.contains(arr[i])) {
-                continue;
-            }
-
-            used.add(arr[i]);
-            swap(arr, index, i);
-            findUniquePermutations(arr, index - 1);
             swap(arr, index, i);
         }
     }
