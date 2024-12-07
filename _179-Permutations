@@ -69,8 +69,6 @@ There are 4P2 = 4! / (4 - 2)! = 4! / 2! = (4 × 3 × 2 × 1) / (2 × 1) = 12 per
 
 // Method 1
 
-//Forward recursive approach
-
 class Solution {
     private List<List<Integer>> permutations;
 
@@ -98,39 +96,8 @@ class Solution {
     }
 }
 
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> permutations;
-
-    public List<List<Integer>> permute(int[] arr) {
-        permutations = new ArrayList<>();
-        findPermutations(arr, new ArrayList<>(), new boolean[arr.length]);
-        return permutations;
-    }
-
-    private void findPermutations(int[] arr, List<Integer> currentPermutation, boolean[] visited) {
-        if (currentPermutation.size() == arr.length) {
-            permutations.add(new ArrayList<>(currentPermutation));
-            return;
-        }
-
-        for (int i = arr.length - 1; i >= 0; i--) {
-            if (!visited[i]) {
-                visited[i] = true;
-                currentPermutation.add(arr[i]);
-                findPermutations(arr, currentPermutation, visited);
-                currentPermutation.remove(currentPermutation.size() - 1);
-                visited[i] = false;
-            }
-        }
-    }
-}
-
 
 //Method 2
-
-//Forward recursive approach
 
 class Solution {
     private List<List<Integer>> permutations;
@@ -154,42 +121,6 @@ class Solution {
         for (int i = index; i < arr.length; i++) {
             swap(arr, index, i);
             findPermutations(arr, index + 1);
-            swap(arr, index, i);
-        }
-    }
-
-    private void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-}
-
-
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> permutations;
-
-    public List<List<Integer>> permute(int[] arr) {
-        permutations = new ArrayList<>();
-        findPermutations(arr, arr.length - 1);
-        return permutations;
-    }
-
-    private void findPermutations(int[] arr, int index) {
-        if (index < 0) {
-            List<Integer> currentPermutation = new ArrayList<>();
-            for (int num : arr) {
-                currentPermutation.add(num);
-            }
-            permutations.add(currentPermutation);
-            return;
-        }
-
-        for (int i = index; i >= 0; i--) {
-            swap(arr, index, i);
-            findPermutations(arr, index - 1);
             swap(arr, index, i);
         }
     }
