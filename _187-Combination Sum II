@@ -124,8 +124,6 @@ class Solution {
 
 //Method 1
 
-//Forward recursive approach
-
 class Solution {
     private List<List<Integer>> targetSumUniqueSubsets;
 
@@ -161,47 +159,8 @@ class Solution {
     }
 }
 
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> targetSumUniqueSubsets;
-
-    public List<List<Integer>> combinationSum2(int[] arr, int targetSum) {
-        targetSumUniqueSubsets = new ArrayList<>();
-        Arrays.sort(arr);
-        findUniqueSubsetsWithTargetSum(arr, arr.length - 1, targetSum, new ArrayList<>());
-        return targetSumUniqueSubsets;
-    }
-
-    private void findUniqueSubsetsWithTargetSum(int[] arr, int index, int targetSum, List<Integer> currentSubset) {
-        if (targetSum == 0) {
-            targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-
-        if (index < 0) {
-            return;
-        }
-
-        currentSubset.add(arr[index]);
-        if (targetSum >= arr[index]) {
-            findUniqueSubsetsWithTargetSum(arr, index - 1, targetSum - arr[index], currentSubset);
-        }
-
-        currentSubset.remove(currentSubset.size() - 1);
-
-        while (index - 1 >= 0 && arr[index] == arr[index - 1]) {
-            index--;
-        }
-
-        findUniqueSubsetsWithTargetSum(arr, index - 1, targetSum, currentSubset);
-    }
-}
-
 
 //Method 2
-
-//Forward recursive approach
 
 class Solution {
     private List<List<Integer>> targetSumUniqueSubsets;
@@ -234,44 +193,6 @@ class Solution {
             }
             currentSubset.add(arr[i]);
             findUniqueSubsetsWithTargetSum(arr, i + 1, targetSum - arr[i], currentSubset);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-//Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> targetSumUniqueSubsets;
-
-    public List<List<Integer>> combinationSum2(int[] arr, int targetSum) {
-        targetSumUniqueSubsets = new ArrayList<>();
-        Arrays.sort(arr);
-        findUniqueSubsetsWithTargetSum(arr, arr.length - 1, targetSum, new ArrayList<>());
-        return targetSumUniqueSubsets;
-    }
-
-    private void findUniqueSubsetsWithTargetSum(int[] arr, int index, int targetSum, List<Integer> currentSubset) {
-        if (targetSum == 0) {
-            targetSumUniqueSubsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-
-        for (int i = index; i >= 0; i--) {
-            if (i < index && arr[i] == arr[i + 1]) {
-                continue;
-            }
-
-            /*
-             * Early Termination: Since the array is sorted and contains only positive
-             * integers, if the current element is greater than the remaining target sum,
-             * skip the current element looking for smaller elements.
-             */
-            if (arr[i] > targetSum) {
-                continue;
-            }
-            currentSubset.add(arr[i]);
-            findUniqueSubsetsWithTargetSum(arr, i - 1, targetSum - arr[i], currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
