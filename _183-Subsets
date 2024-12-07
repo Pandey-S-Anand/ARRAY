@@ -275,21 +275,7 @@ Ex : arr[]={1, 2, 3, 4}
                └── [] //Exclude 4
  */
 
-/* In subset generation problems, we can opt for either a forward or backward recursive approach, 
-   as subsets don't necessarily need to preserve the order of appearance of elements. Additionally, 
-   the problem constraints also allow us to return the solution in any order.
-   
-   Input:
-   nums = [1, 2, 3]
-   
-   Backward recursive approach output: [[3, 2, 1], [3, 2], [3, 1], [3], [2, 1], [2], [1], []]
-   Forward recursive approach output: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
-*/
-
-
 //Method 1
-
-// Forward recursive approach
 
 class Solution {
     private List<List<Integer>> subsets;
@@ -326,34 +312,7 @@ class Solution {
 }
 
 
-// Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> subsets;
-
-    public List<List<Integer>> subsets(int[] arr) {
-        subsets = new ArrayList<>();
-        generateSubsets(arr, arr.length - 1, new ArrayList<>());
-        return subsets;
-    }
-
-    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset) {
-        if (index < 0) {
-            subsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-
-        currentSubset.add(arr[index]);
-        generateSubsets(arr, index - 1, currentSubset);
-        currentSubset.remove(currentSubset.size() - 1);
-        generateSubsets(arr, index - 1, currentSubset);
-    }
-}
-
-
 //Method 2
-
-// Forward recursive approach
 
 class Solution {
     private List<List<Integer>> subsets;
@@ -370,28 +329,6 @@ class Solution {
         for (int i = index; i < arr.length; i++) {
             currentSubset.add(arr[i]);
             generateSubsets(arr, i + 1, currentSubset);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-// Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> subsets;
-
-    public List<List<Integer>> subsets(int[] arr) {
-        subsets = new ArrayList<>();
-        generateSubsets(arr, arr.length - 1, new ArrayList<>());
-        return subsets;
-    }
-
-    private void generateSubsets(int[] arr, int index, List<Integer> currentSubset) {
-        subsets.add(new ArrayList<>(currentSubset));
-
-        for (int i = index; i >= 0; i--) {
-            currentSubset.add(arr[i]);
-            generateSubsets(arr, i - 1, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
