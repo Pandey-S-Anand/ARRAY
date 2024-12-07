@@ -124,7 +124,6 @@ class Solution {
 
 //Method 1
 
-// Forward recursive approach
 
 class Solution {
     private List<List<Integer>> sizeKTargetSumSubsets;
@@ -162,40 +161,8 @@ class Solution {
     }
 }
 
-// Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> sizeKTargetSumSubsets;
-
-    public List<List<Integer>> combinationSum3(int k, int n) {
-        sizeKTargetSumSubsets = new ArrayList<>();
-        generateSizeKTargetSumSubsets(9, k, n, new ArrayList<>());
-        return sizeKTargetSumSubsets;
-    }
-
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int targetSum, List<Integer> currentSubset) {
-        if (currentSubset.size() == k && targetSum == 0) {
-            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-
-        if (currentNumber == 0) {
-            return;
-        }
-
-        currentSubset.add(currentNumber);
-        if (targetSum >= currentNumber && currentSubset.size() <= k) {
-            generateSizeKTargetSumSubsets(currentNumber - 1, k, targetSum - currentNumber, currentSubset);
-        }
-        currentSubset.remove(currentSubset.size() - 1);
-        generateSizeKTargetSumSubsets(currentNumber - 1, k, targetSum, currentSubset);
-    }
-}
-
 
 //Method 2
-
-// Forward recursive approach
 
 class Solution {
     private List<List<Integer>> sizeKTargetSumSubsets;
@@ -224,39 +191,6 @@ class Solution {
             }
             currentSubset.add(num);
             generateSizeKTargetSumSubsets(num + 1, k, targetSum - num, currentSubset);
-            currentSubset.remove(currentSubset.size() - 1);
-        }
-    }
-}
-
-// Backward recursive approach
-
-class Solution {
-    private List<List<Integer>> sizeKTargetSumSubsets;
-
-    public List<List<Integer>> combinationSum3(int k, int n) {
-        sizeKTargetSumSubsets = new ArrayList<>();
-        generateSizeKTargetSumSubsets(9, k, n, new ArrayList<>());
-        return sizeKTargetSumSubsets;
-    }
-
-    private void generateSizeKTargetSumSubsets(int currentNumber, int k, int targetSum, List<Integer> currentSubset) {
-        if (currentSubset.size() == k && targetSum == 0) {
-            sizeKTargetSumSubsets.add(new ArrayList<>(currentSubset));
-            return;
-        }
-
-        for (int num = currentNumber; num >= 1; num--) {
-            if (num > targetSum) {
-                continue;
-            }
-
-            if (currentSubset.size() > k) {
-                break;
-            }
-
-            currentSubset.add(num);
-            generateSizeKTargetSumSubsets(num - 1, k, targetSum - num, currentSubset);
             currentSubset.remove(currentSubset.size() - 1);
         }
     }
