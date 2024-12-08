@@ -114,8 +114,6 @@ class Solution {
 
 //Good Approach
 
-//Method 1
-
 class Solution {
     static Boolean isSubsetSum(int arr[], int targetSum) {
         return hasSubsetWithTargetSum(arr, 0, targetSum);
@@ -140,47 +138,22 @@ class Solution {
          * non-negative value, so this path can safely be ignored.
          * This check prevents unnecessary recursive calls, improving the efficiency of the algorithm.
          */
-        if (targetSum >= arr[index]) {
-           if(hasSubsetWithTargetSum(arr, index + 1, targetSum - arr[index])){
-               return true;
-           }
+        // Option 1: Include the current element (only if it's not greater than the targetSum)
+        if (targetSum >= arr[index] && hasSubsetWithTargetSum(arr, index + 1, targetSum - arr[index])) {
+           return true;
         }
-        
+
+        // Option 2: Exclude the current element
         return hasSubsetWithTargetSum(arr, index + 1, targetSum);
-    }
-}
-
-
-//Method 2
-
-class Solution {
-    static Boolean isSubsetSum(int arr[], int targetSum) {
-        return hasSubsetWithTargetSum(arr, 0, targetSum);
-    }
-
-    private static boolean hasSubsetWithTargetSum(int[] arr, int start, int targetSum) {
-        if (targetSum == 0) {
-            return true;
-        }
-
-        for (int i = start; i < arr.length; i++) {
-            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i + 1, targetSum - arr[i])) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
 
 
 //Better Approach
 
-//Method 1
-
 class Solution {
     private static int[][] cache;
-    
+
     static Boolean isSubsetSum(int arr[], int targetSum) {
         cache = new int[arr.length][targetSum + 1];
         intializeCache();
@@ -191,61 +164,20 @@ class Solution {
         if (index == arr.length) {
             return targetSum == 0;
         }
-        
+
         if (cache[index][targetSum] != -1) {
             return cache[index][targetSum] == 1;
         }
-        
-        if (targetSum >= arr[index]) {
-           if(hasSubsetWithTargetSum(arr, index + 1, targetSum - arr[index])){
-               cache[index][targetSum] =1;
-               return true;
-           }
-        }
-        
-        cache[index][targetSum] = hasSubsetWithTargetSum(arr, index + 1, targetSum)?1:0;
-        return cache[index][targetSum]==1;
-    }
-    
-    private static void intializeCache() {
-        for (int i = 0; i < cache.length; i++) {
-            Arrays.fill(cache[i], -1);
-        }
-    }
-}
 
-
-//Method 2
-
-class Solution {
-    private static int[][] cache;
-    
-    static Boolean isSubsetSum(int arr[], int targetSum) {
-        cache = new int[arr.length + 1][targetSum + 1];
-        intializeCache();
-        return hasSubsetWithTargetSum(arr, 0, targetSum);
-    }
-
-    private static boolean hasSubsetWithTargetSum(int[] arr, int start, int targetSum) {
-        if (targetSum == 0) {
+        if (targetSum >= arr[index] && hasSubsetWithTargetSum(arr, index + 1, targetSum - arr[index])) {
+            cache[index][targetSum] = 1;
             return true;
         }
-        
-        if (cache[start][targetSum] != -1) {
-            return cache[start][targetSum] == 1;
-        }
 
-        for (int i = start; i < arr.length; i++) {
-            if (targetSum >= arr[i] && hasSubsetWithTargetSum(arr, i + 1, targetSum - arr[i])) {
-                cache[start][targetSum] = 1;
-                return true;
-            }
-        }
-        
-        cache[start][targetSum] = 0;
-        return false;
+        cache[index][targetSum] = hasSubsetWithTargetSum(arr, index + 1, targetSum) ? 1 : 0;
+        return cache[index][targetSum] == 1;
     }
-    
+
     private static void intializeCache() {
         for (int i = 0; i < cache.length; i++) {
             Arrays.fill(cache[i], -1);
@@ -300,7 +232,8 @@ class Solution {
                     dp[index][sum] = dp[index + 1][sum];
                 }
             }
-            
+
+            // Early exit: If targetSum is achievable at this point, return true immediately.
             if(dp[index][targetSum]){
                 return true;
             }
