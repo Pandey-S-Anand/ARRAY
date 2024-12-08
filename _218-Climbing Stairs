@@ -8,8 +8,56 @@
  * - Climbing from the ground to the nth stair can be viewed as a forward recursion.
  */
 
+//Bruteforce Approach
 
-//Backward recursion
+//Method 1
+
+class Solution {
+    public int climbStairs(int n) {
+        return climbStairs(0, n);
+    }
+
+    private int climbStairs(int currentStair, int destinationStair) {
+        // Base case: If we've reached the destination stair, there is 1 way to reach it.
+        if (currentStair == destinationStair) {
+            return 1;
+        }
+
+        int count = 0;
+        for (int step = 1; step <= 2; step++) {
+            // If the current step causes us to go beyond the destinationStair, terminate the loop.
+            if (currentStair + step > destinationStair) {
+                break;
+            }
+            
+           /*
+            * Recursive Case:
+            * - To reach the ground floor from the nth stair, you can either:
+            *
+            * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-1)th stair, i.e., climbStairs(n - 1).
+            *
+            * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
+            * - Now, we need to calculate the number of ways to reach the ground floor from
+            * the (n-2)th stair, i.e., climbStairs(n - 2).
+            *
+            * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
+            * you can add the respective step (either a 1-step or a 2-step) to the existing
+            * paths that lead to those stairs.
+            * Essentially, this means recursively calculating all the paths to the two
+            * previous stairs and then extending those paths with the current step (1 or 2)
+            * to reach the nth stair.
+            */
+            count += climbStairs(currentStair + step, destinationStair);
+        }
+
+        return count;
+    }
+}
+
+
+//Method 2
 
 class Solution {
     public int climbStairs(int n) {
@@ -82,53 +130,6 @@ class Solution {
 
         for (int step = 1; step <= 2; step++) {
             count += climbStairs(n - step);
-        }
-
-        return count;
-    }
-}
-
-
-//Forward recursion
-
-class Solution {
-    public int climbStairs(int n) {
-        return climbStairs(0, n);
-    }
-
-    private int climbStairs(int currentStair, int destinationStair) {
-        // Base case: If we've reached the destination stair, there is 1 way to reach it.
-        if (currentStair == destinationStair) {
-            return 1;
-        }
-
-        int count = 0;
-        for (int step = 1; step <= 2; step++) {
-            // If the current step causes us to go beyond the destinationStair, terminate the loop.
-            if (currentStair + step > destinationStair) {
-                break;
-            }
-            
-           /*
-            * Recursive Case:
-            * - To reach the ground floor from the nth stair, you can either:
-            *
-            * 1. Take a single 1-step jump from the nth stair to reach the (n-1)th stair.
-            * - Now, we need to calculate the number of ways to reach the ground floor from
-            * the (n-1)th stair, i.e., climbStairs(n - 1).
-            *
-            * 2. Take a single 2-step jump from the nth stair to reach the (n-2)th stair.
-            * - Now, we need to calculate the number of ways to reach the ground floor from
-            * the (n-2)th stair, i.e., climbStairs(n - 2).
-            *
-            * After determining the number of ways to reach the (n-1)th and (n-2)th stairs,
-            * you can add the respective step (either a 1-step or a 2-step) to the existing
-            * paths that lead to those stairs.
-            * Essentially, this means recursively calculating all the paths to the two
-            * previous stairs and then extending those paths with the current step (1 or 2)
-            * to reach the nth stair.
-            */
-            count += climbStairs(currentStair + step, destinationStair);
         }
 
         return count;
