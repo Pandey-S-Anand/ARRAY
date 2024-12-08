@@ -2,7 +2,7 @@
 
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        int result = coinChange(coins, coins.length - 1, amount);
+        int result = coinChange(coins, 0, amount);
         /*
          * If the result is Integer.MAX_VALUE, it means it's impossible to form the
          * amount using the given coins So, we return -1 in that case; otherwise, return
@@ -24,7 +24,7 @@ class Solution {
          * return Integer.MAX_VALUE This represents that it's not possible to form
          * the amount with the remaining coins
          */
-        if (index < 0) {
+        if (index == coins.length) {
             return Integer.MAX_VALUE;
         }
 
@@ -46,7 +46,7 @@ class Solution {
             }
         }
         // Exclude the current coin and move to the next coin
-        int exclude = coinChange(coins, index - 1, amount);
+        int exclude = coinChange(coins, index + 1, amount);
         /*
          * Return the minimum of the two choices: either include the current coin or
          * exclude it This ensures we get the fewest number of coins required
@@ -64,7 +64,7 @@ class Solution {
     public int coinChange(int[] coins, int amount) {
         cache = new int[coins.length][amount + 1];
         intializeCache();
-        int result = coinChange(coins, coins.length - 1, amount);
+        int result = coinChange(coins, 0, amount);
         return result == Integer.MAX_VALUE ? -1 : result;
     }
 
@@ -73,7 +73,7 @@ class Solution {
             return 0;
         }
 
-        if (index < 0) {
+        if (index == coins.length) {
             return Integer.MAX_VALUE;
         }
 
@@ -82,16 +82,14 @@ class Solution {
         }
 
         int include = Integer.MAX_VALUE;
-
         if (coins[index] <= amount) {
             include = coinChange(coins, index, amount - coins[index]);
-
             if (include != Integer.MAX_VALUE) {
                 include += 1;
             }
         }
 
-        int exclude = coinChange(coins, index - 1, amount);
+        int exclude = coinChange(coins, index + 1, amount);
 
         return cache[index][amount] = Math.min(include, exclude);
     }
@@ -112,35 +110,33 @@ class Solution {
     public int coinChange(int[] coins, int amount) {
         int[][] dp = new int[coins.length + 1][amount + 1];
 
-        dp[0][0] = 0;
-
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = 0; index <= coins.length; index++) {
             dp[index][0] = 0;
         }
 
         for (int sum = 1; sum <= amount; sum++) {
-            dp[0][sum] = Integer.MAX_VALUE;
+            dp[coins.length][sum] = Integer.MAX_VALUE;
         }
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             for (int sum = 1; sum <= amount; sum++) {
                 int include = Integer.MAX_VALUE;
 
-                if (coins[index - 1] <= sum) {
-                    include = dp[index][sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = dp[index][sum - coins[index]];
 
                     if (include != Integer.MAX_VALUE) {
                         include += 1;
                     }
                 }
 
-                int exclude = dp[index - 1][sum];
+                int exclude = dp[index + 1][sum];
 
                 dp[index][sum] = Math.min(include, exclude);
             }
         }
 
-        return dp[coins.length][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length][amount];
+        return dp[0][amount] == Integer.MAX_VALUE ? -1 : dp[0][amount];
     }
 }
 
@@ -152,28 +148,28 @@ class Solution {
         int[][] dp = new int[coins.length + 1][amount + 1];
 
         for (int sum = 1; sum <= amount; sum++) {
-            dp[0][sum] = Integer.MAX_VALUE;
+            dp[coins.length][sum] = Integer.MAX_VALUE;
         }
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             for (int sum = 1; sum <= amount; sum++) {
                 int include = Integer.MAX_VALUE;
 
-                if (coins[index - 1] <= sum) {
-                    include = dp[index][sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = dp[index][sum - coins[index]];
 
                     if (include != Integer.MAX_VALUE) {
                         include += 1;
                     }
                 }
 
-                int exclude = dp[index - 1][sum];
+                int exclude = dp[index + 1][sum];
 
                 dp[index][sum] = Math.min(include, exclude);
             }
         }
 
-        return dp[coins.length][amount] == Integer.MAX_VALUE ? -1 : dp[coins.length][amount];
+        return dp[0][amount] == Integer.MAX_VALUE ? -1 : dp[0][amount];
     }
 }
 
@@ -182,68 +178,35 @@ class Solution {
 
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        int[] previousRow = new int[amount + 1];
+        int[] nextRow = new int[amount + 1];
         int[] currentRow = new int[amount + 1];
 
         for (int sum = 1; sum <= amount; sum++) {
-            previousRow[sum] = Integer.MAX_VALUE;
+            nextRow[sum] = Integer.MAX_VALUE;
         }
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             for (int sum = 1; sum <= amount; sum++) {
                 int include = Integer.MAX_VALUE;
 
-                if (coins[index - 1] <= sum) {
-                    include = currentRow[sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = currentRow[sum - coins[index]];
 
                     if (include != Integer.MAX_VALUE) {
                         include += 1;
                     }
                 }
 
-                int exclude = previousRow[sum];
+                int exclude = nextRow[sum];
 
                 currentRow[sum] = Math.min(include, exclude);
             }
 
             int[] temp = currentRow;
-            currentRow = previousRow;
-            previousRow = temp;
+            currentRow = nextRow;
+            nextRow = temp;
         }
 
-        return previousRow[amount] == Integer.MAX_VALUE ? -1 : previousRow[amount];
-    }
-}
-
-
-//Aliter (Further space optimised)
-
-class Solution {
-    public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-
-        for (int sum = 1; sum <= amount; sum++) {
-            dp[sum] = Integer.MAX_VALUE;
-        }
-
-        for (int index = 1; index <= coins.length; index++) {
-            for (int sum = 1; sum <= amount; sum++) {
-                int include = Integer.MAX_VALUE;
-
-                if (coins[index - 1] <= sum) {
-                    include = dp[sum - coins[index - 1]];
-
-                    if (include != Integer.MAX_VALUE) {
-                        include += 1;
-                    }
-                }
-
-                int exclude = dp[sum];
-
-                dp[sum] = Math.min(include, exclude);
-            }
-        }
-
-        return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
+        return nextRow[amount] == Integer.MAX_VALUE ? -1 : nextRow[amount];
     }
 }
