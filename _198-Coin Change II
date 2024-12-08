@@ -2,7 +2,7 @@
 
 class Solution {
     public int change(int amount, int[] coins) {
-        return coinChange(coins, coins.length - 1, amount);
+        return coinChange(coins, 0, amount);
     }
 
     private int coinChange(int[] coins, int index, int amount) {
@@ -18,7 +18,7 @@ class Solution {
          * Base case: If we've exhausted all coins and still have remaining amount,
          * it means this path does not lead to a valid combination
          */
-        if (index < 0) {
+        if (index == coins.length) {
             return 0; // No valid combination found
         }
 
@@ -32,7 +32,7 @@ class Solution {
             include = coinChange(coins, index, amount - coins[index]);
         }
         // Move to the next coin and calculate the combinations excluding the current coin
-        int exclude = coinChange(coins, index - 1, amount);
+        int exclude = coinChange(coins, index + 1, amount);
 
         // Return the total combinations by adding the combinations including the current coin and excluding it
         return (include + exclude);
@@ -48,7 +48,7 @@ class Solution {
     public int change(int amount, int[] coins) {
         cache = new int[coins.length][amount + 1];
         intializeCache();
-        return coinChange(coins, coins.length - 1, amount);
+        return coinChange(coins, 0, amount);
     }
 
     private int coinChange(int[] coins, int index, int amount) {
@@ -56,7 +56,7 @@ class Solution {
             return 1;
         }
 
-        if (index < 0) {
+        if (index == coins.length) {
             return 0;
         }
 
@@ -69,7 +69,7 @@ class Solution {
             include = coinChange(coins, index, amount - coins[index]);
         }
 
-        int exclude = coinChange(coins, index - 1, amount);
+        int exclude = coinChange(coins, index + 1, amount);
 
         return cache[index][amount] = (include + exclude);
     }
@@ -88,36 +88,33 @@ class Solution {
 
 class Solution {
     public int change(int amount, int[] coins) {
-        /*
-         * dp[i][j] represents the number of combinations possible to make up the amount
-         * 'j' using the first 'i' coins from the coins array. i.e coins[0...i-1]
-         */
+        //dp[i][j] represents the number of combinations possible to make up the amount 'j' using the first 'i' coins from the coins array. i.e coins[i...coins.length - 1]
         int[][] dp = new int[coins.length + 1][amount + 1];
 
-        dp[0][0] = 1;
+        dp[coins.length][0] = 1;
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = 0; index < coins.length; index++) {
             dp[index][0] = 1;
         }
 
         for (int sum = 1; sum <= amount; sum++) {
-            dp[0][sum] = 0;
+            dp[coins.length][sum] = 0;
         }
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             for (int sum = 1; sum <= amount; sum++) {
                 int include = 0;
-                if (coins[index - 1] <= sum) {
-                    include = dp[index][sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = dp[index][sum - coins[index]];
                 }
 
-                int exclude = dp[index - 1][sum];
+                int exclude = dp[index + 1][sum];
 
                 dp[index][sum] = (include + exclude);
             }
         }
 
-        return dp[coins.length][amount];
+        return dp[0][amount];
     }
 }
 
@@ -126,26 +123,27 @@ class Solution {
 
 class Solution {
     public int change(int amount, int[] coins) {
+        //dp[i][j] represents the number of combinations possible to make up the amount 'j' using the first 'i' coins from the coins array. i.e coins[i...coins.length - 1]
         int[][] dp = new int[coins.length + 1][amount + 1];
 
         for (int index = 0; index <= coins.length; index++) {
             dp[index][0] = 1;
         }
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             for (int sum = 1; sum <= amount; sum++) {
                 int include = 0;
-                if (coins[index - 1] <= sum) {
-                    include = dp[index][sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = dp[index][sum - coins[index]];
                 }
 
-                int exclude = dp[index - 1][sum];
+                int exclude = dp[index + 1][sum];
 
                 dp[index][sum] = (include + exclude);
             }
         }
 
-        return dp[coins.length][amount];
+        return dp[0][amount];
     }
 }
 
@@ -154,54 +152,29 @@ class Solution {
 
 class Solution {
     public int change(int amount, int[] coins) {
-        int[] previousRow = new int[amount + 1];
+        int[] nextRow = new int[amount + 1];
         int[] currentRow = new int[amount + 1];
 
-        previousRow[0] = 1;
+        nextRow[0] = 1;
 
-        for (int index = 1; index <= coins.length; index++) {
+        for (int index = coins.length - 1; index >= 0; index--) {
             currentRow[0] = 1;
             for (int sum = 1; sum <= amount; sum++) {
                 int include = 0;
-                if (coins[index - 1] <= sum) {
-                    include = currentRow[sum - coins[index - 1]];
+                if (coins[index] <= sum) {
+                    include = currentRow[sum - coins[index]];
                 }
 
-                int exclude = previousRow[sum];
+                int exclude = nextRow[sum];
 
                 currentRow[sum] = (include + exclude);
             }
 
             int[] temp = currentRow;
-            currentRow = previousRow;
-            previousRow = temp;
+            currentRow = nextRow;
+            nextRow = temp;
         }
 
-        return previousRow[amount];
-    }
-}
-
-
-//Aliter (further space optimised)
-
-class Solution {
-    public int change(int amount, int[] coins) {
-        int[] dp = new int[amount + 1];
-
-        for (int index = 1; index <= coins.length; index++) {
-            dp[0] = 1;
-            for (int sum = 1; sum <= amount; sum++) {
-                int include = 0;
-                if (coins[index - 1] <= sum) {
-                    include = dp[sum - coins[index - 1]];
-                }
-
-                int exclude = dp[sum];
-
-                dp[sum] = (include + exclude);
-            }
-        }
-
-        return dp[amount];
+        return nextRow[amount];
     }
 }
