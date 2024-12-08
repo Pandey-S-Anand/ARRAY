@@ -1,6 +1,6 @@
 //Bruteforce Approach
 
-//Forward recursive approach
+//Method 1
 
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
@@ -20,12 +20,9 @@ class Solution {
 }
 
 
-//Backward recursive approach
+//Method 2
 
-/*
- The minimum cost to reach the top from the bottom is equivalent to the 
- minimum cost to reach the bottom from the top.
-*/
+// The minimum cost to reach the top from the bottom is equivalent to the minimum cost to reach the bottom from the top.
 
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
@@ -47,7 +44,7 @@ class Solution {
 
 //Better Approach
 
-//Forward recursive approach
+//Method 1
 
 class Solution {
     private int[] cache;
@@ -72,7 +69,7 @@ class Solution {
 }
 
 
-//Backward recursive approach
+//Method 2
 
 class Solution {
     private int[] cache;
@@ -84,7 +81,7 @@ class Solution {
     }
 
     private int minCostClimbingStairs(int[] cost, int stair) {
-        if (stair < 0) {
+        if (stair <= 0) {
             return 0;
         }
 
@@ -98,6 +95,32 @@ class Solution {
 
 
 //Optimal Approach
+
+//Method 1
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        /*
+         * dp[i] will store the minimum cost needed to reach the top starting from
+         * stair 'i', where you can either move one or two steps up at each move.
+         */
+        int[] dp = new int[cost.length];
+
+        // Base case: Minimum cost to reach the top from the last stair (n-1) is the cost of that stair.
+        dp[cost.length-1] = cost[cost.length-1];   
+        // Base case: Minimum cost to reach the top from the second-to-last stair (n-2) is the cost of that stair, as you can only take a 1-step jump to reach the top.      
+        dp[cost.length-2] = cost[cost.length-2]; 
+
+        for (int stair = cost.length-3; stair >=0 ; stair--) {
+            dp[stair] = cost[stair] + Math.min(dp[stair + 1], dp[stair + 2]);
+        }
+
+        // The final result is the minimum cost to reach the top (either from the first stair or second stair)
+        return Math.min(dp[0], dp[1]);
+    }
+}
+
+//Method 2
 
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
