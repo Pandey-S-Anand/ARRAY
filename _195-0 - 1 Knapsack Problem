@@ -1,8 +1,8 @@
 //Bruteforce Approach
 
-class Solution {
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        return findMaxValue(weights, values, weights.length - 1, capacity);
+public class Solution {
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        return findMaxValue(weight, value, 0, maxWeight);
     }
 
     private static int findMaxValue(int[] weights, int[] values, int index, int capacity) {
@@ -10,17 +10,17 @@ class Solution {
          * Base Case 1: If the remaining capacity is 0, we cannot add any more items, so the maximum value obtainable is 0.
          * Base Case 2: If we have considered all items, there are no more items left to add, resulting in a value of 0.
          */
-        if (capacity == 0 || index < 0) {
+        if (capacity == 0 || index == weights.length) {
             return 0;
         }
 
-        int exclude = findMaxValue(weights, values, index - 1, capacity);
+        int exclude = findMaxValue(weights, values, index + 1, capacity);
 
         int include = Integer.MIN_VALUE;
         // Check if we can include the current item (only if its weight is less than or equal to the remaining capacity)
         if (weights[index] <= capacity) {
             // If we can include the current item, add its value
-            include = values[index] + findMaxValue(weights, values, index - 1, capacity - weights[index]);
+            include = values[index] + findMaxValue(weights, values, index + 1, capacity - weights[index]);
         }
         // Return the maximum of including or excluding the current item
         return Math.max(include, exclude);
@@ -30,17 +30,17 @@ class Solution {
 
 //Better Approach
 
-class Solution {
+public class Solution {
     private static int[][] cache;
 
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        cache = new int[weights.length][capacity + 1];
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        cache = new int[weight.length][maxWeight + 1];
         intializeCache();
-        return findMaxValue(weights, values, weights.length - 1, capacity);
+        return findMaxValue(weight, value, 0, maxWeight);
     }
 
     private static int findMaxValue(int[] weights, int[] values, int index, int capacity) {
-        if (capacity == 0 || index < 0) {
+        if (capacity == 0 || index == weights.length) {
             return 0;
         }
 
@@ -48,13 +48,12 @@ class Solution {
             return cache[index][capacity];
         }
 
-        int exclude = findMaxValue(weights, values, index - 1, capacity);
+        int exclude = findMaxValue(weights, values, index + 1, capacity);
 
         int include = Integer.MIN_VALUE;
         if (weights[index] <= capacity) {
-            include = values[index] + findMaxValue(weights, values, index - 1, capacity - weights[index]);
+            include = values[index] + findMaxValue(weights, values, index + 1, capacity - weights[index]);
         }
-
         return cache[index][capacity] = Math.max(include, exclude);
     }
 
@@ -70,107 +69,85 @@ class Solution {
 
 //Naive Implementation
 
-class Solution {
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        //dp[i][j] represents the maximum value achievable using the first i items (i.e., arr[0...i-1]) within a knapsack capacity of j.
-        int[][] dp = new int[weights.length + 1][capacity + 1];
+public class Solution {
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        // dp[i][j] represents the maximum value achievable using the first i items (i.e., arr[i...n - 1]) within a knapsack capacity of j.
+        int[][] dp = new int[n + 1][maxWeight + 1];
 
-        dp[0][0] = 0;
-
-        for (int index = 1; index <= weights.length; index++) {
-            dp[index][0] = 0;
+        for (int capacity = 0; capacity <= maxWeight; capacity++) {
+            dp[n][capacity] = 0;
         }
 
-        for (int cap = 1; cap <= capacity; cap++) {
-            dp[0][cap] = 0;
+        for (int index = 0; index < n; index++) {
+            dp[index][maxWeight] = 0;
         }
 
-        for (int index = 1; index <= weights.length; index++) {
-            for (int cap = 1; cap <= capacity; cap++) {
-                int exclude = dp[index - 1][cap];
+        for (int index = n - 1; index >= 0; index--) {
+            for (int capacity = 1; capacity <= maxWeight; capacity++) {
+                int exclude = dp[index + 1][capacity];
 
                 int include = Integer.MIN_VALUE;
-                if (weights[index - 1] <= cap) {
-                    include = values[index - 1] + dp[index - 1][cap - weights[index - 1]];
+                if (weight[index] <= capacity) {
+                    include = value[index] + dp[index + 1][capacity - weight[index]];
                 }
 
-                dp[index][cap] = Math.max(include, exclude);
+                dp[index][capacity] = Math.max(include, exclude);
             }
         }
 
-        return dp[weights.length][capacity];
+        return dp[0][maxWeight];
     }
 }
+
 
 //Optimal Implementation
 
-class Solution {
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        int[][] dp = new int[weights.length + 1][capacity + 1];
+public class Solution {
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        int[][] dp = new int[n + 1][maxWeight + 1];
 
-        for (int index = 1; index <= weights.length; index++) {
-            for (int cap = 1; cap <= capacity; cap++) {
-                int exclude = dp[index - 1][cap];
+        for (int index = n - 1; index >= 0; index--) {
+            for (int capacity = 1; capacity <= maxWeight; capacity++) {
+                int exclude = dp[index + 1][capacity];
 
                 int include = Integer.MIN_VALUE;
-                if (weights[index - 1] <= cap) {
-                    include = values[index - 1] + dp[index - 1][cap - weights[index - 1]];
+                if (weight[index] <= capacity) {
+                    include = value[index] + dp[index + 1][capacity - weight[index]];
                 }
 
-                dp[index][cap] = Math.max(include, exclude);
+                dp[index][capacity] = Math.max(include, exclude);
             }
         }
 
-        return dp[weights.length][capacity];
+        return dp[0][maxWeight];
     }
 }
+
 
 //Aliter (space optimised)
 
-class Solution {
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        int[] previousRow = new int[capacity + 1];
-        int[] currentRow = new int[capacity + 1];
+public class Solution {
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+        int[] currentRow = new int[maxWeight + 1];
+        int[] nextRow = new int[maxWeight + 1];
 
-        for (int index = 1; index <= weights.length; index++) {
-            for (int cap = 1; cap <= capacity; cap++) {
-                int exclude = previousRow[cap];
+        for (int index = n - 1; index >= 0; index--) {
+            for (int capacity = 1; capacity <= maxWeight; capacity++) {
+                int exclude = nextRow[capacity];
 
                 int include = Integer.MIN_VALUE;
-                if (weights[index - 1] <= cap) {
-                    include = values[index - 1] + previousRow[cap - weights[index - 1]];
+                if (weight[index] <= capacity) {
+                    include = value[index] + nextRow[capacity - weight[index]];
                 }
 
-                currentRow[cap] = Math.max(include, exclude);
+                currentRow[capacity] = Math.max(include, exclude);
             }
+
             int[] temp = currentRow;
-            currentRow = previousRow;
-            previousRow = temp;
+            currentRow = nextRow;
+            nextRow = temp;
         }
 
-        return previousRow[capacity];
-    }
-}
-
-//Aliter (Further space optimised)
-
-class Solution {
-    static int knapSack(int capacity, int[] weights, int[] values) {
-        int[] dp = new int[capacity + 1];
-
-        for (int index = 1; index <= weights.length; index++) {
-            for (int cap = capacity; cap >= 1; cap--) {
-                int exclude = dp[cap];
-
-                int include = Integer.MIN_VALUE;
-                if (weights[index - 1] <= cap) {
-                    include = values[index - 1] + dp[cap - weights[index - 1]];
-                }
-
-                dp[cap] = Math.max(include, exclude);
-            }
-        }
-
-        return dp[capacity];
+        return nextRow[maxWeight];
     }
 }
