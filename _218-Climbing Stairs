@@ -139,6 +139,42 @@ class Solution {
 
 //Better Approach
 
+//Method 1
+
+class Solution {
+    private int[] cache;
+
+    public int climbStairs(int n) {
+        cache = new int[n];
+        Arrays.fill(cache, -1);
+        return climbStairs(0, n);
+    }
+
+    private int climbStairs(int currentStair, int destinationStair) {
+        if (currentStair == destinationStair) {
+            return 1;
+        }
+
+        if (cache[currentStair] != -1) {
+            return cache[currentStair];
+        }
+
+        int count = 0;
+        for (int step = 1; step <= 2; step++) {
+            if (currentStair + step > destinationStair) {
+                break;
+            }
+
+            count += climbStairs(currentStair + step, destinationStair);
+        }
+
+        return cache[currentStair] = count;
+    }
+}
+
+
+//Method 2
+
 class Solution {
     private int[] cache;
 
@@ -173,6 +209,36 @@ class Solution {
 
 
 //Optimal Approach
+
+//Method 1
+
+class Solution {
+    public int climbStairs(int n) {
+        // dp[i] represents the number of ways to reach the top (stair 'n') starting from stair 'i'.
+        int[] dp = new int[n + 1];
+        
+        // Base case: There is exactly 1 way to reach the top if you're already on the top stair.
+        dp[n] = 1;
+
+        for (int currentStair = n - 1; currentStair >= 0; currentStair--) {
+            int count = 0;
+            for (int step = 1; step <= 2; step++) {
+                if (currentStair + step > n) {
+                    break;
+                }
+
+                count += dp[currentStair + step];
+            }
+
+            dp[currentStair] = count;
+        }
+
+        return dp[0];
+    }
+}
+
+
+//Method 2
 
 class Solution {
     public int climbStairs(int n) {
