@@ -1,6 +1,6 @@
 //Bruteforce Approach
 
-//Forward Recursive Approach
+//Method 1
 
 class Solution {
     public int minimumEnergy(int arr[], int n) {
@@ -32,7 +32,7 @@ class Solution {
 }
 
 
-//Backward Recursive Approach
+//Method 2
 
 class Solution {
     public int minimumEnergy(int arr[], int n) {
@@ -54,8 +54,7 @@ class Solution {
                 break;
             }
 
-            int energy = minimumEnergyHelper(height, currentStair - step)
-                    + Math.abs(height[currentStair] - height[currentStair - step]);
+            int energy = minimumEnergyHelper(height, currentStair - step) + Math.abs(height[currentStair] - height[currentStair - step]);
             minEnergy = Math.min(minEnergy, energy);
         }
 
@@ -67,7 +66,7 @@ class Solution {
 
 //Better Approach
 
-//Forward Recursive Approach
+//Method 1
 
 class Solution {
     private int[] cache;
@@ -102,7 +101,7 @@ class Solution {
 }
 
 
-//Backward Recursive Approach
+//Method 2
 
 class Solution {
     private int[] cache;
