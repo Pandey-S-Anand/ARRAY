@@ -300,6 +300,10 @@ class Solution {
                     dp[index][sum] = dp[index + 1][sum];
                 }
             }
+            
+            if(dp[index][targetSum]){
+                return true;
+            }
         }
 
         return dp[0][targetSum];
@@ -323,6 +327,10 @@ class Solution {
                 } else {
                     currentRow[sum] = nextRow[sum];
                 }
+            }
+            
+            if(currentRow[targetSum]){
+                return true;
             }
 
             boolean[] temp = currentRow;
@@ -351,6 +359,10 @@ class Solution {
                 } else {
                     nextRow[sum] = nextRow[sum];
                 }
+            }
+            
+            if(nextRow[targetSum]){
+                return true;
             }
         }
 
