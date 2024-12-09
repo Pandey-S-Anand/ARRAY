@@ -249,3 +249,83 @@ class Solution {
 
 //Optimal Approach
 
+class Solution {
+    public int minInsertions(int arr[], int n) {
+        return n - lengthOfLIS(arr);
+    }
+
+    public int lengthOfLIS(int[] arr) {
+        List<Integer> tail = new ArrayList<>(arr.length);
+
+        for (int num : arr) {
+            int index = upperBound(tail, num);
+
+            if (index == tail.size()) {
+                tail.add(num);
+            } else {
+                tail.set(index, num);
+            }
+        }
+
+        return tail.size();
+    }
+
+    private int upperBound(List<Integer> arr, int x) {
+        int low = 0, high = arr.size() - 1, upperBound = arr.size();
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr.get(mid) > x) {
+                upperBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return upperBound;
+    }
+}
+
+//Aliter
+
+class Solution {
+    public int minInsertions(int arr[], int n) {
+        return n - lengthOfLIS(arr);
+    }
+
+    private int lengthOfLIS(int[] arr) {
+        int[] tail = new int[arr.length];
+        int length = 0;
+
+        for (int num : arr) {
+            int index = upperBound(tail, length, num);
+
+            if (index == length) {
+                length++;
+            }
+
+            tail[index] = num;
+        }
+
+        return length;
+    }
+
+    private int upperBound(int[] arr, int n, int x) {
+        int low = 0, high = n - 1, upperBound = n;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] > x) {
+                upperBound = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return upperBound;
+    }
+}
