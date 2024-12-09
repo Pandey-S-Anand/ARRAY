@@ -1,4 +1,6 @@
 /*
+Logic :
+
 The minimum number of elements that need to be removed to form a mountain array 
 is equal to the count of elements that are not part of the longest bitonic subsequence (LBS).
 
