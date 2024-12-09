@@ -1,1 +1,17 @@
+/*
+ * The LIS (Longest Increasing Subsequence) of an array represents the longest subsequence 
+ * of elements that are already in increasing order. Each step allows us to remove an element 
+ * and insert it into a different position to achieve a fully sorted array.
+ * 
+ * To minimize the number of steps, we should move the fewest elements possible. 
+ * Since the LIS is the longest subsequence that maintains relative order, it ensures 
+ * the least number of elements need to be moved. Using the LIS guarantees the minimum 
+ * number of steps required to sort the array.
+ * 
+ * If the length of the array is N and the length of the LIS is L, then the minimum number 
+ * of steps needed to sort the array is:
+ * 
+ * Steps = N - L
+ */
+
 
