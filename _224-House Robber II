@@ -84,23 +84,24 @@ class Solution {
     private int rob(int[] arr, int index, int n) {
         int[] dp = new int[n];
 
-        for (int i = index; i < n; i++) {
+        for (int i = n - 1; i >= index; i--) {
             int rob = arr[i];
-            if (i - 2 >= 0) {
-                rob += dp[i - 2];
+            if (i + 2 < n) {
+                rob += dp[i + 2];
             }
 
             int notRob = 0;
-            if (i - 1 >= 0) {
-                notRob = dp[i - 1];
+            if (i + 1 < n) {
+                notRob = dp[i + 1];
             }
 
             dp[i] = Math.max(rob, notRob);
         }
 
-        return dp[n - 1];
+        return dp[index];
     }
 }
+
 
 //Aliter (Space optimised)
 
@@ -114,24 +115,17 @@ class Solution {
     }
 
     private int rob(int[] arr, int index, int n) {
-        int prev1 = 0, prev2 = 0, current = 0;
+        int next1 = 0, next2 = 0, current = 0;
 
-        for (int i = index; i < n; i++) {
-            int rob = arr[i];
-            if (i - 2 >= 0) {
-                rob += prev2;
-            }
-
-            int notRob = 0;
-            if (i - 1 >= 0) {
-                notRob = prev1;
-            }
+        for (int i = n - 1; i >= index; i--) {
+            int rob = arr[i] + next2;
+            int notRob = next1;
 
             current = Math.max(rob, notRob);
-            prev2 = prev1;
-            prev1 = current;
+            next2 = next1;
+            next1 = current;
         }
 
-        return prev1;
+        return next1;
     }
 }
