@@ -140,3 +140,50 @@ class Solution {
         return dp[0][0];
     }
 }
+
+
+//Aliter (Spce optimised)
+
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+
+        if (obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) {
+            return 0;
+        }
+
+        int[] currentRow = new int[n];
+        int[] nextRow = new int[n];
+
+        nextRow[n - 1] = 1;
+
+        for (int col = n - 2; col >= 0; col--) {
+            if (nextRow[col + 1] == 1 && obstacleGrid[m - 1][col + 1] == 0) {
+                nextRow[col] = 1;
+            }
+        }
+
+        for (int row = m - 2; row >= 0; row--) {
+            currentRow[n - 1] = 1;
+            for (int col = n - 2; col >= 0; col--) {
+                int moveRight = 0;
+                if (obstacleGrid[row][col + 1] == 0) {
+                    moveRight = currentRow[col + 1];
+                }
+
+                int moveDown = 0;
+                if (obstacleGrid[row + 1][col] == 0) {
+                    moveDown = nextRow[col];
+                }
+
+                currentRow[col] = moveRight + moveDown;
+            }
+
+            int[] temp = currentRow;
+            currentRow = nextRow;
+            nextRow = temp;
+        }
+
+        return nextRow[0];
+    }
+}
