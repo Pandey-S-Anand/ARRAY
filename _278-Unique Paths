@@ -139,3 +139,31 @@ class Solution {
         return dp[0][0];
     }
 }
+
+//Aliter
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[] currentRow = new int[n];
+        int[] nextRow = new int[n];
+
+        nextRow[n - 1] = 1;
+
+        for (int j = 0; j < n - 1; j++) {
+            nextRow[j] = 1;
+        }
+
+        for (int row = m - 2; row >= 0; row--) {
+            currentRow[n - 1] = 1;
+            for (int col = n - 2; col >= 0; col--) {
+                currentRow[col] = currentRow[col + 1] + nextRow[col];
+            }
+
+            int[] temp = currentRow;
+            currentRow = nextRow;
+            nextRow = temp;
+        }
+
+        return nextRow[0];
+    }
+}
