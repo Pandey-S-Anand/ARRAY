@@ -140,3 +140,36 @@ class Solution {
         return previous1;
     }
 }
+
+/*
+  Code to print pairing configurations:
+
+  class Solution {
+    private List<String> pairingConfigurations;
+
+    public List<String> printFriendPairings(String friends) {
+        pairingConfigurations = new ArrayList<>();
+        printPairingsHelper(friends, "");
+        return pairingConfigurations;
+    }
+
+    private void printPairingsHelper(String remainingFriends, String currentConfiguration) {
+        // Base case: If no remaining friends, add the current configuration to the result
+        if (remainingFriends.isEmpty()) {
+            pairingConfigurations.add(currentConfiguration.trim()); // Trim to remove leading/trailing spaces
+            return;
+        }
+
+        // Case 1: The first friend remains single
+        char firstFriend = remainingFriends.charAt(0);
+        printPairingsHelper(remainingFriends.substring(1), currentConfiguration + "{" + firstFriend + "} ");
+
+        // Case 2: The first friend pairs up with any of the other remaining friends
+        for (int i = 1; i < remainingFriends.length(); i++) {
+            char secondFriend = remainingFriends.charAt(i);
+            String newRemainingFriends = remainingFriends.substring(1, i) + remainingFriends.substring(i + 1);
+            printPairingsHelper(newRemainingFriends, currentConfiguration + "{" + firstFriend + "," + secondFriend + "} ");
+        }
+    }
+}
+*/
