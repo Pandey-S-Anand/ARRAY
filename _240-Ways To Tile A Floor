@@ -65,7 +65,7 @@ class Solution {
 }
 
 
-//Good Approach
+//Optimal Approach
 
 class Solution {
     static int numberOfWays(int n) {
@@ -87,7 +87,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Aliter (Space optimised)
 
 class Solution {
     static int numberOfWays(int n) {
