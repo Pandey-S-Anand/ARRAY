@@ -5,32 +5,33 @@ class Solution {
         int maxArea = 0;
         for (int i = 0; i < heights.length; i++) {
             int height = heights[i];
-            int width = findNextSmallerElementIndices(heights, i) - (findPreviousSmallerElementIndices(heights, i) + 1);
+            int width = findNextSmallerIndex(heights, i) - (findPreviousSmallerIndex(heights, i) + 1);
             int area = height * width;
             maxArea = Math.max(maxArea, area);
         }
         return maxArea;
     }
 
-    private int findPreviousSmallerElementIndices(int[] heights, int index) {
+    // Find the index of the nearest smaller element to the left of the given index
+    private int findPreviousSmallerIndex(int[] heights, int index) {
         for (int i = index - 1; i >= 0; i--) {
             if (heights[i] < heights[index]) {
                 return i;
             }
         }
-        return -1;
+        return -1; // No smaller element found to the left
     }
 
-    private int findNextSmallerElementIndices(int[] heights, int index) {
+    // Find the index of the nearest smaller element to the right of the given index
+    private int findNextSmallerIndex(int[] heights, int index) {
         for (int i = index + 1; i < heights.length; i++) {
             if (heights[i] < heights[index]) {
                 return i;
             }
         }
-        return heights.length;
+        return heights.length; // No smaller element found to the right
     }
 }
-
 
 
 //Optimal Approach
@@ -40,20 +41,20 @@ class Solution {
 class Solution {
     public int largestRectangleArea(int[] heights) {
         int maxArea = 0;
-        int[] nextSmallerElementIndex = findNextSmallerElementIndices(heights);
-        int[] previousSmallerElementIndex = findPreviousSmallerElementIndices(heights);
+        int[] nextSmallerElementIndex = findNextSmallerIndices(heights);
+        int[] previousSmallerElementIndex = findPreviousSmallerIndices(heights);
 
         for (int i = 0; i < heights.length; i++) {
-            int height = heights[i];
+            int currentHeight = heights[i];
             int width = nextSmallerElementIndex[i] - previousSmallerElementIndex[i] - 1;
-            int area = height * width;
+            int area = currentHeight * width;
             maxArea = Math.max(maxArea, area);
         }
 
         return maxArea;
     }
 
-    private int[] findPreviousSmallerElementIndices(int[] heights) {
+    private int[] findPreviousSmallerIndices(int[] heights) {
         Deque<Integer> stack = new ArrayDeque<>();
         int[] previousSmallerElementIndex = new int[heights.length];
 
@@ -74,7 +75,7 @@ class Solution {
         return previousSmallerElementIndex;
     }
 
-    private int[] findNextSmallerElementIndices(int[] heights) {
+    private int[] findNextSmallerIndices(int[] heights) {
         Deque<Integer> stack = new ArrayDeque<>();
         int[] nextSmallerElementIndex = new int[heights.length];
 
@@ -97,14 +98,16 @@ class Solution {
 }
 
 
+
 //Optimal Implementation
 
 class Solution {
+    private Deque<Integer> stack;
+
     public int largestRectangleArea(int[] heights) {
         int maxArea = 0;
-        Deque<Integer> stack = new ArrayDeque<>();
-        int[] nextSmallerElementIndex = findNextSmallerElementIndices(heights, stack);
-
+        stack = new ArrayDeque<>();
+        int[] nextSmallerElementIndex = findNextSmallerElementIndices(heights);
         stack.clear();
 
         for (int i = 0; i < heights.length; i++) {
@@ -113,17 +116,18 @@ class Solution {
             }
 
             int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
-            int width = nextSmallerElementIndex[i] - (previousSmallerElementIndex + 1);
-            int area = heights[i] * width;
-            maxArea = Math.max(maxArea, area);
 
+            int height = heights[i];
+            int width = nextSmallerElementIndex[i] - previousSmallerElementIndex - 1;
+            int area = height * width;
+            maxArea = Math.max(maxArea, area);
             stack.push(i);
         }
 
         return maxArea;
     }
 
-    private int[] findNextSmallerElementIndices(int[] heights, Deque<Integer> stack) {
+    private int[] findNextSmallerElementIndices(int[] heights) {
         int[] nextSmallerElementIndex = new int[heights.length];
 
         for (int i = heights.length - 1; i >= 0; i--) {
