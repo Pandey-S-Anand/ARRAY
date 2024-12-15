@@ -2,18 +2,29 @@
 
 class Solution {
     public int trap(int[] arr) {
-        if (arr.length < 3 || isSorted(arr)) {
+        /*
+         * In a sorted array (ascending or descending), no water can be trapped because
+         * there are no valleys where water can collect. Ascending arrays form an upward
+         * slope, and descending arrays form a downward slope, causing water to flow
+         * off. Valleys are essential for trapping water, which sorted arrays lack.
+         */
+        if (arr.length < 3 || isMonotonicallySorted(arr)) {
             return 0;
         }
 
         int totalUnitOfWaterTrapped = 0;
 
         for (int i = 0; i < arr.length; i++) {
-            int maxOnLeft = maxOnLeft(arr, i);
-            int maxOnRight = maxOnRight(arr, i);
-
-            if (maxOnLeft > arr[i] && maxOnRight > arr[i]) {
-                totalUnitOfWaterTrapped += (Math.min(maxOnLeft, maxOnRight) - arr[i]);
+            // Find the maximum height to the left of the current index
+            int leftMax = maxOnLeft(arr, i);
+            // Find the maximum height to the right of the current index
+            int rightMax = maxOnRight(arr, i);
+            /*
+             * If both the left and right maximum heights are greater than the current
+             * height, calculate the trapped water at this index and add it to the total.
+             */
+            if (leftMax > arr[i] && rightMax > arr[i]) {
+                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]) * 1;
             }
         }
 
@@ -37,50 +48,54 @@ class Solution {
         return max;
     }
 
-    private boolean isSorted(int[] arr) {
-        boolean ascending = true;
-        boolean descending = true;
+    private boolean isMonotonicallySorted(int[] arr) {
+        boolean ascendingSorted = true;
+        boolean descendingSorted = true;
 
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i] > arr[i + 1]) {
-                ascending = false;
+                ascendingSorted = false;
             }
+
             if (arr[i] < arr[i + 1]) {
-                descending = false;
+                descendingSorted = false;
+            }
+
+            if (!ascendingSorted && !descendingSorted) {
+                return false;
             }
         }
 
-        return ascending || descending;
+        return true;
     }
 }
-
 
 
 //Good Approach
 
 class Solution {
     public int trap(int[] arr) {
-        if (arr.length < 3 || isSorted(arr)) {
+        if (arr.length < 3) {
             return 0;
         }
 
         int totalUnitOfWaterTrapped = 0;
-        int[] maxOnLeft = maxOnLeft(arr);
-        int[] maxOnRight = maxOnRight(arr);
+        int[] maxOnLeft = computeMaxLeft(arr);
+        int[] maxOnRight = computeMaxRight(arr);
 
         for (int i = 0; i < arr.length; i++) {
             int leftMax = maxOnLeft[i];
             int rightMax = maxOnRight[i];
 
             if (leftMax > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += Math.min(leftMax, rightMax) - arr[i];
+                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]) * 1;
             }
         }
 
         return totalUnitOfWaterTrapped;
     }
 
-    private int[] maxOnLeft(int[] arr) {
+    private int[] computeMaxLeft(int[] arr) {
         int[] maxOnLeft = new int[arr.length];
         int maxSoFarOnLeft = Integer.MIN_VALUE;
 
@@ -92,7 +107,7 @@ class Solution {
         return maxOnLeft;
     }
 
-    private int[] maxOnRight(int[] arr) {
+    private int[] computeMaxRight(int[] arr) {
         int[] maxOnRight = new int[arr.length];
         int maxSoFarOnRight = Integer.MIN_VALUE;
 
@@ -102,107 +117,36 @@ class Solution {
         }
 
         return maxOnRight;
-    }
-
-    private boolean isSorted(int[] arr) {
-        boolean ascending = true;
-        boolean descending = true;
-
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                ascending = false;
-            }
-            if (arr[i] < arr[i + 1]) {
-                descending = false;
-            }
-        }
-
-        return ascending || descending;
     }
 }
 
 
 //Better Approach
 
-//Naive Implementation
-
 class Solution {
     public int trap(int[] arr) {
-        if (arr.length < 3 || isSorted(arr)) {
+        if (arr.length < 3) {
             return 0;
         }
 
-        int totalUnitOfWaterTrapped = 0, leftMax = Integer.MIN_VALUE;
-
-        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((arr1, arr2) -> arr2[0] - arr1[0]);
-
-        for (int i = 0; i < arr.length; i++) {
-            maxHeap.add(new int[] { arr[i], i });
-        }
-
-        for (int i = 0; i < arr.length; i++) {
-            while (!maxHeap.isEmpty() && maxHeap.peek()[1] <= i) {
-                maxHeap.poll(); // Remove elements that are not to the right of the current index
-            }
-
-            int rightMax = -1;
-            if (!maxHeap.isEmpty()) {
-                rightMax = maxHeap.peek()[0];
-            }
-
-            if (leftMax > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += Math.min(leftMax, rightMax) - arr[i];
-            }
-            leftMax = Math.max(leftMax, arr[i]);
-        }
-
-        return totalUnitOfWaterTrapped;
-    }
-
-    private boolean isSorted(int[] arr) {
-        boolean ascending = true;
-        boolean descending = true;
-
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                ascending = false;
-            }
-            if (arr[i] < arr[i + 1]) {
-                descending = false;
-            }
-        }
-
-        return ascending || descending;
-    }
-}
-
-
-//Optimal Implementation
-
-
-class Solution {
-    public int trap(int[] arr) {
-        if (arr.length < 3 || isSorted(arr)) {
-            return 0;
-        }
-
-        int totalUnitOfWaterTrapped = 0, leftMax = Integer.MIN_VALUE;
-        int[] maxOnRight = maxOnRight(arr);
+        int totalUnitOfWaterTrapped = 0;
+        int maxSoFarOnLeft = Integer.MIN_VALUE;
+        int[] maxOnRight = computeMaxRight(arr);
 
         for (int i = 0; i < arr.length; i++) {
             int rightMax = maxOnRight[i];
 
-            if (leftMax > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += Math.min(leftMax, rightMax) - arr[i];
+            if (maxSoFarOnLeft > arr[i] && rightMax > arr[i]) {
+                totalUnitOfWaterTrapped += (Math.min(maxSoFarOnLeft, rightMax) - arr[i]) * 1;
             }
 
-            leftMax = Math.max(leftMax, arr[i]);
+            maxSoFarOnLeft = Math.max(maxSoFarOnLeft, arr[i]);
         }
 
         return totalUnitOfWaterTrapped;
     }
 
-    private int[] maxOnRight(int[] arr) {
+    private int[] computeMaxRight(int[] arr) {
         int[] maxOnRight = new int[arr.length];
         int maxSoFarOnRight = Integer.MIN_VALUE;
 
@@ -213,24 +157,7 @@ class Solution {
 
         return maxOnRight;
     }
-
-    private boolean isSorted(int[] arr) {
-        boolean ascending = true;
-        boolean descending = true;
-
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                ascending = false;
-            }
-            if (arr[i] < arr[i + 1]) {
-                descending = false;
-            }
-        }
-
-        return ascending || descending;
-    }
 }
-
 
 
 //Optimal Approach (Two Pointers)  
