@@ -24,7 +24,7 @@ class Solution {
              * height, calculate the trapped water at this index and add it to the total.
              */
             if (leftMax > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]) * 1;
+                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]);
             }
         }
 
@@ -88,7 +88,7 @@ class Solution {
             int rightMax = maxOnRight[i];
 
             if (leftMax > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]) * 1;
+                totalUnitOfWaterTrapped += (Math.min(leftMax, rightMax) - arr[i]);
             }
         }
 
@@ -137,7 +137,7 @@ class Solution {
             int rightMax = maxOnRight[i];
 
             if (maxSoFarOnLeft > arr[i] && rightMax > arr[i]) {
-                totalUnitOfWaterTrapped += (Math.min(maxSoFarOnLeft, rightMax) - arr[i]) * 1;
+                totalUnitOfWaterTrapped += (Math.min(maxSoFarOnLeft, rightMax) - arr[i]);
             }
 
             maxSoFarOnLeft = Math.max(maxSoFarOnLeft, arr[i]);
@@ -160,4 +160,66 @@ class Solution {
 }
 
 
-//Optimal Approach (Two Pointers)  
+//Optimal Approach (Space Optimised)  
+
+/*
+ * The building at `height[maxHeightIndex]` divides the array into two halves: left and right.
+ * 
+ * For all buildings in the left half (before `maxHeightIndex`), the maximum height building 
+ * to their right will always be `height[maxHeightIndex]`. Thus, water can be trapped at each 
+ * position based on the difference between the current building height and `height[maxHeightIndex]`.
+ * 
+ * Similarly, for all buildings in the right half (after `maxHeightIndex`), the maximum height 
+ * building to their left will always be `height[maxHeightIndex]`. Water is trapped based on the 
+ * difference between the current building height and `height[maxHeightIndex]`.
+ * 
+ * By treating `height[maxHeightIndex]` as the boundary, we can independently calculate the trapped 
+ * water in the left and right halves.
+ */
+
+class Solution {
+    public int trap(int[] arr) {
+        if (arr.length < 3) {
+            return 0;
+        }
+
+        int totalUnitOfWaterTrapped = 0;
+
+        // Step 1: Find the maximum height building
+        int i = 1, j = arr.length - 1;
+        int maxHeightIndex = 0; // Index of the highest building.
+
+        while (i <= j) {
+            if (arr[i] > arr[maxHeightIndex]) {
+                maxHeightIndex = i;
+            }
+
+            if (arr[j] > arr[maxHeightIndex]) {
+                maxHeightIndex = j;
+            }
+
+            i++;
+            j--;
+        }
+
+        // Step 2: Compute water trapped in the first half (left to maxHeightIndex)
+        int maxSoFarOnLeft = Integer.MIN_VALUE;
+        for (i = 0; i < maxHeightIndex; i++) {
+            if (arr[i] < maxSoFarOnLeft) {
+                totalUnitOfWaterTrapped += maxSoFarOnLeft - arr[i];
+            }
+            maxSoFarOnLeft = Math.max(maxSoFarOnLeft, arr[i]);
+        }
+
+        // Step 3: Compute water trapped in the second half (right from maxHeightIndex)
+        int maxSoFarOnRight = Integer.MIN_VALUE;
+        for (i = arr.length - 1; i > maxHeightIndex; i--) {
+            if (arr[i] < maxSoFarOnRight) {
+                totalUnitOfWaterTrapped += maxSoFarOnRight - arr[i];
+            }
+            maxSoFarOnRight = Math.max(maxSoFarOnRight, arr[i]);
+        }
+
+        return totalUnitOfWaterTrapped;
+    }
+}
