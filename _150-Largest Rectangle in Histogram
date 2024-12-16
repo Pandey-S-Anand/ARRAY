@@ -34,7 +34,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Better Approach
 
 //Naive Implementation
 
@@ -147,3 +147,7 @@ class Solution {
         return nextSmallerElementIndex;
     }
 }
+
+
+// Optimal Approach
+
