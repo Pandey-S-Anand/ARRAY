@@ -158,7 +158,7 @@ class Solution {
 
         for (int i = 0; i < heights.length; i++) {
             while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
-                // Pop the top index and calculate the height of the rectangle
+                // Pop the top index and get the height of the rectangle
                 int height = heights[stack.pop()];
                 // The index of the previous smaller element is now at the top of the stack
                 int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
@@ -173,7 +173,7 @@ class Solution {
 
         // Process remaining elements in the stack after the iteration completes
         while (!stack.isEmpty()) {
-            // Pop the top index and calculate the height of the rectangle
+            // Pop the top index and get the height of the rectangle
             int height = heights[stack.pop()];
             // The index of the previous smaller element is now at the top of the stack
             int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
