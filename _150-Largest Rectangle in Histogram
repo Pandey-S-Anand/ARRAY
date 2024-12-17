@@ -151,3 +151,38 @@ class Solution {
 
 // Optimal Approach
 
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int maxArea = 0;
+
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                // Pop the top index and calculate the height of the rectangle
+                int height = heights[stack.pop()];
+                // The index of the previous smaller element is now at the top of the stack
+                int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
+                // The current index `i` is the next smaller element for the popped height
+                int nextSmallerElementIndex = i;
+                int width = nextSmallerElementIndex - previousSmallerElementIndex - 1;
+                maxArea = Math.max(maxArea, height * width);
+            }
+            // Push the current index onto the stack
+            stack.push(i);
+        }
+
+        // Process remaining elements in the stack after the iteration completes
+        while (!stack.isEmpty()) {
+            // Pop the top index and calculate the height of the rectangle
+            int height = heights[stack.pop()];
+            // The index of the previous smaller element is now at the top of the stack
+            int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
+            // Since no smaller element was found to the right, set next smaller element index to `heights.length`
+            int nextSmallerElementIndex = heights.length;
+            int width = nextSmallerElementIndex - previousSmallerElementIndex - 1;
+            maxArea = Math.max(maxArea, height * width);
+        }
+
+        return maxArea;
+    }
+}
