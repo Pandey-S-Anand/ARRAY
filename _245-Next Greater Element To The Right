@@ -1,18 +1,18 @@
 //Bruteforce Approach
 
 class Solution {
-    public static long[] nextLargerElement(long[] arr, int n) {
-        long[] nextLargerElement = new long[n];
+    public ArrayList<Integer> nextLargerElement(int[] arr) {
+        ArrayList<Integer> nextLargerElement = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) {
-            nextLargerElement[i] = nextGreaterValue(arr, n, i);
+        for (int i = 0; i < arr.length; i++) {
+            nextLargerElement.add(nextLargerElement(arr, i));
         }
 
         return nextLargerElement;
     }
 
-    private static long nextGreaterValue(long[] arr, int n, int index) {
-        for (int i = index + 1; i < n; i++) {
+    private int nextLargerElement(int[] arr, int index) {
+        for (int i = index + 1; i < arr.length; i++) {
             if (arr[i] > arr[index]) {
                 return arr[i];
             }
@@ -23,27 +23,23 @@ class Solution {
 }
 
 
-//Optimal Approach (Using Stack)
+//Optimal Approach
 
 class Solution {
-    public static long[] nextLargerElement(long[] arr, int n) {
-        Deque<Long> stack = new ArrayDeque<>();
-        long[] nextLargerElement = new long[n];
+    public ArrayList<Integer> nextLargerElement(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        ArrayList<Integer> nextLargerElement = new ArrayList<>();
 
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = arr.length - 1; i >= 0; i--) {
             while (!stack.isEmpty() && stack.peek() <= arr[i]) {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                nextLargerElement[i] = -1;
-            } else {
-                nextLargerElement[i] = stack.peek();
-            }
-
+            nextLargerElement.add(stack.isEmpty() ? -1 : stack.peek());
             stack.push(arr[i]);
         }
 
+        Collections.reverse(nextLargerElement);
         return nextLargerElement;
     }
 }
