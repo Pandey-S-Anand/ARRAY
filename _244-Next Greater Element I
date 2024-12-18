@@ -2,15 +2,15 @@
 
 class Solution {
     public int[] nextGreaterElement(int[] subset, int[] arr) {
-        Map<Integer, Integer> valueAndNextGreaterValueMap = new HashMap<>();
+        Map<Integer, Integer> nextGreaterMap = new HashMap<>();
 
         for (int i = 0; i < arr.length; i++) {
-            valueAndNextGreaterValueMap.put(arr[i], nextGreaterValue(i, arr));
+            nextGreaterMap.put(arr[i], nextGreaterValue(i, arr));
         }
 
         int[] nextGreaterValue = new int[subset.length];
         for (int i = 0; i < subset.length; i++) {
-            nextGreaterValue[i] = valueAndNextGreaterValueMap.get(subset[i]);
+            nextGreaterValue[i] = nextGreaterMap.get(subset[i]);
         }
 
         return nextGreaterValue;
@@ -33,7 +33,7 @@ class Solution {
 class Solution {
     public int[] nextGreaterElement(int[] subset, int[] arr) {
         Deque<Integer> stack = new ArrayDeque<>();
-        HashMap<Integer, Integer> valueAndNextGreaterValueMap = new HashMap<>();
+        Map<Integer, Integer> nextGreaterMap = new HashMap<>();
         int[] nextGreaterValue = new int[subset.length];
 
         for (int i = arr.length - 1; i >= 0; i--) {
@@ -41,17 +41,12 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                valueAndNextGreaterValueMap.put(arr[i], -1);
-            } else {
-                valueAndNextGreaterValueMap.put(arr[i], stack.peek());
-            }
-
+            nextGreaterMap.put(arr[i], stack.isEmpty() ? -1 : stack.peek());
             stack.push(arr[i]);
         }
 
         for (int i = 0; i < subset.length; i++) {
-            nextGreaterValue[i] = valueAndNextGreaterValueMap.get(subset[i]);
+            nextGreaterValue[i] = nextGreaterMap.get(subset[i]);
         }
 
         return nextGreaterValue;
