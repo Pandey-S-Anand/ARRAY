@@ -36,11 +36,7 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                previousSmaller.add(-1);
-            } else {
-                previousSmaller.add(stack.peek());
-            }
+            previousSmaller.add(stack.isEmpty() ? -1 : stack.peek());
 
             stack.push(val);
         }
