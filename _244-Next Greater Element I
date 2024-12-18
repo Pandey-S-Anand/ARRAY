@@ -28,7 +28,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Optimal Approach (Monotonically decreasing stack)
 
 class Solution {
     public int[] nextGreaterElement(int[] subset, int[] arr) {
