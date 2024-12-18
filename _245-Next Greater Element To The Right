@@ -23,7 +23,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Optimal Approach (Monotonically decreasing stack)
 
 class Solution {
     public ArrayList<Integer> nextLargerElement(int[] arr) {
