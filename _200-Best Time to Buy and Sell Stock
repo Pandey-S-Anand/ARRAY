@@ -23,7 +23,8 @@ class Solution {
         int maxProfit = 0, lowestPriceSoFar = prices[0];
 
         for (int currentDay = 1; currentDay < prices.length; currentDay++) {
-            maxProfit = Math.max(maxProfit, prices[currentDay] - lowestPriceSoFar);
+            int profit = prices[currentDay] - lowestPriceSoFar;
+            maxProfit = Math.max(maxProfit, profit);
             lowestPriceSoFar = Math.min(lowestPriceSoFar, prices[currentDay]);
         }
 
