@@ -33,7 +33,7 @@ class Solution {
         }
         // Get the maximum for the first window
         maxInAllWindows[0] = maxInWindow.peek();
-        // Remove the element that was part of the first window
+        // Remove the first element that was part of the first window
         maxInWindow.remove(arr[0]);
 
         // To find max in second window and onwards
@@ -41,7 +41,7 @@ class Solution {
             maxInWindow.offer(arr[i]);
             // Get the maximum for the current window
             maxInAllWindows[i - k + 1] = maxInWindow.peek();
-            // Remove the element that was part of the current window
+            // Remove the first element that was part of the current window
             maxInWindow.remove(arr[i - k + 1]);
         }
 
@@ -52,9 +52,44 @@ class Solution {
 
 //Optimal Implementation
 
+/*
+ * This approach uses lazy removal for elements in the heap. Elements are only removed 
+ * when they impact the maximum value of the current sliding window. Specifically, 
+ * we remove elements from the top of the heap (maxHeap.peek()) only if their index 
+ * is outside the current window (i.e., when maxHeap.peek()[1] <= i - k). This ensures 
+ * that the maximum element in the heap always belongs to the current window.
+ * 
+ * By deferring removals until they affect the result, we avoid unnecessary deletions. 
+ * Since heap operations (insertions and deletions) take O(log k), this strategy minimizes 
+ * deletions and maintains overall efficiency.
+ * 
+ * Let's consider an example for clarity:
+ * 
+ * nums = [1, 3, -1, -3, 5, 3, 6, 7], k = 3
+ * 
+ * Initially, the heap is built for the first window [1, 3, -1] (i = 0 to 2):
+ * - After processing the first window, maxHeap contains:
+ *   [3, 1], [1, 0], [-1, 2] (value-index pairs)
+ *   The maximum value in the window is 3, so maxInAllWindows[0] = 3.
+ * 
+ * As we slide the window to the right to the next window [3, -1, -3] (i = 1 to 3), we add -3 to the heap:
+ * - maxHeap now contains: [3, 1], [1, 0], [-1, 2], [-3, 3].
+ * 
+ * Now, we check if the top element of the heap belongs to the previous window:
+ * - maxHeap.peek() is [3, 1]. We check if its index (1) is less than or equal to i - k (1 - 3 = -2).
+ *   Since index 1 is not less than or equal to -2, it remains valid for the current window.
+ *   Thus, no removal occurs, and the maximum value for this window is 3 (maxInAllWindows[1] = 3).
+ * 
+ * As we slide further to the window [3, -1, -3] (i = 2 to 4), we find that [3, 1] is no longer part of the window:
+ * - Since its index (1) is less than i - k (i - k = 2 - 3 = -1), we remove [3, 1] from the heap.
+ * - After removal, maxHeap contains: [5, 3], [3, 5], [-1, 2], [6, 4].
+ * - The maximum value for this window is now 5 (maxInAllWindows[2] = 5).
+ */
+
+
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        PriorityQueue<int[]> maxHeap = new PriorityQueue<>(new Comparator<int[]>() {
+        Queue<int[]> maxHeap = new PriorityQueue<>(new Comparator<int[]>() {
             public int compare(int[] a, int[] b) {
                 return b[0] - a[0];
             }
@@ -74,10 +109,11 @@ class Solution {
             maxHeap.offer(new int[] { arr[i], i });
 
             /*
-             * Making sure the max doesnot belong to any of the previous window i.e if the max
-             * belong to any of the previous window, remove it ,so that you can get the max
-             * in current window
+             * The left boundary of the current window is from i-k+1 to i. If the index of the element at
+             * the top of the heap falls below this left boundary (i.e., it's no longer part of the current window),
+             * we remove it to ensure the maximum element in the heap belongs to the current window.
              */
+
             while (maxHeap.peek()[1] <= i - k) {
                 maxHeap.poll();
             }
