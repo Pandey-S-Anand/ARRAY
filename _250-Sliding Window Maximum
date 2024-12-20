@@ -127,7 +127,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Better Approach
 
 //Naive Implementation
 
@@ -171,8 +171,7 @@ class Solution {
 }
 
 
-
-//Optimal 
+// Optimal Implemerntation
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
@@ -222,3 +221,7 @@ class Solution {
         return maxInAllWindows;
     }
 }
+
+
+//Optimal Approach
+
