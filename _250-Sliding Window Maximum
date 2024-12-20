@@ -239,8 +239,7 @@ class Solution {
 
         // Process the rest of the array
         for (int i = k; i < arr.length; i++) {
-            // Remove elements from the back of the deque if they are smaller than or equal
-            // to the current element
+            // Remove elements from the back of the deque if they are smaller than or equal to the current element
             while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
                 deque.pollLast();
             }
