@@ -231,19 +231,19 @@ class Solution {
 
         // The maximum for the first window
         windowMaxima[0] = arr[deque.peekFirst()];
-
-        // Process the rest of the array
-        for (int i = k; i < arr.length; i++) {
+        
+        // Process the second window and all subsequent windows
+        for (int windowEnd = k; windowEnd < arr.length; windowEnd++) {
             // Remove elements from the back of the deque if they are smaller than or equal to the current element
-            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
+            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[windowEnd]) {
                 deque.pollLast();
             }
 
             // Add the current element index to the deque
-            deque.offerLast(i);
+            deque.offerLast(windowEnd);
 
             // Remove indices that are outside the current window
-            if (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+            if (!deque.isEmpty() && deque.peekFirst() <= windowEnd - k) {
                 deque.pollFirst();
             }
 
@@ -253,7 +253,7 @@ class Solution {
              * guarantees that the largest element of the current window remains at the
              * front of the deque (deque.peekFirst()).
              */
-            windowMaxima[i - k + 1] = arr[deque.peekFirst()];
+            windowMaxima[windowEnd - k + 1] = arr[deque.peekFirst()];
         }
 
         return windowMaxima;
