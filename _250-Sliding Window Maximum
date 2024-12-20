@@ -89,37 +89,32 @@ class Solution {
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        Queue<int[]> maxHeap = new PriorityQueue<>(new Comparator<int[]>() {
-            public int compare(int[] a, int[] b) {
-                return b[0] - a[0];
-            }
-        });
+        Queue<Integer> maxHeap = new PriorityQueue<>((a, b) -> arr[b] - arr[a]);
 
         int[] maxInAllWindows = new int[arr.length - k + 1];
 
-        // Initialize the heap with the first window elements
+        // Initialize the heap with the first window indices
         for (int i = 0; i < k; i++) {
-            maxHeap.offer(new int[] { arr[i], i });
+            maxHeap.offer(i);
         }
 
         // Get the maximum for the first window
-        maxInAllWindows[0] = maxHeap.peek()[0];
+        maxInAllWindows[0] = arr[maxHeap.peek()];
 
         for (int i = k; i < arr.length; i++) {
-            maxHeap.offer(new int[] { arr[i], i });
+            maxHeap.offer(i);
 
             /*
-             * The left boundary of the current window is from i-k+1 to i. If the index of the element at
-             * the top of the heap falls below this left boundary (i.e., it's no longer part of the current window),
+             * The left boundary of the current window is from i-k+1 to i. If the index of
+             * the element at the top of the heap falls below this left boundary (i.e., it's no longer part of the current window),
              * we remove it to ensure the maximum element in the heap belongs to the current window.
              */
-
-            while (maxHeap.peek()[1] <= i - k) {
+            while (maxHeap.peek() <= i - k) {
                 maxHeap.poll();
             }
 
             // Get the maximum for the current window
-            maxInAllWindows[i - k + 1] = maxHeap.peek()[0];
+            maxInAllWindows[i - k + 1] = arr[maxHeap.peek()];
         }
 
         return maxInAllWindows;
