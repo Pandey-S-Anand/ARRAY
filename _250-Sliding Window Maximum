@@ -231,10 +231,11 @@ class Solution {
 
         // The maximum for the first window
         windowMaxima[0] = arr[deque.peekFirst()];
-        
+
         // Process the second window and all subsequent windows
         for (int windowEnd = k; windowEnd < arr.length; windowEnd++) {
-            // Remove elements from the back of the deque if they are smaller than or equal to the current element
+            // Remove elements from the back of the deque if they are smaller than or equal
+            // to the current element
             while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[windowEnd]) {
                 deque.pollLast();
             }
@@ -242,7 +243,18 @@ class Solution {
             // Add the current element index to the deque
             deque.offerLast(windowEnd);
 
-            // Remove indices that are outside the current window
+            /*
+             * Since the sliding window moves by 1 position at each step,
+             * the maximum element, which is always at the front of the deque
+             * (because the deque is maintained in decreasing order), is the
+             * only element that can potentially fall out of the window.
+             * 
+             * As the left boundary of the window advances by 1 index, we need
+             * to check if the element at the front of the deque is outside the
+             * current window. If it is, we remove it to ensure the deque only
+             * contains indices within the current window.
+             */
+
             if (!deque.isEmpty() && deque.peekFirst() <= windowEnd - k) {
                 deque.pollFirst();
             }
