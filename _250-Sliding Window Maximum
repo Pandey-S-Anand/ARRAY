@@ -219,7 +219,7 @@ class Solution {
 }
 
 
-//Optimal Approach
+//Optimal Approach (Using monotonic decreasing deque)
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
