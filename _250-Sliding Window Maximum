@@ -133,7 +133,28 @@ class Solution {
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        int[] nextGreaterElementIndex = new int[arr.length];
+        int[] nextMaxIndex = computeNextGreaterElement(arr);
+        int[] windowMaxima = new int[arr.length - k + 1];
+
+        for (int i = 0; i <= (arr.length - k); i++) {
+            int j = i;
+            /*
+             * The purpose of 'j' is to jump from next greater to next greater until the
+             * next greater is out of the current window,the last value of 'j' within the
+             * window is the max value index(i.e arr[j]) within the window
+             */
+            while (nextMaxIndex[j] < (i + k)) {
+                j = nextMaxIndex[j];
+            }
+
+            windowMaxima[i] = arr[j];
+        }
+
+        return windowMaxima;
+    }
+
+    private int[] computeNextGreaterElement(int[] arr) {
+        int[] nextMaxIndex = new int[arr.length];
         Deque<Integer> stack = new ArrayDeque<>();
 
         for (int i = (arr.length - 1); i >= 0; i--) {
@@ -141,32 +162,12 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                nextGreaterElementIndex[i] = arr.length;
-            } else {
-                nextGreaterElementIndex[i] = stack.peek();
-            }
+            nextMaxIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
 
             stack.push(i);
         }
 
-        int[] maxInAllWindows = new int[arr.length - k + 1];
-
-        for (int i = 0; i < (arr.length - k + 1); i++) {
-            int j = i;
-            /*
-             * The purpose of 'j' is to jump from next greater to next greater until the
-             * next greater is out of the current window,the last value of 'j' within the
-             * window is the max value index(i.e arr[j]) within the window
-             */
-            while (nextGreaterElementIndex[j] < (i + k)) {
-                j = nextGreaterElementIndex[j];
-            }
-
-            maxInAllWindows[i] = arr[j];
-        }
-
-        return maxInAllWindows;
+        return nextMaxIndex;
     }
 }
 
@@ -175,28 +176,11 @@ class Solution {
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        int[] nextGreaterElementIndex = new int[arr.length];
-        Deque<Integer> stack = new ArrayDeque<>();
-
-        // Compute the next greater element index for each element
-        for (int i = (arr.length - 1); i >= 0; i--) {
-            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
-                stack.pop();
-            }
-
-            if (stack.isEmpty()) {
-                nextGreaterElementIndex[i] = arr.length;
-            } else {
-                nextGreaterElementIndex[i] = stack.peek();
-            }
-
-            stack.push(i);
-        }
-
-        int[] maxInAllWindows = new int[arr.length - k + 1];
+        int[] nextMaxIndex = computeNextGreaterElement(arr);
+        int[] windowMaxima = new int[arr.length - k + 1];
         int j = 0;
 
-        for (int i = 0; i < (arr.length - k + 1); i++) {
+        for (int i = 0; i <= (arr.length - k); i++) {
             /*
              * if the next greater element index already lies out of the current window, we
              * have our answer (i.e next greater element index) there is no point
@@ -205,23 +189,79 @@ class Solution {
             if (j < i) {
                 j = i;
             }
-            /*
-             * The purpose of 'j' is to jump from next greater element index to next greater
-             * element index until the next greater element index is out of the current
-             * window,the last value of 'j' within the window is the max value index within
-             * the window
-             */
-            while (nextGreaterElementIndex[j] < (i + k)) {
-                j = nextGreaterElementIndex[j];
+
+            while (nextMaxIndex[j] < (i + k)) {
+                j = nextMaxIndex[j];
             }
 
-            maxInAllWindows[i] = arr[j];
+            windowMaxima[i] = arr[j];
         }
 
-        return maxInAllWindows;
+        return windowMaxima;
+    }
+
+    private int[] computeNextGreaterElement(int[] arr) {
+        int[] nextMaxIndex = new int[arr.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int i = (arr.length - 1); i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                stack.pop();
+            }
+
+            nextMaxIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+
+            stack.push(i);
+        }
+
+        return nextMaxIndex;
     }
 }
 
 
 //Optimal Approach
 
+class Solution {
+    public int[] maxSlidingWindow(int[] arr, int k) {
+        int[] windowMaxima = new int[arr.length - k + 1];
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        // Process the first window separately
+        for (int i = 0; i < k; i++) {
+            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
+                deque.pollLast();
+            }
+            deque.offerLast(i);
+        }
+
+        // The maximum for the first window
+        windowMaxima[0] = arr[deque.peekFirst()];
+
+        // Process the rest of the array
+        for (int i = k; i < arr.length; i++) {
+            // Remove elements from the back of the deque if they are smaller than or equal
+            // to the current element
+            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
+                deque.pollLast();
+            }
+
+            // Add the current element index to the deque
+            deque.offerLast(i);
+
+            // Remove indices that are outside the current window
+            if (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+                deque.pollFirst();
+            }
+
+            /*
+             * When adding a new element, we remove all smaller or equal elements from the
+             * back of the deque (deque.pollLast()), maintaining a decreasing order. This
+             * guarantees that the largest element of the current window remains at the
+             * front of the deque (deque.peekFirst()).
+             */
+            windowMaxima[i - k + 1] = arr[deque.peekFirst()];
+        }
+
+        return windowMaxima;
+    }
+}
