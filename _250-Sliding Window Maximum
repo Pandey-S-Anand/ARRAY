@@ -2,7 +2,7 @@
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        int[] maxInAllWindows = new int[arr.length - k + 1];
+        int[] windowMaxima = new int[arr.length - k + 1];
 
         for (int i = 0; i < (arr.length - k + 1); i++) {
             int maxInWindow = Integer.MIN_VALUE;
@@ -10,10 +10,10 @@ class Solution {
                 maxInWindow = Math.max(arr[j], maxInWindow);
             }
 
-            maxInAllWindows[i] = maxInWindow;
+            windowMaxima[i] = maxInWindow;
         }
 
-        return maxInAllWindows;
+        return windowMaxima;
     }
 }
 
@@ -24,7 +24,7 @@ class Solution {
 
 class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
-        int[] maxInAllWindows = new int[arr.length - k + 1];
+        int[] windowMaxima = new int[arr.length - k + 1];
         Queue<Integer> maxInWindow = new PriorityQueue<>((a, b) -> b - a);
 
         // Initialize the heap with the first window elements
@@ -32,7 +32,7 @@ class Solution {
             maxInWindow.offer(arr[i]);
         }
         // Get the maximum for the first window
-        maxInAllWindows[0] = maxInWindow.peek();
+        windowMaxima[0] = maxInWindow.peek();
         // Remove the first element that was part of the first window
         maxInWindow.remove(arr[0]);
 
@@ -40,12 +40,12 @@ class Solution {
         for (int i = k; i < arr.length; i++) {
             maxInWindow.offer(arr[i]);
             // Get the maximum for the current window
-            maxInAllWindows[i - k + 1] = maxInWindow.peek();
+            windowMaxima[i - k + 1] = maxInWindow.peek();
             // Remove the first element that was part of the current window
             maxInWindow.remove(arr[i - k + 1]);
         }
 
-        return maxInAllWindows;
+        return windowMaxima;
     }
 }
 
@@ -91,7 +91,7 @@ class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
         Queue<Integer> maxHeap = new PriorityQueue<>((a, b) -> arr[b] - arr[a]);
 
-        int[] maxInAllWindows = new int[arr.length - k + 1];
+        int[] windowMaxima = new int[arr.length - k + 1];
 
         // Initialize the heap with the first window indices
         for (int i = 0; i < k; i++) {
@@ -99,7 +99,7 @@ class Solution {
         }
 
         // Get the maximum for the first window
-        maxInAllWindows[0] = arr[maxHeap.peek()];
+        windowMaxima[0] = arr[maxHeap.peek()];
 
         for (int i = k; i < arr.length; i++) {
             maxHeap.offer(i);
@@ -114,10 +114,10 @@ class Solution {
             }
 
             // Get the maximum for the current window
-            maxInAllWindows[i - k + 1] = arr[maxHeap.peek()];
+            windowMaxima[i - k + 1] = arr[maxHeap.peek()];
         }
 
-        return maxInAllWindows;
+        return windowMaxima;
     }
 }
 
