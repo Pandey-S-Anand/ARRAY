@@ -146,11 +146,14 @@ class Solution {
 
 class Solution {
     private final int MOD = 1000000007;
+    private Deque<Integer> stack;
 
     public int sumSubarrayMins(int[] arr) {
         long sum = 0;
         // Find the next smaller element index on the left and right for each element
+        stack = new ArrayDeque();
         int[] ngeIndexLeft = findNextStrictlySmallerOnLeft(arr);
+        stack.clear();
         int[] ngeIndexRight = findNextSmallerOnRight(arr);
 
         for (int i = 0; i < arr.length; i++) {
@@ -164,7 +167,6 @@ class Solution {
     }
 
     private int[] findNextStrictlySmallerOnLeft(int[] arr) {
-        Deque<Integer> stack = new ArrayDeque<>();
         int[] ngeIndexLeft = new int[arr.length];
 
         for (int i = 0; i < arr.length; i++) {
@@ -185,7 +187,6 @@ class Solution {
     }
 
     private int[] findNextSmallerOnRight(int[] arr) {
-        Deque<Integer> stack = new ArrayDeque<>();
         int[] ngeIndexRight = new int[arr.length];
 
         for (int i = arr.length - 1; i >= 0; i--) {
