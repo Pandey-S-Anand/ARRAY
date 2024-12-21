@@ -1,0 +1,86 @@
+//Bruteforce Approach
+
+class Solution {
+    public ArrayList<Integer> maxOfMin(int[] arr) {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for (int windowSize = 1; windowSize <= arr.length; windowSize++) {
+            result.add(maxOfMinInWindow(windowSize, arr));
+        }
+
+        return result;
+    }
+
+    private int maxOfMinInWindow(int k, int[] arr) {
+        int maxOfMin = Integer.MIN_VALUE;
+
+        // Iterate over all possible windows of size k
+        for (int i = 0; i <= arr.length - k; i++) {
+            int currentMin = Integer.MAX_VALUE;
+
+            // Find the minimum in the current window
+            for (int j = i; j < i + k; j++) {
+                currentMin = Math.min(currentMin, arr[j]);
+            }
+
+            // Update the maximum of the minimums
+            maxOfMin = Math.max(maxOfMin, currentMin);
+        }
+
+        return maxOfMin;
+    }
+}
+
+
+//Better Approach (Using monotonic increasing deque)
+
+class Solution {
+    public ArrayList<Integer> maxOfMin(int[] arr) {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for (int windowSize = 1; windowSize <= arr.length; windowSize++) {
+            result.add(maxOfMinInWindow(windowSize, arr));
+        }
+
+        return result;
+    }
+
+    private int maxOfMinInWindow(int k, int[] arr) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        int maxOfMin = Integer.MIN_VALUE;
+
+        // Process the first window separately
+        for (int i = 0; i < k; i++) {
+            // Maintain a monotonic increasing deque where the smallest element is always at the front
+            while (!deque.isEmpty() && arr[deque.peekLast()] >= arr[i]) {
+                deque.pollLast();
+            }
+            deque.offerLast(i);
+        }
+
+        // The front of the deque is the minimum of the 1st window
+        maxOfMin = Math.max(maxOfMin, arr[deque.peekFirst()]);
+
+        // Process the remaining windows
+        for (int windowEndIndex = k; windowEndIndex < arr.length; windowEndIndex++) {
+            // Maintain the deque for the current window
+            while (!deque.isEmpty() && arr[deque.peekLast()] >= arr[windowEndIndex]) {
+                deque.pollLast();
+            }
+            deque.offerLast(windowEndIndex);
+
+            // Remove element from the deque if the maximum no longer belongs to the current window, i.e., it belongs to the previous window.
+            if (!deque.isEmpty() && deque.peekFirst() <= windowEndIndex - k) {
+                deque.pollFirst();
+            }
+
+            // The front of the deque is the minimum of the current window
+            maxOfMin = Math.max(maxOfMin, arr[deque.peekFirst()]);
+        }
+
+        return maxOfMin;
+    }
+}
+
+
+//Optimal Approach
