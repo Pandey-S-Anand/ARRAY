@@ -143,6 +143,7 @@ class Solution {
  *  This issue is relevant when the array contains duplicate elements.
  */
 
+//Naive Implementation
 
 class Solution {
     private final int MOD = 1000000007;
@@ -198,6 +199,52 @@ class Solution {
              * Set ngeIndexRight[i] to arr.length in that case, else set it to the index of
              * the top element of the stack
              */
+            ngeIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return ngeIndexRight;
+    }
+}
+
+
+//Optimal Implementation
+
+
+class Solution {
+    private final int MOD = 1000000007;
+    private Deque<Integer> stack;
+
+    public int sumSubarrayMins(int[] arr) {
+        long sum = 0;
+
+        stack = new ArrayDeque<>();
+        int[] ngeIndexRight = findNextSmallerOnRight(arr);
+        stack.clear();
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                stack.pop();
+            }
+
+            int ngeIndexLeft = stack.isEmpty() ? -1 : stack.peek();
+
+            long subarrayCount = ((i - ngeIndexLeft)) * ((long) (ngeIndexRight[i] - i));
+            sum = (sum + (arr[i] * subarrayCount) % MOD) % MOD;
+            stack.push(i);
+        }
+
+        return (int) sum;
+    }
+
+    private int[] findNextSmallerOnRight(int[] arr) {
+        int[] ngeIndexRight = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+
             ngeIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
             stack.push(i);
         }
