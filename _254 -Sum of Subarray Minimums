@@ -153,13 +153,13 @@ class Solution {
         long sum = 0;
         // Find the next smaller element index on the left and right for each element
         stack = new ArrayDeque();
-        int[] ngeIndexLeft = findNextStrictlySmallerOnLeft(arr);
+        int[] nseIndexLeft = findNextStrictlySmallerOnLeft(arr);
         stack.clear();
-        int[] ngeIndexRight = findNextSmallerOnRight(arr);
+        int[] nseIndexRight = findNextSmallerOnRight(arr);
 
         for (int i = 0; i < arr.length; i++) {
             // Calculate the count of subarrays where arr[i] is the minimum
-            long subarrayCount = ((i - ngeIndexLeft[i])) * ((long) (ngeIndexRight[i] - i));
+            long subarrayCount = ((i - nseIndexLeft[i])) * ((long) (nseIndexRight[i] - i));
             // Add the contribution of arr[i] to the total sum
             sum = (sum + (arr[i] * subarrayCount) % MOD) % MOD;
         }
@@ -168,7 +168,7 @@ class Solution {
     }
 
     private int[] findNextStrictlySmallerOnLeft(int[] arr) {
-        int[] ngeIndexLeft = new int[arr.length];
+        int[] nseIndexLeft = new int[arr.length];
 
         for (int i = 0; i < arr.length; i++) {
             while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
@@ -177,18 +177,18 @@ class Solution {
 
             /*
              * If the stack is empty, it means there is no smaller element to the left
-             * Set ngeIndexLeft[i] to -1 in that case, else set it to the index of the top
+             * Set nseIndexLeft[i] to -1 in that case, else set it to the index of the top
              * element of the stack
              */
-            ngeIndexLeft[i] = stack.isEmpty() ? -1 : stack.peek();
+            nseIndexLeft[i] = stack.isEmpty() ? -1 : stack.peek();
             stack.push(i);
         }
 
-        return ngeIndexLeft;
+        return nseIndexLeft;
     }
 
     private int[] findNextSmallerOnRight(int[] arr) {
-        int[] ngeIndexRight = new int[arr.length];
+        int[] nseIndexRight = new int[arr.length];
 
         for (int i = arr.length - 1; i >= 0; i--) {
             while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
@@ -196,14 +196,14 @@ class Solution {
             }
             /*
              * If the stack is empty, it means there is no smaller element to the right
-             * Set ngeIndexRight[i] to arr.length in that case, else set it to the index of
+             * Set nseIndexRight[i] to arr.length in that case, else set it to the index of
              * the top element of the stack
              */
-            ngeIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
+            nseIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
             stack.push(i);
         }
 
-        return ngeIndexRight;
+        return nseIndexRight;
     }
 }
 
@@ -219,7 +219,7 @@ class Solution {
         long sum = 0;
 
         stack = new ArrayDeque<>();
-        int[] ngeIndexRight = findNextSmallerOnRight(arr);
+        int[] nseIndexRight = findNextSmallerOnRight(arr);
         stack.clear();
 
         for (int i = 0; i < arr.length; i++) {
@@ -227,9 +227,9 @@ class Solution {
                 stack.pop();
             }
 
-            int ngeIndexLeft = stack.isEmpty() ? -1 : stack.peek();
+            int nseIndexLeft = stack.isEmpty() ? -1 : stack.peek();
 
-            long subarrayCount = ((i - ngeIndexLeft)) * ((long) (ngeIndexRight[i] - i));
+            long subarrayCount = ((i - nseIndexLeft)) * ((long) (nseIndexRight[i] - i));
             sum = (sum + (arr[i] * subarrayCount) % MOD) % MOD;
             stack.push(i);
         }
@@ -238,17 +238,17 @@ class Solution {
     }
 
     private int[] findNextSmallerOnRight(int[] arr) {
-        int[] ngeIndexRight = new int[arr.length];
+        int[] nseIndexRight = new int[arr.length];
 
         for (int i = arr.length - 1; i >= 0; i--) {
             while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
                 stack.pop();
             }
 
-            ngeIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
+            nseIndexRight[i] = stack.isEmpty() ? arr.length : stack.peek();
             stack.push(i);
         }
 
-        return ngeIndexRight;
+        return nseIndexRight;
     }
 }
