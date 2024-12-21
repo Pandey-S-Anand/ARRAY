@@ -84,3 +84,58 @@ class Solution {
 
 
 //Optimal Approach
+
+class Solution {
+    private Deque<Integer> stack;
+
+    public ArrayList<Integer> maxOfMin(int[] arr) {
+        stack = new ArrayDeque<>();
+        ArrayList<Integer> maxOfMinForWindowSizes = new ArrayList<>(Collections.nCopies(arr.length, 0));
+
+        // Find previous and next smaller element indices
+        int[] pseIndex = findNextSmallerOnLeft(arr);
+        stack.clear();
+        int[] nseIndex = findNextSmallerOnRight(arr);
+
+        for (int i = 0; i < arr.length; i++) {
+            int windowSpan = nseIndex[i] - pseIndex[i] - 1;
+            maxOfMinForWindowSizes.set(windowSpan - 1, Math.max(maxOfMinForWindowSizes.get(windowSpan - 1), arr[i]));
+        }
+
+        for (int i = arr.length - 2; i >= 0; i--) {
+            maxOfMinForWindowSizes.set(i, Math.max(maxOfMinForWindowSizes.get(i), maxOfMinForWindowSizes.get(i + 1)));
+        }
+
+        return maxOfMinForWindowSizes;
+    }
+
+    private int[] findNextSmallerOnLeft(int[] arr) {
+        int[] pseIndex = new int[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+
+            pseIndex[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        return pseIndex;
+    }
+
+    private int[] findNextSmallerOnRight(int[] arr) {
+        int[] nseIndex = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+
+            nseIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return nseIndex;
+    }
+}
