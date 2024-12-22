@@ -31,7 +31,7 @@ class StockSpanner {
 }
 
 
-//Optimal Approach
+//Optimal Approach (Monotonic increasing stack)
 
 class StockSpanner {
     /*
