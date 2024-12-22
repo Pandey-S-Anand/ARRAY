@@ -1,0 +1,220 @@
+//Bruteforce Approach
+
+class Solution {
+    public long subArrayRanges(int[] arr) {
+        int sum = 0;
+        for (int start = 0; start < arr.length; start++) {
+            for (int end = start; end < arr.length; end++) {
+                sum += maxMinDiffInSubarray(arr, start, end);
+            }
+        }
+
+        return sum;
+    }
+
+    private int maxMinDiffInSubarray(int[] arr, int start, int end) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+
+        for (int i = start; i <= end; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+
+            if (arr[i] < min) {
+                min = arr[i];
+            }
+        }
+
+        return max - min;
+    }
+}
+
+
+//Improved Approach
+
+class Solution {
+    public long subArrayRanges(int[] arr) {
+        int sum = 0;
+
+        for (int start = 0; start < arr.length; start++) {
+            int prevMax = Integer.MIN_VALUE;
+            int prevMin = Integer.MAX_VALUE;
+            for (int end = start; end < arr.length; end++) {
+                int currMax = Math.max(prevMax, arr[end]);
+                int currMin = Math.min(prevMin, arr[end]);
+                sum = sum + (currMax - currMin);
+                prevMax = currMax;
+                prevMin = currMin;
+            }
+        }
+
+        return sum;
+    }
+}
+
+
+//Optimal Approach
+
+//Naive Implementation
+
+class Solution {
+    private Deque<Integer> stack;
+
+    public long subArrayRanges(int[] arr) {
+        stack = new ArrayDeque<>();
+        int[] prevGreaterIndex = findPreviousGreater(arr);
+        stack.clear();
+        int[] nextGreaterIndex = findNextGreater(arr);
+        stack.clear();
+        int[] prevSmallerIndex = findPreviousSmaller(arr);
+        stack.clear();
+        int[] nextSmallerIndex = findNextSmaller(arr);
+
+        long maxContributionSum = 0;
+        long minContributionSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            long subarraysCountWhereCurrentIsMax = (i - prevGreaterIndex[i]) * (nextGreaterIndex[i] - i);
+            long subarraysCountWhereCurrentIsMin = (i - prevSmallerIndex[i]) * (nextSmallerIndex[i] - i);
+
+            maxContributionSum = maxContributionSum + (arr[i] * subarraysCountWhereCurrentIsMax);
+            minContributionSum = minContributionSum + (arr[i] * subarraysCountWhereCurrentIsMin);
+        }
+
+        return maxContributionSum - minContributionSum;
+    }
+
+    private int[] findPreviousGreater(int[] arr) {
+        int[] prevGreaterIndex = new int[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] < arr[i]) {
+                stack.pop();
+            }
+
+            prevGreaterIndex[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        return prevGreaterIndex;
+    }
+
+    private int[] findNextGreater(int[] arr) {
+        int[] nextGreaterIndex = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                stack.pop();
+            }
+
+            nextGreaterIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return nextGreaterIndex;
+    }
+
+    private int[] findPreviousSmaller(int[] arr) {
+        int[] prevSmallerIndex = new int[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                stack.pop();
+            }
+
+            prevSmallerIndex[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.push(i);
+        }
+
+        return prevSmallerIndex;
+    }
+
+    private int[] findNextSmaller(int[] arr) {
+        int[] nextSmallerIndex = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+
+            nextSmallerIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return nextSmallerIndex;
+    }
+}
+
+
+//Optimal Implementation
+
+class Solution {
+    public long subArrayRanges(int[] arr) {
+        Deque<Integer> stack1 = new ArrayDeque<>();
+        Deque<Integer> stack2 = new ArrayDeque<>();
+
+        int[] nextGreaterIndex = findNextGreater(arr);
+        int[] nextSmallerIndex = findNextSmaller(arr);
+
+        long maxContributionSum = 0;
+        long minContributionSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack1.isEmpty() && arr[stack1.peek()] < arr[i]) {
+                stack1.pop();
+            }
+
+            int prevGreaterIndex = stack1.isEmpty() ? -1 : stack1.peek();
+
+            while (!stack2.isEmpty() && arr[stack2.peek()] > arr[i]) {
+                stack2.pop();
+            }
+
+            int prevSmallerIndex = stack2.isEmpty() ? -1 : stack2.peek();
+
+            long subarraysCountWhereCurrentIsMax = (i - prevGreaterIndex) * (nextGreaterIndex[i] - i);
+            long subarraysCountWhereCurrentIsMin = (i - prevSmallerIndex) * (nextSmallerIndex[i] - i);
+
+            maxContributionSum = maxContributionSum + (arr[i] * subarraysCountWhereCurrentIsMax);
+            minContributionSum = minContributionSum + (arr[i] * subarraysCountWhereCurrentIsMin);
+
+            stack1.push(i);
+            stack2.push(i);
+        }
+
+        return maxContributionSum - minContributionSum;
+    }
+
+    private int[] findNextGreater(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextGreaterIndex = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] <= arr[i]) {
+                stack.pop();
+            }
+
+            nextGreaterIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return nextGreaterIndex;
+    }
+
+    private int[] findNextSmaller(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] nextSmallerIndex = new int[arr.length];
+
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
+            }
+
+            nextSmallerIndex[i] = stack.isEmpty() ? arr.length : stack.peek();
+            stack.push(i);
+        }
+
+        return nextSmallerIndex;
+    }
+}
