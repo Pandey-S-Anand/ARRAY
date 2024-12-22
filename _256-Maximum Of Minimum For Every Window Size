@@ -100,9 +100,45 @@ class Solution {
         int[] nseIndex = findNextSmallerOnRight(arr);
 
         for (int i = 0; i < arr.length; i++) {
+            /*
+             * The window span represents the range of window sizes where the current
+             * element is a candidate for the minimum element. Specifically, it means this element
+             * can be the minimum for windows of size 1 to `windowSpan`.
+             */
             int windowSpan = nseIndex[i] - pseIndex[i] - 1;
             maxOfMinForWindowSizes.set(windowSpan - 1, Math.max(maxOfMinForWindowSizes.get(windowSpan - 1), arr[i]));
         }
+
+        /*
+         * The reason we start updating from `n-2` (processing window sizes from the second-largest downwards)
+         * is that for a window size of `n` (the entire array), there is only one possible window—the array itself.
+         * 
+         * For this single window, the smallest element is guaranteed to be the overall
+         * minimum of the entire array, and this value directly contributes to the result for the window size `n`,
+         * so it is already correctly computed.
+         * 
+         * Additionally, for a window of size `n`, there will always be exactly one candidate element
+         * (possibly repeated) that will be the minimum for a window of size `n`.
+         */
+
+        /*
+         * Instead of updating all candidate windows for each element, we only update the
+         * answer array for the largest possible window size (`windowSpan`) in which
+         * the current element can be the minimum. This avoids unnecessary O(n²) time complexity
+         * by restricting updates to only the largest valid window size for each element.
+         *
+         * After processing all elements, we perform a second pass from the
+         * second-largest window size down to propagate the maximum values. This ensures that the
+         * answer for any smaller window size also takes into account the maximum value of the
+         * corresponding larger window size:
+         * - For a window of size `i`, the answer will be the maximum between the current
+         *   value for window size `i` and the value for window size `i+1`.
+         * - This works because an element valid for a larger window (`i+1`) is also
+         *   valid for any smaller window (`i`).
+         *
+         * This optimization allows us to build the result in O(n) time after the
+         * initial pass, efficiently utilizing the fact that larger window candidates also apply to  smaller ones.
+         */
 
         for (int i = arr.length - 2; i >= 0; i--) {
             maxOfMinForWindowSizes.set(i, Math.max(maxOfMinForWindowSizes.get(i), maxOfMinForWindowSizes.get(i + 1)));
