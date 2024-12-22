@@ -225,3 +225,42 @@ class Solution {
         return nseIndex;
     }
 }
+
+
+//Optimal Implementation
+
+class Solution {
+    public ArrayList<Integer> maxOfMin(int[] arr) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        ArrayList<Integer> maxOfMinForWindowSizes = new ArrayList<>(Collections.nCopies(arr.length, 0));
+
+        for (int i = 0; i < arr.length; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                int index = stack.pop();
+                int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
+                int nextSmallerElementIndex = i;
+
+                int windowSpan = nextSmallerElementIndex - previousSmallerElementIndex - 1;
+
+                maxOfMinForWindowSizes.set(windowSpan - 1, Math.max(maxOfMinForWindowSizes.get(windowSpan - 1), arr[index]));
+            }
+            stack.push(i);
+        }
+
+        while (!stack.isEmpty()) {
+            int index = stack.pop();
+            int previousSmallerElementIndex = stack.isEmpty() ? -1 : stack.peek();
+            int nextSmallerElementIndex = arr.length;
+
+            int windowSpan = nextSmallerElementIndex - previousSmallerElementIndex - 1;
+
+            maxOfMinForWindowSizes.set(windowSpan - 1, Math.max(maxOfMinForWindowSizes.get(windowSpan - 1), arr[index]));
+        }
+
+        for (int i = arr.length - 2; i >= 0; i--) {
+            maxOfMinForWindowSizes.set(i, Math.max(maxOfMinForWindowSizes.get(i), maxOfMinForWindowSizes.get(i + 1)));
+        }
+
+        return maxOfMinForWindowSizes;
+    }
+}
