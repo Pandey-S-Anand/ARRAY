@@ -54,6 +54,30 @@ class Solution {
 }
 
 
+/*
+ * The problem of finding the sum of the differences between the maximum 
+ * and minimum elements for all subarrays can be reformulated as follows:
+ * 
+ * 1. Compute the sum of the maximum elements of all subarrays.
+ * 2. Compute the sum of the minimum elements of all subarrays.
+ * 3. The result is the difference between the two sums:
+ *      Result = Sum of Max Contributions - Sum of Min Contributions.
+ * 
+ * For each element in the array:
+ * - Its contribution as the maximum element is calculated based on 
+ *   the number of subarrays where it is the maximum.
+ * - Similarly, its contribution as the minimum element is calculated 
+ *   based on the number of subarrays where it is the minimum.
+ * 
+ * Using the next greater and previous greater indices, we can efficiently 
+ * determine the number of subarrays where an element is the maximum.
+ * Likewise, using the next smaller and previous smaller indices, we can 
+ * determine the number of subarrays where an element is the minimum.
+ * 
+ * By summing up these contributions for all elements and taking the 
+ * difference between the two sums, we obtain the desired result.
+ */
+
 //Optimal Approach
 
 //Naive Implementation
