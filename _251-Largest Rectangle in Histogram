@@ -73,11 +73,7 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                previousSmallerElementIndex[i] = -1;
-            } else {
-                previousSmallerElementIndex[i] = stack.peek();
-            }
+            previousSmallerElementIndex[i] = stack.isEmpty() ? -1 : stack.peek();
 
             stack.push(i);
         }
@@ -93,11 +89,7 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                nextSmallerElementIndex[i] = heights.length;
-            } else {
-                nextSmallerElementIndex[i] = stack.peek();
-            }
+            nextSmallerElementIndex[i] = stack.isEmpty() ? heights.length : stack.peek();
 
             stack.push(i);
         }
@@ -135,7 +127,7 @@ class Solution {
         return maxArea;
     }
 
-    private int[] findNextSmallerElementIndices(int[] heights) {
+    private int[] findNextSmallerIndices(int[] heights) {
         int[] nextSmallerElementIndex = new int[heights.length];
 
         for (int i = heights.length - 1; i >= 0; i--) {
@@ -143,11 +135,7 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.isEmpty()) {
-                nextSmallerElementIndex[i] = heights.length;
-            } else {
-                nextSmallerElementIndex[i] = stack.peek();
-            }
+            nextSmallerElementIndex[i] = stack.isEmpty() ? heights.length : stack.peek();
 
             stack.push(i);
         }
