@@ -110,18 +110,6 @@ class Solution {
         }
 
         /*
-         * The reason we start updating from `n-2` (processing window sizes from the second-largest downwards)
-         * is that for a window size of `n` (the entire array), there is only one possible window—the array itself.
-         * 
-         * For this single window, the smallest element is guaranteed to be the overall
-         * minimum of the entire array, and this value directly contributes to the result for the window size `n`,
-         * so it is already correctly computed.
-         * 
-         * Additionally, for a window of size `n`, there will always be exactly one candidate element
-         * (possibly repeated) that will be the minimum for a window of size `n`.
-         */
-
-        /*
          * Instead of updating all candidate windows for each element, we only update the
          * answer array for the largest possible window size (`windowSpan`) in which
          * the current element can be the minimum. This avoids unnecessary O(n²) time complexity
@@ -138,6 +126,18 @@ class Solution {
          *
          * This optimization allows us to build the result in O(n) time after the
          * initial pass, efficiently utilizing the fact that larger window candidates also apply to  smaller ones.
+         */
+
+        /*
+         * The reason we start updating from `n-2` (processing window sizes from the second-largest downwards)
+         * is that for a window size of `n` (the entire array), there is only one possible window—the array itself.
+         * 
+         * For this single window, the smallest element is guaranteed to be the overall
+         * minimum of the entire array, and this value directly contributes to the result for the window size `n`,
+         * so it is already correctly computed.
+         * 
+         * Additionally, for a window of size `n`, there will always be exactly one candidate element
+         * (possibly repeated) that will be the minimum for a window of size `n`.
          */
 
         for (int i = arr.length - 2; i >= 0; i--) {
