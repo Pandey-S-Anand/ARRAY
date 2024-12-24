@@ -1,0 +1,45 @@
+/*
+Operator precedence determines the order in which different operators are evaluated in an expression. 
+Operators with higher precedence are executed before those with lower precedence.
+
+Associativity defines how operators of the same precedence are grouped in the absence of parentheses. 
+
+| **Operator** | **Description**        | **Precedence** | **Associativity** |
+|---------------|------------------------|----------------|--------------------|
+| `^`           | Exponentiation         | High           | Right-to-left     |
+| `*`, `/`      | Multiplication, Division | Medium         | Left-to-right     |
+| `+`, `-`      | Addition, Subtraction  | Low            | Left-to-right     |
+
+### Explanation
+1. **Parentheses `()`**:
+   - Parentheses are not operators, but are used for **grouping**. They indicate which part of an expression should be evaluated first, overriding all other operator precedence rules.
+
+2. **Exponentiation `^`**:
+   - Exponentiation has high precedence and associates from **right to left**.
+   - Example: `2^3^2` is evaluated as `2^(3^2)`.
+
+3. **Multiplication `*` and Division `/`**:
+   - These operators have medium precedence and are evaluated after exponentiation but before addition and subtraction. They associate from **left to right**.
+   - Example: `8 / 4 * 2` is evaluated as `(8 / 4) * 2`.
+
+4. **Addition `+` and Subtraction `-`**:
+   - These operators have the lowest precedence and are evaluated last, after parentheses, exponentiation, multiplication, and division. They also associate from **left to right**.
+   - Example: `4 + 3 - 2` is evaluated as `(4 + 3) - 2`.
+*/
+
+
+/*
+ * Rules for Infix to Postfix Conversion:
+ * 1. Print operands as they appear.
+ * 2. Push '(' onto the stack when encountered.
+ * 3. If the stack is empty or the top of the stack is '(', push the incoming operator onto the stack.
+ * 4. When ')' is encountered, pop and print operators from the stack until '(' is found. Discard '('.
+ * 5. Push the incoming operator onto the stack if it has higher precedence than the operator at the top of the stack.
+ * 6. If the incoming operator has lower precedence than the operator at the top of the stack,
+ *    pop and print the operator on top of stack, then recheck the incoming operator against the operator on the new top of the stack.
+ * 7. If the incoming operator has equal precedence with the operator at the top of the stack:
+ *    - For left-to-right associativity: pop and print the top operator, then push the incoming operator.
+ *    - For right-to-left associativity: push the incoming operator.
+ * 8. After processing the entire expression, pop and print all remaining operators from the stack.
+ */
+
