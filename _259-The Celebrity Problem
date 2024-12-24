@@ -63,7 +63,6 @@ class Solution {
         // Stack to maintain potential celebrity candidates
         Deque<Integer> stack = new ArrayDeque<>();
 
-        // Push all persons into the stack
         for (int otherPerson = 0; otherPerson < matrix.length; otherPerson++) {
             if (!stack.isEmpty()) {
                 int person = stack.peek(); // The current candidate on top of the stack
