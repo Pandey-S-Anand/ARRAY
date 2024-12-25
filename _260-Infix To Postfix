@@ -44,50 +44,50 @@ Note : Parentheses are not operators, but are used for **grouping**. They indica
 //Intuitive Implementation
 
 class Solution {
-    public static String infixToPostfix(String expression) {
+    public static String infixToPostfix(String infixExpression) {
         StringBuilder postfix = new StringBuilder();
-        Deque<Character> stack = new ArrayDeque<>(); // Note: The stack maintains a monotonically increasing order of operator precedence from bottom to top.
+        Deque<Character> operatorStack = new ArrayDeque<>(); // Note: The stack maintains a monotonically increasing order of operator precedence from bottom to top.
 
-        for (int i = 0; i < expression.length(); i++) {
-            char ch = expression.charAt(i);
+        for (int i = 0; i < infixExpression.length(); i++) {
+            char ch = infixExpression.charAt(i);
 
             // If the character is an operand (a letter or a number), add it to the result
             if (isOperand(ch)) {
                 postfix.append(ch);
             } else if (ch == '(') { // If the character is '(', push it to the stack (open parentheses)
-                stack.push(ch);
+                operatorStack.push(ch);
             } else if (ch == ')') { // If the character is ')', pop from the stack until '(' is found
-                while (!stack.isEmpty() && stack.peek() != '(') {
-                    postfix.append(stack.pop());
+                while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
+                    postfix.append(operatorStack.pop());
                 }
-                stack.pop(); // Pop the '(' from the stack
+                operatorStack.pop(); // Pop the '(' from the stack
             } else {
-                if (stack.isEmpty() || stack.peek() == '(') { // If the stack is empty or contains '(' on top, push the operator onto the stack
-                    stack.push(ch);
-                } else if (precedence(ch) > precedence(stack.peek())) { // If the incoming operator has higher precedence, push it onto the stack
-                    stack.push(ch);
-                } else { // precedence(ch) <= precedence(stack.peek())
+                if (operatorStack.isEmpty() || operatorStack.peek() == '(') { // If the stack is empty or contains '(' on top, push the operator onto the stack
+                    operatorStack.push(ch);
+                } else if (precedence(ch) > precedence(operatorStack.peek())) { // If the incoming operator has higher precedence, push it onto the stack
+                    operatorStack.push(ch);
+                } else { // precedence(ch) <= precedence(operatorStack.peek())
                     // Pop operators of higher precedence from the stack
-                    while (!stack.isEmpty() && stack.peek() != '(' && precedence(ch) < precedence(stack.peek())) {
-                        postfix.append(stack.pop());
+                    while (!operatorStack.isEmpty() && operatorStack.peek() != '(' && precedence(ch) < precedence(operatorStack.peek())) {
+                        postfix.append(operatorStack.pop());
                     }
 
                     // If the stack is empty or contains '(', push the incoming operator onto the  stack
-                    if (stack.isEmpty() || stack.peek() == '(') {
-                        stack.push(ch);
+                    if (operatorStack.isEmpty() || operatorStack.peek() == '(') {
+                        operatorStack.push(ch);
                     } else {
                         // If the incoming operator has equal precedence with the top of the stack
-                        if (precedence(ch) == precedence(stack.peek())) {
+                        if (precedence(ch) == precedence(operatorStack.peek())) {
                             // If the operator is left-to-right associative, pop the operator from the stack and push the incoming operator
                             if (isLeftToRightAssociative(ch)) {
-                                postfix.append(stack.pop());
-                                stack.push(ch);
+                                postfix.append(operatorStack.pop());
+                                operatorStack.push(ch);
                             } else {
                                 // If the operator is right-to-left associative, push the incoming operator onto the stack
-                                stack.push(ch);
+                                operatorStack.push(ch);
                             }
-                        } else { // precedence(ch) > precedence(stack.peek())
-                            stack.push(ch); // If the incoming operator has higher precedence, push it onto the stack
+                        } else { // precedence(ch) > precedence(operatorStack.peek())
+                            operatorStack.push(ch); // If the incoming operator has higher precedence, push it onto the stack
                         }
                     }
                 }
@@ -95,8 +95,8 @@ class Solution {
         }
 
         // After processing all characters, pop the remaining operators from the stack and append to the result
-        while (!stack.isEmpty()) {
-            postfix.append(stack.pop());
+        while (!operatorStack.isEmpty()) {
+            postfix.append(operatorStack.pop());
         }
 
         return postfix.toString();
@@ -139,46 +139,46 @@ class Solution {
 //Concise Implementation
 
 class Solution {
-    public static String infixToPostfix(String expression) {
+    public String infixToPostfix(String infixExpression) {
         StringBuilder postfix = new StringBuilder();
-        Deque<Character> stack = new ArrayDeque<>();
+        Deque<Character> operatorStack = new ArrayDeque<>();
 
-        for (int i = 0; i < expression.length(); i++) {
-            char ch = expression.charAt(i);
+        for (int i = 0; i < infixExpression.length(); i++) {
+            char ch = infixExpression.charAt(i);
 
             if (Character.isLetterOrDigit(ch)) {
                 postfix.append(ch);
             } else if (ch == '(') {
-                stack.push(ch);
+                operatorStack.push(ch);
             } else if (ch == ')') {
-                while (!stack.isEmpty() && stack.peek() != '(') {
-                    postfix.append(stack.pop());
+                while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
+                    postfix.append(operatorStack.pop());
                 }
-                stack.pop();
+                operatorStack.pop();
             } else {
-                while (!stack.isEmpty() && stack.peek() != '(' && precedence(ch) < precedence(stack.peek())) {
-                    postfix.append(stack.pop());
+                while (!operatorStack.isEmpty() && operatorStack.peek() != '(' && precedence(ch) < precedence(operatorStack.peek())) {
+                    postfix.append(operatorStack.pop());
                 }
 
-                if (stack.isEmpty() || stack.peek() == '(') {
-                    stack.push(ch);
+                if (operatorStack.isEmpty() || operatorStack.peek() == '(') {
+                    operatorStack.push(ch);
                 } else {
-                    if (precedence(ch) == precedence(stack.peek()) && isLeftToRightAssociative(ch)) {
-                        postfix.append(stack.pop());
+                    if (precedence(ch) == precedence(operatorStack.peek()) && isLeftToRightAssociative(ch)) {
+                        postfix.append(operatorStack.pop());
                     }
-                    stack.push(ch);
+                    operatorStack.push(ch);
                 }
             }
         }
 
-        while (!stack.isEmpty()) {
-            postfix.append(stack.pop());
+        while (!operatorStack.isEmpty()) {
+            postfix.append(operatorStack.pop());
         }
 
         return postfix.toString();
     }
 
-    private static int precedence(char operator) {
+    private int precedence(char operator) {
         switch (operator) {
             case '^':
                 return 3;
