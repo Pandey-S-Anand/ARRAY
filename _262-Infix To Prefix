@@ -83,6 +83,6 @@ public class Solution {
      * except for '^', which is right-to-left associative.
      */
     private boolean isLeftToRightAssociative(char operator) {
-        return operator != '^'; // '^' has right-to-left associativity
+        return operator != '^'; 
     }
 }
