@@ -46,7 +46,7 @@ Note : Parentheses are not operators, but are used for **grouping**. They indica
 class Solution {
     public static String infixToPostfix(String expression) {
         StringBuilder postfix = new StringBuilder();
-        Stack<Character> stack = new Stack<>(); // Note: The stack maintains a monotonically increasing order of operator precedence from bottom to top.
+        Deque<Character> stack = new ArrayDeque<>(); // Note: The stack maintains a monotonically increasing order of operator precedence from bottom to top.
 
         for (int i = 0; i < expression.length(); i++) {
             char ch = expression.charAt(i);
@@ -141,7 +141,7 @@ class Solution {
 class Solution {
     public static String infixToPostfix(String expression) {
         StringBuilder postfix = new StringBuilder();
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> stack = new ArrayDeque<>();
 
         for (int i = 0; i < expression.length(); i++) {
             char ch = expression.charAt(i);
