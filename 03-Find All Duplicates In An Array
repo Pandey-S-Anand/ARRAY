@@ -28,15 +28,12 @@ class Solution {
 class Solution {
     public List<Integer> findDuplicates(int[] arr) {
         List<Integer> duplicates = new ArrayList<>();
-        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        Arrays.sort(arr);
 
-        for (int val : arr) {
-            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
-        }
-
-        for (int key : frequencyMap.keySet()) {
-            if (frequencyMap.get(key) == 2) {
-                duplicates.add(key);
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                duplicates.add(arr[i]);
+                i++;
             }
         }
 
@@ -46,6 +43,26 @@ class Solution {
 
 
 //Method 3
+
+class Solution {
+    public List<Integer> findDuplicates(int[] arr) {
+        List<Integer> duplicates = new ArrayList<>();
+        Set<Integer> unique = new HashSet<>();
+
+        for (int num : arr) {
+            if (unique.contains(num)) {
+                duplicates.add(num);
+            } else {
+                unique.add(num);
+            }
+        }
+
+        return duplicates;
+    }
+}
+
+
+//Method 4
 
 class Solution {
     public List<Integer> findDuplicates(int[] arr) {
@@ -65,38 +82,19 @@ class Solution {
 }
 
 
-//Method 4
-
-class Solution {
-    public List<Integer> findDuplicates(int[] arr) {
-        List<Integer> duplicates = new ArrayList<>();
-        Set<Integer> set = new HashSet<>();
-
-        for (int val : arr) {
-            if (set.contains(val)) {
-                duplicates.add(val);
-            } else {
-                set.add(val);
-            }
-        }
-
-        return duplicates;
-    }
-}
-
-
-
 //Method 5
 
 class Solution {
     public List<Integer> findDuplicates(int[] arr) {
         List<Integer> duplicates = new ArrayList<>();
-        Arrays.sort(arr);
 
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                duplicates.add(arr[i]);
-                i++;
+        for (int num : arr) {
+            int value = Math.abs(num);
+
+            if (arr[value - 1] < 0) {
+                duplicates.add(value);
+            } else {
+                arr[value - 1] *= -1;
             }
         }
 
@@ -109,27 +107,6 @@ class Solution {
 
 class Solution {
     public List<Integer> findDuplicates(int[] arr) {
-        List<Integer> duplicates = new ArrayList<>();
-
-        for (int i = 0; i < arr.length; i++) {
-            int ele = Math.abs(arr[i]);
-
-            if (arr[ele - 1] < 0) {
-                duplicates.add(ele);
-            } else {
-                arr[ele - 1] *= -1;
-            }
-        }
-
-        return duplicates;
-    }
-}
-
-
-//Method 7
-
-class Solution {
-    public List<Integer> findDuplicates(int[] arr) {
         int i = 0;
         List<Integer> duplicates = new ArrayList<>();
 
@@ -139,9 +116,7 @@ class Solution {
             if (arr[correctIndex] == arr[i]) {
                 i++;
             } else { // if arr[i] is not at its correct index
-                int temp = arr[correctIndex];
-                arr[correctIndex] = arr[i];
-                arr[i] = temp;
+                swap(arr, i, correctIndex);
             }
         }
 
@@ -152,5 +127,11 @@ class Solution {
         }
 
         return duplicates;
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
