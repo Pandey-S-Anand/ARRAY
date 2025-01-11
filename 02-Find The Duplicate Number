@@ -40,21 +40,18 @@ class Solution {
 
 class Solution {
     public int findDuplicate(int[] arr) {
-       int repeating=-1;
-       Map<Integer,Integer>frequencyMap=new HashMap<>(arr.length);
-       
-       for(int val:arr){
-          frequencyMap.put(val,frequencyMap.getOrDefault(val,0)+1);
-       }
-       
-       for(int key:frequencyMap.keySet()){
-          if(frequencyMap.get(key)>1){
-             repeating=key;
-             break;
-          }
-       }
+        Set<Integer> unique = new HashSet<>();
+        int repeated = -1;
 
-       return repeating;   
+        for (int num : arr) {
+            if (unique.contains(num)) {
+                repeated = num;
+                break;
+            }
+            unique.add(num);
+        }
+
+        return repeated;
     }
 }
 
@@ -85,15 +82,16 @@ class Solution {
 class Solution {
     public int findDuplicate(int[] arr) {
         int repeated = -1;
-        for (int i = 0; i < arr.length; i++) {
-            int ele = Math.abs(arr[i]);
 
-            if (arr[ele] < 0) {
-                repeated = ele;
+        for (int num : arr) {
+            int value = Math.abs(num);
+
+            if (arr[value] < 0) {
+                repeated = value;
                 break;
             }
 
-            arr[ele] *= -1;
+            arr[value] *= -1;
         }
 
         return repeated;
@@ -101,27 +99,7 @@ class Solution {
 }
 
 
-//Method 6
-
-class Solution {
-    public int findDuplicate(int[] arr) {
-        Set<Integer> set = new HashSet<>();
-        int repeated = -1;
-
-        for (int val : arr) {
-            if (set.contains(val)) {
-                repeated = val;
-                break;
-            }
-            set.add(val);
-        }
-
-        return repeated;
-    }
-}
-
-
-//Method 7 (Cyclic Sort)
+//Method 6 (Cyclic Sort)
 
 class Solution {
     public int findDuplicate(int[] arr) {
@@ -132,13 +110,17 @@ class Solution {
             if (arr[correctIndex] == arr[i]) {
                 i++;
             } else { // if arr[i] is not at its correct index
-                int temp = arr[correctIndex];
-                arr[correctIndex] = arr[i];
-                arr[i] = temp;
+                swap(arr, i, correctIndex);
             }
         }
 
         return arr[arr.length - 1];
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
 
@@ -217,52 +199,49 @@ class Solution {
 
 class Solution {
     public int findDuplicate(int[] arr) {
-        // Slow ptr moves 1 step while fast ptr moves 2 steps at a time.
-        // if they meet then there is a cycle.
-        // the starting point of that cycle is the no. which is repeating.
-
-        int slow = arr[0];
-        int fast = arr[arr[0]];
-
-        // DETECTING CYCLE -> use floyd's cycle detection
-        while (slow != fast) {
-            slow = arr[slow];
-            fast = arr[arr[fast]];
+        // The slow pointer moves 1 step while the fast pointer moves 2 steps at a time.
+        // If they meet, then there is a cycle. The starting point of that cycle is the repeating number.
+        
+        int slowPointer = arr[0];
+        int fastPointer = arr[arr[0]];
+        
+        // CYCLE DETECTION using Floyd's Cycle Detection algorithm
+        while (slowPointer != fastPointer) {
+            slowPointer = arr[slowPointer];
+            fastPointer = arr[arr[fastPointer]];
         }
-
-        // DETECTING STARTING POINT OF THE CYCLE
-        // reset slow or fast anyone and then move both by 1 step,Wherever They meet is
-        // the starting Point of the Cycle.
-        fast = 0; // or slow=0
-        while (slow != fast) {
-            slow = arr[slow];
-            fast = arr[fast];
+        
+        // DETECTING THE STARTING POINT OF THE CYCLE
+        // Reset one pointer to the beginning and move both pointers one step at a time.
+        // They will meet at the starting point of the cycle, which is the repeating number.
+        fastPointer = 0; // or slowPointer = 0
+        while (slowPointer != fastPointer) {
+            slowPointer = arr[slowPointer];
+            fastPointer = arr[fastPointer];
         }
-
-        return slow;// return fast; //both are pointing at starting pt of cycle
+        
+        return slowPointer; // both pointers meet at the starting point of the cycle
     }
 }
 
 
+
 /*
+    let’s take an example and dry run on it to understand.
 
-// let’s take an example and dry run on it to understand.
+       0   1   2   3   4   5   6   7   8   9
+     | 2 | 5 | 9 | 6 | 9 | 3 | 8 | 9 | 7 | 1 |
+  
+     
+       2 -- 9 -- 1 -- 5
+            |         |
+            |         3
+            |         |
+            7 -- 8 -- 6
 
-//     0   1   2   3   4   5   6   7   8   9
-//   | 2 | 5 | 9 | 6 | 9 | 3 | 8 | 9 | 7 | 1 |
-//  
-//     
-//     2 -- 9 -- 1 -- 5
-//          |         |
-//          |         3
-//          |         |
-//          7 -- 8 -- 6
-
-// Initially, we have 2, then we go to the second index, we have 9, then we go to the 9th index, 
-//we have 1, then we go to the 1st index, we again have 5, 
-//then we go to the 5th index, we have 3, then we go to the 3rd index, 
-//we get 6, then we go to the 6th index, we get 8, then we go to the 8th index, 
-//we get 7, then we go to the 7th index and we get 9 and here cycle is formed.
-
-
+  Initially, we have 2, then we go to the second index, we have 9, then we go to the 9th index, 
+  we have 1, then we go to the 1st index, we again have 5, 
+  then we go to the 5th index, we have 3, then we go to the 3rd index, 
+  we get 6, then we go to the 6th index, we get 8, then we go to the 8th index, 
+  we get 7, then we go to the 7th index and we get 9 and here cycle is formed.
 */
