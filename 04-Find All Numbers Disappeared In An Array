@@ -13,7 +13,7 @@ class Solution {
         return notPresent;
     }
 
-    public boolean linearSearch(int[] arr, int key) {
+    private boolean linearSearch(int[] arr, int key) {
         int low = 0, high = arr.length - 1;
 
         while (low <= high) {
@@ -33,15 +33,15 @@ class Solution {
 
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] arr) {
-        Set<Integer> set = new HashSet<>();
+        Set<Integer> presentNumbers = new HashSet<>();
         List<Integer> notPresent = new ArrayList<>();
 
-        for (int val : arr) {
-            set.add(val);
+        for (int num : arr) {
+            presentNumbers.add(num);
         }
 
         for (int num = 1; num <= arr.length; num++) {
-            if (!set.contains(num)) {
+            if (!presentNumbers.contains(num)) {
                 notPresent.add(num);
             }
         }
@@ -55,15 +55,15 @@ class Solution {
 
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] arr) {
-        boolean[] visited = new boolean[arr.length + 1];
+        boolean[] presentNumbers = new boolean[arr.length + 1];
         List<Integer> notPresent = new ArrayList<>();
 
-        for (int val : arr) {
-            visited[val] = true;
+        for (int num : arr) {
+            presentNumbers[num] = true;
         }
 
         for (int num = 1; num <= arr.length; num++) {
-            if (!visited[num]) {
+            if (!presentNumbers[num]) {
                 notPresent.add(num);
             }
         }
@@ -88,11 +88,11 @@ class Solution {
     public List<Integer> findDisappearedNumbers(int[] arr) {
         List<Integer> notPresent = new ArrayList<>();
 
-        for (int i = 0; i < arr.length; i++) {
-            int ele = Math.abs(arr[i]);
+        for (int num : arr) {
+            int value = Math.abs(num);
 
-            if (arr[ele - 1] > 0) {
-                arr[ele - 1] *= -1;
+            if (arr[value - 1] > 0) {
+                arr[value - 1] *= -1;
             }
         }
 
