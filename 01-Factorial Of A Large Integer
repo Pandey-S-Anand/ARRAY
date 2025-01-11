@@ -2,20 +2,20 @@
 //Method 1- Bruteforce (Using BigInteger)
 
 class Solution {
-    static ArrayList<Integer> factorial(int num){
-      BigInteger factorial=new BigInteger("1");
- 
-      for(int i=num;i>0;i--) {   // or for(int i=1;i<=num;i++)
-        factorial=factorial.multiply(BigInteger.valueOf(i));
-      }
-      
-      ArrayList<Integer>result=new ArrayList<>();
-      
-      for(char ch:factorial.toString().toCharArray()){
-        result.add(ch-'0');
-      }
-        
-      return result;
+    static ArrayList<Integer> factorial(int number) {
+        BigInteger factorial = BigInteger.ONE;
+
+        for (int i = number; i > 0; i--) {
+            factorial = factorial.multiply(BigInteger.valueOf(i));
+        }
+
+        ArrayList<Integer> factorialDigits = new ArrayList<>();
+
+        for (char digitChar : factorialValue.toString().toCharArray()) {
+            factorialDigits.add(digitChar - '0');
+        }
+
+        return factorialDigits;
     }
 }
 
@@ -23,25 +23,25 @@ class Solution {
 //Method 2- Optimal (Using ArrayList)
 
 class Solution {
-    static ArrayList<Integer> factorial(int n){
-        ArrayList<Integer>factorial = new ArrayList<>();
-        factorial.add(1);
-        
+    static ArrayList<Integer> factorial(int number) {
+        ArrayList<Integer> factorialDigits = new ArrayList<>();
+        factorialDigits.add(1); // Initialize with 1 as the factorial of 0! or 1! is 1.
+
         int carry = 0;
-        for(int num = 2 ; num <= n ; num++){
-           for(int i=factorial.size()-1;i>= 0;i--){
-              int product=(factorial.get(i) * num) + carry;
-              carry = product / 10;
-              factorial.set(i,product % 10);
-           }
-           
-           while(carry != 0){
-             factorial.add(0,carry%10);
-             carry=carry/10;
-           }
+        for (int multiplier = 2; multiplier <= number; multiplier++) {
+            for (int i = factorialDigits.size() - 1; i >= 0; i--) {
+                int product = (factorialDigits.get(i) * multiplier) + carry;
+                carry = product / 10;
+                factorialDigits.set(i, product % 10);
+            }
+
+            while (carry != 0) {
+                factorialDigits.add(0, carry % 10);
+                carry = carry / 10;
+            }
         }
-        
-        return factorial;
+
+        return factorialDigits;
     }
 }
 
