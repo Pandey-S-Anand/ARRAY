@@ -1,33 +1,38 @@
 class Solution {
-    static long mod=1000000007L;
+    static long MOD = 1000000007L;
 
-    public long[] factorial(long arr[], int n) {
-        long[] factorial=findFactorialOfMaxNumber(arr,n);
-        long[] result = new long[n]; 
-        
-        for (int i = 0; i < n; i++){
-            result[i] = factorial[(int)arr[i]];
+    public long[] factorial(long[] numbers, int size) {
+        long maxNumber = findMaxValue(numbers, size);
+        long[] precomputedFactorials = precomputeFactorials(maxNumber);
+        long[] factorials = new long[size];
+
+        for (int i = 0; i < size; i++) {
+            factorials[i] = precomputedFactorials[(int) numbers[i]];
         }
-        
-        return result;
-    }
-    
-    public long[] findFactorialOfMaxNumber(long[]arr,int n){
-      long max=arr[0];
-      for(int i=1;i<n;i++){
-         if(arr[i]>max){
-           max=arr[i];
-         }
-      }
-      
-      long[] factorial = new long[(int)(max+1)]; //fact[i]=i! => fact[max]=max!       
-      factorial[0] = 1L; // 0!=1
 
-      //find the factorial of maximum number in the array (i.e 'max') using Dynamic programming
-      for (int num = 1; num <= max; num++){
-        factorial[num] = (factorial[num-1] * num) % mod; 
-      }
-      
-      return factorial;
+        return factorials;
+    }
+
+    private long findMaxValue(long[] numbers, int size) {
+        long maxValue = numbers[0];
+        for (int i = 1; i < size; i++) {
+            if (numbers[i] > maxValue) {
+                maxValue = numbers[i];
+            }
+        }
+        return maxValue;
+    }
+
+    private long[] precomputeFactorials(long maxNumber) {
+        // Array to store factorials up to the maximum number
+        long[] factorials = new long[(int) (maxNumber + 1)];
+        factorials[0] = 1L; // 0! = 1
+
+        // Compute factorials using dynamic programming
+        for (int num = 1; num <= maxNumber; num++) {
+            factorials[num] = (factorials[num - 1] * num) % MOD;
+        }
+
+        return factorials;
     }
 }
