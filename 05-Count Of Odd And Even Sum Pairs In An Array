@@ -1,21 +1,21 @@
 //Bruteforce Approach
 
 class Solution {
-    public static void countEvenOddSumPair(int[] arr) {
-        int countEvenSumPair = 0, countOddSumPair = 0;
+    public static void countEvenOddXorPairs(int[] arr) {
+        int evenXorCount = 0, oddXorCount = 0;
 
         for (int i = 0; i < arr.length; i++) {
             for (int j = i + 1; j < arr.length; j++) {
                 if ((arr[i] ^ arr[j]) % 2 == 0) {
-                    countEvenSumPair++;
+                    evenXorCount++;
                 } else {
-                    countOddSumPair++;
+                    oddXorCount++;
                 }
             }
         }
 
-        System.out.println("Count of Pairs With Even Xor =" + countEvenSumPair);
-        System.out.println("Count of Pairs With Even Xor =" + countOddSumPair);
+        System.out.println("Count of Pairs With Even XOR = " + evenXorCount);
+        System.out.println("Count of Pairs With Odd XOR = " + oddXorCount);
     }
 }
 
@@ -23,23 +23,24 @@ class Solution {
 //Optimal Approach
 
 class Solution {
-    public static void countEvenOddSumPair(int[] arr) {
-        int countEven = 0;
+    public static void countEvenOddSumPairs(int[] arr) {
+        int evenCount = 0;
 
         for (int val : arr) {
             if ((val % 2) == 0) {
-                countEven++;
+                evenCount++;
             }
         }
 
-        int countOdd = arr.length - countEven;
-        int cntEvenSumPairs = (countEven * (countEven - 1)) / 2 + (countOdd * (countOdd - 1)) / 2;
-        int cntOddSumPairs = (countEven * countOdd);
+        int oddCount = arr.length - evenCount;
+        int evenSumPairCount = (evenCount * (evenCount - 1)) / 2 + (oddCount * (oddCount - 1)) / 2;
+        int oddSumPairCount = (evenCount * oddCount);
 
-        System.out.println("Count of Pairs With Even Sum =" + cntEvenSumPairs);
-        System.out.println("Count of Pairs With Even Sum =" + cntOddSumPairs);
+        System.out.println("Count of Pairs With Even Sum = " + evenSumPairCount);
+        System.out.println("Count of Pairs With Odd Sum = " + oddSumPairCount);
     }
 }
+
 
 /*
   int[] arr={6, 7, 1, 3, 2, 5, 4};
