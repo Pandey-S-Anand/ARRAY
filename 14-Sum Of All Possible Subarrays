@@ -2,16 +2,16 @@
 
 class Solution {
     public int sumAllSubarrays(int[] arr) {
-        int sum = 0;
+        int totalSum = 0;
         for (int start = 0; start < arr.length; start++) {
             for (int end = start; end < arr.length; end++) {
                 for (int range = start; range <= end; range++) {
-                    sum += arr[range];
+                    totalSum += arr[range];
                 }
             }
         }
 
-        return sum;
+        return totalSum;
     }
 }
 
