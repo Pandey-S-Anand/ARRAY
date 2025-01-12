@@ -49,13 +49,13 @@ class Solution {
     static int majorityElement(int arr[], int n) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
 
-        for (int val : arr) {
-            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
+        for (int num : arr) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
         }
 
-        for (int val : frequencyMap.keySet()) {
-            if (frequencyMap.get(val) > (arr.length / 2)) {
-                return val;
+        for (int num : frequencyMap.keySet()) {
+            if (frequencyMap.get(num) > (arr.length / 2)) {
+                return num;
             }
         }
         // majority element doesnot exists in the array
@@ -70,10 +70,10 @@ class Solution {
     static int majorityElement(int arr[], int n) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
 
-        for (int val : arr) {
-            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
-            if (frequencyMap.get(val) > (arr.length / 2)) {
-                return val;
+        for (int num : arr) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+            if (frequencyMap.get(num) > (arr.length / 2)) {
+                return num;
             }
         }
 
