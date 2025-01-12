@@ -42,4 +42,48 @@ class Solution {
 
 //Optimal Approach
 
+/*
+The element arr[i] can be part of a subarray that starts at any index from 0 to i (inclusive), 
+so there are (i + 1) possible starting positions.
+It can also be part of a subarray that ends at any index from i to n - 1 (inclusive), 
+so there are (n - i) possible ending positions.
 
+Therefore, the total number of subarrays that include arr[i] is the product of these two values:
+totalSubarrays = (i + 1) * (n - i)
+
+Subarray lengths alternate between odd and even as you move through the array. 
+Thus, half of the subarrays (rounded up) will have odd lengths. 
+This is why the number of odd-length subarrays that include arr[i] is calculated as:
+oddSubarrays = ((i + 1) * (n - i) + 1) / 2
+
+The "+1" is added to account for the case when the total subarray length is odd, ensuring that we round up.
+*/
+
+
+class Solution {
+    public int sumOddLengthSubarrays(int[] arr) {
+        int totalSum = 0;  // Initialize total sum to accumulate the result
+
+        // Iterate through each element of the array
+        for (int i = 0; i < arr.length; i++) {
+            // Calculate the total number of subarrays that include arr[i]
+            int totalSubarrays = (i + 1) * (arr.length - i);
+
+            // Calculate the number of odd-length subarrays that include arr[i]
+            int oddSubarrays;
+            if (totalSubarrays % 2 != 0) {
+                // If totalSubarrays is odd, the number of odd-length subarrays is the ceiling of totalSubarrays / 2
+                oddSubarrays = (totalSubarrays + 1) / 2;
+            } else {
+                // If totalSubarrays is even, the number of odd-length subarrays is half of totalSubarrays
+                oddSubarrays = totalSubarrays / 2;
+            }
+
+            // Add the contribution of arr[i] to the total sum
+            totalSum += arr[i] * oddSubarrays;
+        }
+
+        // Return the final sum of all odd-length subarrays
+        return totalSum;
+    }
+}
