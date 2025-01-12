@@ -51,6 +51,8 @@ so there are (n - i) possible ending positions.
 Therefore, the total number of subarrays that include arr[i] is the product of these two values:
 totalSubarrays = (i + 1) * (n - i)
 
+Here, 'n' represents the length of the array arr[].
+
 Subarray lengths alternate between odd and even as you move through the array. 
 Thus, half of the subarrays (rounded up) will have odd lengths. 
 This is why the number of odd-length subarrays that include arr[i] is calculated as:
