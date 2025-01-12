@@ -85,13 +85,13 @@ class Solution {
             int temp = arr[i];
 
             while (true) {
-                int index = (j + k) % arr.length;
-                if (index == i) {
+                int nextIndex = (j + k) % arr.length;
+                if (nextIndex == i) {
                     arr[j] = temp;
                     break;
                 } else {
-                    arr[j] = arr[index];
-                    j = index;
+                    arr[j] = arr[nextIndex];
+                    j = nextIndex;
                 }
             }
         }
