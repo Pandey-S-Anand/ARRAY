@@ -3,12 +3,12 @@
 class Solution {
     public void rotate(int[] arr, int k) {
         k = k % arr.length;
-        for (int i = 1; i <= k; i++) {
+        while (k-- > 0) {
             rightRotateBy1(arr);
         }
     }
 
-    public void rightRotateBy1(int[] arr) {
+    private void rightRotateBy1(int[] arr) {
         int temp = arr[arr.length - 1];
         System.arraycopy(arr, 0, arr, 1, arr.length - 1);
         arr[0] = temp;
@@ -58,13 +58,13 @@ class Solution {
         reverseArray(arr, 0, k - 1);
     }
 
-    public void reverseArray(int[] arr, int start, int end) {
+    private void reverseArray(int[] arr, int start, int end) {
         while (start < end) {
             swap(arr, start++, end--);
         }
     }
 
-    public void swap(int[] arr, int i, int j) {
+    private void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -97,13 +97,12 @@ class Solution {
         }
     }
 
-    public int gcd(int divisor, int dividend) {
-        int rem = dividend % divisor;
-        if (rem == 0) {
+    private int gcd(int divisor, int dividend) {
+        int remainder = dividend % divisor;
+        if (remainder == 0) {
             return divisor;
         }
 
-        return gcd(rem, divisor);
+        return gcd(remainder, divisor);
     }
 }
-
