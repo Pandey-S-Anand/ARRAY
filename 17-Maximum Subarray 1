@@ -10,9 +10,11 @@ public class Solution {
         for (int start = 0; start < arr.length; start++) {
             for (int end = start; end < arr.length; end++) {
                 int currentSubArraySum = 0;
+
                 if (!currentSubArray.isEmpty()) {
                     currentSubArray.clear();
                 }
+
                 for (int range = start; range <= end; range++) {
                     currentSubArraySum += arr[range];
                     currentSubArray.add(arr[range]);
@@ -63,6 +65,7 @@ public class Solution {
             if (!currentSubArray.isEmpty()) {
                 currentSubArray.clear();
             }
+
             currentSubArraySum = 0;
             for (int end = start; end < arr.length; end++) {
                 currentSubArraySum += arr[end];
@@ -97,7 +100,6 @@ public class Solution {
         return maxSum;
     }
 }
-
 
 
 //Optimal Approach
