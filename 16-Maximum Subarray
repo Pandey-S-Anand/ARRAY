@@ -100,8 +100,8 @@ class Solution {
 class Solution {
     public int maxSubArray(int[] arr) {
         int currentSum = 0, maxSum = Integer.MIN_VALUE;
-        for (int val : arr) {
-            currentSum += val;
+        for (int num : arr) {
+            currentSum += num;
             maxSum = Math.max(currentSum, maxSum);
 
             if (currentSum < 0) {
