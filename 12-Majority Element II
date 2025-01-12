@@ -11,7 +11,7 @@ Therefore, at most two elements can each appear more than 𝑛 / 3 times in the 
 
 class Solution {
     public List<Integer> majorityElement(int[] arr) {
-        List<Integer> result = new ArrayList<>();
+        List<Integer> majorityElements = new ArrayList<>();
         boolean[] visited = new boolean[arr.length];
 
         for (int i = 0; i < arr.length; i++) {
@@ -29,24 +29,25 @@ class Solution {
             }
 
             if (count > (arr.length / 3)) {
-                result.add(arr[i]);
+                majorityElements.add(arr[i]);
             }
 
-            if (result.size() == 2) {
+            if (majorityElements.size() == 2) {
                 break;
             }
         }
 
-        return result;
+        return majorityElements;
     }
 }
+
 
 
 //Good Approach
 
 class Solution {
     public List<Integer> majorityElement(int[] arr) {
-        List<Integer> result = new ArrayList<>();
+        List<Integer> majorityElements = new ArrayList<>();
 
         for (int i = 0; i < arr.length; i++) {
             int count = 1;
@@ -57,43 +58,45 @@ class Solution {
                 }
             }
 
-            if (count > (arr.length / 3) && ! result.contains(arr[i])) {
-                result.add(arr[i]);
+            if (count > (arr.length / 3) && !majorityElements.contains(arr[i])) {
+                majorityElements.add(arr[i]);
             }
 
-            if (result.size() == 2) {
+            if (majorityElements.size() == 2) {
                 break;
             }
         }
 
-        return result;
+        return majorityElements;
     }
 }
+
 
 //Better Approach
 
 class Solution {
-    public List<Integer> majorityElement(int[] arr) {
-        List<Integer> result = new ArrayList<>();
+    public List<Integer> findMajorityElements(int[] nums) {
+        List<Integer> majorityElements = new ArrayList<>();
         Map<Integer, Integer> frequencyMap = new HashMap<>();
 
-        for (int val : arr) {
-            frequencyMap.put(val, frequencyMap.getOrDefault(val, 0) + 1);
+        for (int num : nums) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
         }
 
-        for (int val : frequencyMap.keySet()) {
-            if (frequencyMap.get(val) > (arr.length / 3)) {
-                result.add(val);
+        for (int num : frequencyMap.keySet()) {
+            if (frequencyMap.get(num) > (nums.length / 3)) {
+                majorityElements.add(num);
             }
 
-            if (result.size() == 2) {
+            if (majorityElements.size() == 2) {
                 break;
             }
         }
 
-        return result;
+        return majorityElements;
     }
 }
+
 
 
 //Optimal Approach
@@ -102,28 +105,28 @@ class Solution {
     public List<Integer> majorityElement(int[] arr) {
         int majorityCandidate1 = -1, majorityCandidate2 = -1, voteCount1 = 0, voteCount2 = 0;
 
-        for (int val : arr) {
+        for (int num : arr) {
             /*
-             * When voteCount1 is zero,it indicates that majorityCandidate1 is no
+             * When voteCount1 is zero, it indicates that majorityCandidate1 is no
              * longer a potential majority candidate and a new candidate should be
-             * considered for majorityCandidate1.However, this new candidate should not
+             * considered for majorityCandidate1. However, this new candidate should not
              * be the same as majorityCandidate2 to maintain distinct candidates. This is
-             * why we use the check 'val != majorityCandidate2'.
-             * Similarly,When voteCount2 is zero,it indicates that majorityCandidate2
+             * why we use the check 'num != majorityCandidate2'.
+             * Similarly, when voteCount2 is zero, it indicates that majorityCandidate2
              * is no longer a potential majority candidate and a new candidate should be
-             * considered for majorityCandidate2 However, this new candidate should not
+             * considered for majorityCandidate2. However, this new candidate should not
              * be the same as majorityCandidate1 to maintain distinct candidates.
-             * Thus, we use the check 'val != majorityCandidate1'.
+             * Thus, we use the check 'num != majorityCandidate1'.
              */
-            if (voteCount1 == 0 && val != majorityCandidate2) {
-                majorityCandidate1 = val;
+            if (voteCount1 == 0 && num != majorityCandidate2) {
+                majorityCandidate1 = num;
                 voteCount1 = 1;
-            } else if (val == majorityCandidate1) {
+            } else if (num == majorityCandidate1) {
                 voteCount1++;
-            } else if (voteCount2 == 0 && val != majorityCandidate1) {
-                majorityCandidate2 = val;
+            } else if (voteCount2 == 0 && num != majorityCandidate1) {
+                majorityCandidate2 = num;
                 voteCount2 = 1;
-            } else if (val == majorityCandidate2) {
+            } else if (num == majorityCandidate2) {
                 voteCount2++;
             } else {
                 voteCount1--;
@@ -131,26 +134,26 @@ class Solution {
             }
         }
 
-        List<Integer> result = new ArrayList<>();
+        List<Integer> majorityElements = new ArrayList<>();
         voteCount1 = 0;
         voteCount2 = 0;
 
-        for (int val : arr) {
-            if (val == majorityCandidate1) {
+        for (int num : arr) {
+            if (num == majorityCandidate1) {
                 voteCount1++;
-            } else if (val == majorityCandidate2) {
+            } else if (num == majorityCandidate2) {
                 voteCount2++;
             }
         }
 
         if (voteCount1 > (arr.length / 3)) {
-            result.add(majorityCandidate1);
+            majorityElements.add(majorityCandidate1);
         }
 
         if (voteCount2 > (arr.length / 3)) {
-            result.add(majorityCandidate2);
+            majorityElements.add(majorityCandidate2);
         }
 
-        return result;
+        return majorityElements;
     }
 }
